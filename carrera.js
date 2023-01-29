@@ -1,7 +1,7 @@
 const escenario = document.getElementById('canvas')
 const lienzo = escenario.getContext('2d')
 const imagenFondo = new Image()
-imagenFondo.src = './imagenes/fondo3.png'
+imagenFondo.src = './imagenes/fondo.png'
 let alturaImagenFondo
 let anchoImagenFondo = window.innerWidth
 const anchoMaxMapa = 1200
@@ -33,6 +33,20 @@ muñecoVerdeIzquierda.src = './imagenes/verdeIzquierda.png'
 const muñecoVerdeDerecha = new Image()
 muñecoVerdeDerecha.src = './imagenes/verdeDerecha.png'
 
+const muñecoRosa = new Image()
+muñecoRosa.src = './imagenes/rosa.png'
+const muñecoRosaIzquierda = new Image()
+muñecoRosaIzquierda.src = './imagenes/rosaIzquierda.png'
+const muñecoRosaDerecha = new Image()
+muñecoRosaDerecha.src = './imagenes/rosaDerecha.png'
+
+const muñecoAmarillo = new Image()
+muñecoAmarillo.src = './imagenes/amarillo.png'
+const muñecoAmarilloIzquierda = new Image()
+muñecoAmarilloIzquierda.src = './imagenes/amarilloIzquierda.png'
+const muñecoAmarilloDerecha = new Image()
+muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.png'
+
 let alturaImagenMuñequito =100
 let anchoImagenMuñequito =100
 
@@ -53,24 +67,30 @@ const botonColor = document.getElementById('eleccionColor')
 const seccionInicio= document.getElementById('inicio')
 const seccionCarrera= document.getElementById('carrera')
 const seccionMensaje= document.getElementById('mensaje')
+const seccionLargada= document.getElementById('largada')
 
 const spanMensaje=document.getElementById('spanMensaje')
 const spanNivel=document.getElementById('nivel')
+const spanLargada=document.getElementById('spanLargada')
 
 
 let inputRojo
 let inputAzul
 let inputVerde
+let inputAmarillo
+let inputRosa
 
 window.addEventListener('load',iniciarJuego)
 function iniciarJuego() {
     inputRojo  = document.getElementById('radioRojo')
     inputAzul  = document.getElementById('radioAzul')
     inputVerde  = document.getElementById('radioVerde')
+    inputAmarillo  = document.getElementById('radioAmarillo')
+    inputRosa  = document.getElementById('radioRosa')
     
     document.addEventListener('keyup',correr)
     botonColor.addEventListener('click',prepararCarrera)
-    botonInicio.addEventListener('click',iniciarCarrera)
+    botonInicio.addEventListener('click',cuentaRegresiva)
 
     botonColor.disabled=true
 
@@ -79,10 +99,11 @@ function iniciarJuego() {
     seccionInicio.style.display='flex'
     seccionCarrera.style.display='none'
     seccionMensaje.style.display='none'
+    seccionLargada.style.display='none'
 }
 
 function revisarEleccion() {
-    if (inputRojo.checked||inputAzul.checked||inputVerde.checked) {
+    if (inputRojo.checked||inputAzul.checked||inputVerde.checked||inputAmarillo.checked||inputRosa.checked) {
         botonColor.disabled=false
     }
 }
@@ -128,6 +149,25 @@ function prepararCarrera() {
         imagenJugadorIzquierda=muñecoVerdeIzquierda
         imagenJugadorDerecha=muñecoVerdeDerecha
         imagenRival1=muñecoAzul
+        imagenRival1Izquierda=muñecoAzulIzquierda
+        imagenRival1Derecha=muñecoAzulDerecha
+        imagenRival2=muñecoRojo
+        imagenRival2Izquierda=muñecoRojoIzquierda
+        imagenRival2Derecha=muñecoRojoDerecha
+    }if (inputRosa.checked) {
+        imagenJugador=muñecoRosa
+        imagenJugadorIzquierda=muñecoRosaIzquierda
+        imagenJugadorDerecha=muñecoRosaDerecha
+        imagenRival1=muñecoAzul
+        imagenRival1Izquierda=muñecoAzulIzquierda
+        imagenRival1Derecha=muñecoAzulDerecha
+        imagenRival2=muñecoRojo
+        imagenRival2Izquierda=muñecoRojoIzquierda
+        imagenRival2Derecha=muñecoRojoDerecha
+    }if (inputAmarillo.checked) {
+        imagenJugador=muñecoAmarillo
+        imagenJugadorIzquierda=muñecoAmarilloIzquierda
+        imagenJugadorDerecha=muñecoAmarilloDerecha
         imagenRival1Izquierda=muñecoAzulIzquierda
         imagenRival1Derecha=muñecoAzulDerecha
         imagenRival2=muñecoRojo
@@ -196,6 +236,34 @@ function dibujar() {
     }
 }
 
+let cuenta
+function cuentaRegresiva() {
+    cuenta=setInterval(contar,800)
+    dibujar()
+    contar()
+}
+
+let i =0
+function contar() {
+    seccionMensaje.style.display='none'
+    seccionLargada.style.display='flex'
+    if (i==0) {
+        spanLargada.innerHTML='3...'  
+    }if (i==1) {
+        spanLargada.innerHTML='3...2...'
+    }if (i==2) {
+        spanLargada.innerHTML='3...2...1...'
+    }if (i==3) {
+        spanLargada.innerHTML='3...2...1...YA !!!'
+        clearInterval(cuenta)
+        iniciarCarrera()
+    }
+    i++
+    if (i==4) {
+        i=0
+    }
+}
+
 let validadcionInicio
 let velocidadRival1
 let velocidadRival2
@@ -207,9 +275,11 @@ function iniciarCarrera() {
     velocidadRival2 =setInterval(moverRival2,dificultad+10)
     validadcionInicio=true
 
-    seccionMensaje.style.display='none'
+    
 
     spanNivel.innerHTML= ` ${nivel}`
+
+    
 }
 
 let pasoIzquierdo=0
@@ -278,6 +348,7 @@ function victoria() {
     posicionRival2=10
 
     seccionMensaje.style.display='flex'
+    seccionLargada.style.display='none'
 
 
 }

@@ -8,17 +8,25 @@
     <title>Carrera</title>
 </head>
 <body>
+    <h1>La Carrera de los MuñeLocos</h1>
     <section id="inicio">
-        <div>
-            <h1>Carrera</h1>
-            <p>Elige el color de tu personaje</p>
+        
+        <p>Elige el color de tu personaje</p>
+
+        <div id="iconos">
             <input class="radio"type="radio" name="radio" id="radioRojo">
-            <label class="color" for='radioRojo'> Rojo</label>
+            <label class="icono" for='radioRojo'> <img src='imagenes/rojoIcono.png' alt="" ></label>
             <input class="radio" type="radio" name="radio" id='radioAzul'>
-            <label class="color" for='radioAzul'> Azul</label>
+            <label class="icono" for='radioAzul'> <img src='imagenes/azulIcono.png' alt="" ></label>
             <input class="radio" type="radio" name="radio" id='radioVerde'>
-            <label class="color" for='radioVerde'> Verde</label>
-            <br>
+            <label class="icono" for='radioVerde'> <img src='imagenes/verdeIcono.png' alt="" ></label>
+            <input class="radio" type="radio" name="radio" id='radioAmarillo'>
+            <label class="icono" for='radioAmarillo'> <img src='imagenes/amarilloIcono.png' alt="" ></label>
+            <input class="radio" type="radio" name="radio" id='radioRosa'>
+            <label class="icono" for='radioRosa'> <img src='imagenes/rosaIcono.png' alt="" ></label>
+        </div>
+
+        <div>
             <input class="boton" type="button" id="eleccionColor" value="Listo">
         </div>
     </section>
@@ -29,6 +37,9 @@
             <canvas id="canvas"></canvas>
             
             
+    </section>
+    <section id="largada">
+        <p><span id="spanLargada"></span></p>
     </section>
     <section id="mensaje" >
         <p><span id="spanMensaje"></span></p>
