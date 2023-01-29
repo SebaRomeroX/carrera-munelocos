@@ -1,6 +1,5 @@
 const escenario = document.getElementById('canvas')
 const lienzo = escenario.getContext('2d')
-
 const imagenFondo = new Image()
 imagenFondo.src = './imagenes/fondo3.png'
 let alturaImagenFondo
@@ -48,15 +47,98 @@ const t = {
     RIGHT:39
   };
 
-const botonInicio = document.getElementById('inicio')
+const botonInicio = document.getElementById('botonInicio')
+const botonColor = document.getElementById('eleccionColor')
+
+const seccionInicio= document.getElementById('inicio')
+const seccionCarrera= document.getElementById('carrera')
+const seccionMensaje= document.getElementById('mensaje')
+
+const spanMensaje=document.getElementById('spanMensaje')
+const spanNivel=document.getElementById('nivel')
+
+
+let inputRojo
+let inputAzul
+let inputVerde
 
 window.addEventListener('load',iniciarJuego)
 function iniciarJuego() {
-    dibujar()
-    intervalo =setInterval(dibujar,50)
+    inputRojo  = document.getElementById('radioRojo')
+    inputAzul  = document.getElementById('radioAzul')
+    inputVerde  = document.getElementById('radioVerde')
     
     document.addEventListener('keyup',correr)
+    botonColor.addEventListener('click',prepararCarrera)
     botonInicio.addEventListener('click',iniciarCarrera)
+
+    botonColor.disabled=true
+
+    revisar =setInterval(revisarEleccion,50)
+    
+    seccionInicio.style.display='flex'
+    seccionCarrera.style.display='none'
+    seccionMensaje.style.display='none'
+}
+
+function revisarEleccion() {
+    if (inputRojo.checked||inputAzul.checked||inputVerde.checked) {
+        botonColor.disabled=false
+    }
+}
+
+let imagenJugador
+let imagenJugadorIzquierda
+let imagenJugadorDerecha
+let imagenRival1
+let imagenRival1Izquierda
+let imagenRival1Derecha
+let imagenRival2
+let imagenRival2Izquierda
+let imagenRival2Derecha
+
+let nivel= 1
+function prepararCarrera() {
+    seccionCarrera.style.display='flex'
+    seccionMensaje.style.display='flex'
+    seccionInicio.style.display='none'
+
+    if (inputRojo.checked) {
+        imagenJugador=muñecoRojo
+        imagenJugadorIzquierda=muñecoRojoIzquierda
+        imagenJugadorDerecha=muñecoRojoDerecha
+        imagenRival1=muñecoAzul
+        imagenRival1Izquierda=muñecoAzulIzquierda
+        imagenRival1Derecha=muñecoAzulDerecha
+        imagenRival2=muñecoVerde
+        imagenRival2Izquierda=muñecoVerdeIzquierda
+        imagenRival2Derecha=muñecoVerdeDerecha
+    }if (inputAzul.checked) {
+        imagenJugador=muñecoAzul
+        imagenJugadorIzquierda=muñecoAzulIzquierda
+        imagenJugadorDerecha=muñecoAzulDerecha
+        imagenRival1=muñecoRojo
+        imagenRival1Izquierda=muñecoRojoIzquierda
+        imagenRival1Derecha=muñecoRojoDerecha
+        imagenRival2=muñecoVerde
+        imagenRival2Izquierda=muñecoVerdeIzquierda
+        imagenRival2Derecha=muñecoVerdeDerecha
+    }if (inputVerde.checked) {
+        imagenJugador=muñecoVerde
+        imagenJugadorIzquierda=muñecoVerdeIzquierda
+        imagenJugadorDerecha=muñecoVerdeDerecha
+        imagenRival1=muñecoAzul
+        imagenRival1Izquierda=muñecoAzulIzquierda
+        imagenRival1Derecha=muñecoAzulDerecha
+        imagenRival2=muñecoRojo
+        imagenRival2Izquierda=muñecoRojoIzquierda
+        imagenRival2Derecha=muñecoRojoDerecha
+    }
+
+    dibujar()
+
+    spanMensaje.innerHTML='Cuando oprimas el boton empezara la carrera'
+    spanNivel.innerHTML= ` ${nivel}`
 }
 
 function dibujar() {
@@ -68,13 +150,10 @@ function dibujar() {
         escenario.height
     )
     
-    let imagenRival1
-    if (validadcionInicio==false) {
-        imagenRival1=muñecoAzul
-    } else if (pasoRival1%2==0) {
-        imagenRival1=muñecoAzulIzquierda
+    if (pasoRival1%2==0) {
+        imagenRival1=imagenRival1Izquierda
     } else if (pasoRival1%2!==0) {
-        imagenRival1=muñecoAzulDerecha
+        imagenRival1=imagenRival1Derecha
     }  
     lienzo.drawImage(
         imagenRival1,
@@ -83,15 +162,12 @@ function dibujar() {
         anchoImagenMuñequito,
         alturaImagenMuñequito
     )
-
-    let imagenJugador
+    
     if (pasoIzquierdo==1) {
-        imagenJugador=muñecoRojoIzquierda
+        imagenJugador=imagenJugadorIzquierda
     } else if (pasoDerecho==1) {
-        imagenJugador=muñecoRojoDerecha
-    } else {
-        imagenJugador=muñecoRojo
-    }       
+        imagenJugador=imagenJugadorDerecha
+    }    
     lienzo.drawImage(
         imagenJugador,
         posicionJugador+40,
@@ -99,14 +175,11 @@ function dibujar() {
         anchoImagenMuñequito,
         alturaImagenMuñequito
     )
-
-    let imagenRival2=muñecoVerde
-    if (validadcionInicio==false) {
-        imagenRival1=muñecoVerde
-    }else if (pasoRival2%2!==0) {
-        imagenRival2=muñecoVerdeIzquierda
+    
+    if (pasoRival2%2!==0) {
+        imagenRival2=imagenRival2Izquierda
     } else if (pasoRival2%2==0) {
-        imagenRival2=muñecoVerdeDerecha
+        imagenRival2=imagenRival2Derecha
     }
     lienzo.drawImage(
         imagenRival2,
@@ -117,17 +190,26 @@ function dibujar() {
     )
 
     if (posicionJugador>=anchoImagenFondo-anchoImagenMuñequito||
-        posicionRival1>=anchoImagenFondo-anchoImagenMuñequito||
-        posicionRival2>=anchoImagenFondo-anchoImagenMuñequito) {
+        posicionRival1>=anchoImagenFondo-anchoImagenMuñequito-40||
+        posicionRival2>=anchoImagenFondo-anchoImagenMuñequito-80) {
         victoria()
     }
 }
 
 let validadcionInicio
+let velocidadRival1
+let velocidadRival2
+
+let dificultad = 150
 function iniciarCarrera() {
-    let velocidadRival1 =setInterval(moverRival1,150)
-    let velocidadRival2 =setInterval(moverRival2,160)
+    intervalo =setInterval(dibujar,50)
+    velocidadRival1 =setInterval(moverRival1,dificultad)
+    velocidadRival2 =setInterval(moverRival2,dificultad+10)
     validadcionInicio=true
+
+    seccionMensaje.style.display='none'
+
+    spanNivel.innerHTML= ` ${nivel}`
 }
 
 let pasoIzquierdo=0
@@ -145,8 +227,6 @@ function correr(algo) {
                 break;
         }
     }
-    
-    console.log('corre')
 }
 
 function darPasoIzquierdo() {
@@ -181,12 +261,24 @@ function victoria() {
     clearInterval(intervalo)
     clearInterval(velocidadRival1)
     clearInterval(velocidadRival2)
+    
+    
+    
+    if (posicionJugador>posicionRival1&&posicionJugador>posicionRival2) {
+        spanMensaje.innerHTML='Ganaste !! Si oprimes el boton pasaras al siguiente nivel'
+        nivel++
+        dificultad=dificultad-10
+    }if (posicionRival1>=posicionJugador||posicionRival2>=posicionJugador) {
+        spanMensaje.innerHTML='Perdiste.. Si oprimes el boton podras intentarlo de nuevo'
 
-    if (posicionJugador>=anchoImagenFondo-anchoImagenMuñequito) {
-        alert('Ganaste')
-    }if (posicionRival1>=anchoImagenFondo-anchoImagenMuñequito) {
-        alert('Perdiste')
     }
+
+    posicionRival1=90
+    posicionJugador=50
+    posicionRival2=10
+
+    seccionMensaje.style.display='flex'
+
 
 }
 

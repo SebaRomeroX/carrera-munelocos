@@ -4,13 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
     <title>Carrera</title>
 </head>
 <body>
-    <h1>Carrera</h1>
-        <p>oprime las teclas izquierda y derecha alternadamente para correr</p>
-        <input type="button" id="inicio" value="Iniciar">
-        <canvas id="canvas"></canvas>
+    <section id="inicio">
+        <div>
+            <h1>Carrera</h1>
+            <p>Elige el color de tu personaje</p>
+            <input class="radio"type="radio" name="radio" id="radioRojo">
+            <label class="color" for='radioRojo'> Rojo</label>
+            <input class="radio" type="radio" name="radio" id='radioAzul'>
+            <label class="color" for='radioAzul'> Azul</label>
+            <input class="radio" type="radio" name="radio" id='radioVerde'>
+            <label class="color" for='radioVerde'> Verde</label>
+            <br>
+            <input class="boton" type="button" id="eleccionColor" value="Listo">
+        </div>
+    </section>
+    <section id="carrera">
+            <p>Oprime las teclas izquierda y derecha alternadamente para correr</p>
+            <p>Nivel°<span id="nivel"></span></p>
+            
+            <canvas id="canvas"></canvas>
+            
+            
+    </section>
+    <section id="mensaje" >
+        <p><span id="spanMensaje"></span></p>
+        <input class="boton" type="button" id="botonInicio" value="Dale !!">
+    </section>
+    
+        
         <script src="carrera.js"></script>
 </body>
 </html>
