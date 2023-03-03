@@ -47,15 +47,6 @@ muñecoAmarilloIzquierda.src = './imagenes/amarilloIzquierda.png'
 const muñecoAmarilloDerecha = new Image()
 muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.png'
 
-let alturaImagenMuñequito =100
-let anchoImagenMuñequito =100
-
-let posicionJugador =10
-let posicionRival1 =10
-let posicionRival2 =10
-
-let movimiento=0
-
 const t = {
     LEFT:37,
     RIGHT:39
@@ -73,6 +64,14 @@ const spanMensaje=document.getElementById('spanMensaje')
 const spanNivel=document.getElementById('nivel')
 const spanLargada=document.getElementById('spanLargada')
 
+let alturaImagenMuñequito =100
+let anchoImagenMuñequito =100
+
+let posicionJugador =10
+let posicionRival1 =10
+let posicionRival2 =10
+
+let movimiento=0
 
 let inputRojo
 let inputAzul
@@ -80,7 +79,36 @@ let inputVerde
 let inputAmarillo
 let inputRosa
 
+let imagenJugador
+let imagenJugadorIzquierda
+let imagenJugadorDerecha
+let imagenRival1
+let imagenRival1Izquierda
+let imagenRival1Derecha
+let imagenRival2
+let imagenRival2Izquierda
+let imagenRival2Derecha
+
+let nivel= 1
+
+let cuenta
+
+let i =0
+
+let validadcionInicio
+let velocidadRival1
+let velocidadRival2
+
+let dificultad = 150
+
+let pasoIzquierdo=0
+let pasoDerecho=0
+
+let pasoRival1=0
+let pasoRival2=0
+
 window.addEventListener('load',iniciarJuego)
+
 function iniciarJuego() {
     inputRojo  = document.getElementById('radioRojo')
     inputAzul  = document.getElementById('radioAzul')
@@ -108,17 +136,6 @@ function revisarEleccion() {
     }
 }
 
-let imagenJugador
-let imagenJugadorIzquierda
-let imagenJugadorDerecha
-let imagenRival1
-let imagenRival1Izquierda
-let imagenRival1Derecha
-let imagenRival2
-let imagenRival2Izquierda
-let imagenRival2Derecha
-
-let nivel= 1
 function prepararCarrera() {
     seccionCarrera.style.display='flex'
     seccionMensaje.style.display='flex'
@@ -195,10 +212,11 @@ function dibujar() {
     } else if (pasoRival1%2!==0) {
         imagenRival1=imagenRival1Derecha
     }  
+
     lienzo.drawImage(
         imagenRival1,
         posicionRival1+80,
-        alturaImagenFondo*4/5-80-alturaImagenMuñequito/2,
+        alturaImagenFondo*4/5-100-alturaImagenMuñequito/2,
         anchoImagenMuñequito,
         alturaImagenMuñequito
     )
@@ -208,10 +226,11 @@ function dibujar() {
     } else if (pasoDerecho==1) {
         imagenJugador=imagenJugadorDerecha
     }    
+
     lienzo.drawImage(
         imagenJugador,
         posicionJugador+40,
-        alturaImagenFondo*4/5-40-alturaImagenMuñequito/2,
+        alturaImagenFondo*4/5-50-alturaImagenMuñequito/2,
         anchoImagenMuñequito,
         alturaImagenMuñequito
     )
@@ -221,10 +240,11 @@ function dibujar() {
     } else if (pasoRival2%2==0) {
         imagenRival2=imagenRival2Derecha
     }
+
     lienzo.drawImage(
         imagenRival2,
         posicionRival2,
-        alturaImagenFondo*4/5-alturaImagenMuñequito/2,
+        alturaImagenFondo*4/5-10-alturaImagenMuñequito/2,
         anchoImagenMuñequito,
         alturaImagenMuñequito
     )
@@ -236,17 +256,16 @@ function dibujar() {
     }
 }
 
-let cuenta
 function cuentaRegresiva() {
     cuenta=setInterval(contar,800)
     dibujar()
     contar()
 }
 
-let i =0
 function contar() {
     seccionMensaje.style.display='none'
     seccionLargada.style.display='flex'
+
     if (i==0) {
         spanLargada.innerHTML='3...'  
     }if (i==1) {
@@ -258,32 +277,23 @@ function contar() {
         clearInterval(cuenta)
         iniciarCarrera()
     }
+
     i++
+    
     if (i==4) {
         i=0
     }
 }
 
-let validadcionInicio
-let velocidadRival1
-let velocidadRival2
-
-let dificultad = 150
 function iniciarCarrera() {
     intervalo =setInterval(dibujar,50)
     velocidadRival1 =setInterval(moverRival1,dificultad)
     velocidadRival2 =setInterval(moverRival2,dificultad+10)
     validadcionInicio=true
 
-    
-
     spanNivel.innerHTML= ` ${nivel}`
-
-    
 }
 
-let pasoIzquierdo=0
-let pasoDerecho=0
 function correr(algo) {
     if (validadcionInicio==true) {
         switch (algo.keyCode){
@@ -315,8 +325,6 @@ function darPasoDerecho() {
     }
 }
 
-let pasoRival1=0
-let pasoRival2=0
 function moverRival1() {
     posicionRival1 += 5
     pasoRival1++
@@ -332,15 +340,12 @@ function victoria() {
     clearInterval(velocidadRival1)
     clearInterval(velocidadRival2)
     
-    
-    
     if (posicionJugador>posicionRival1&&posicionJugador>posicionRival2) {
         spanMensaje.innerHTML='Ganaste !! Si oprimes el boton pasaras al siguiente nivel'
         nivel++
         dificultad=dificultad-10
     }if (posicionRival1>=posicionJugador||posicionRival2>=posicionJugador) {
         spanMensaje.innerHTML='Perdiste.. Si oprimes el boton podras intentarlo de nuevo'
-
     }
 
     posicionRival1=90
@@ -349,7 +354,5 @@ function victoria() {
 
     seccionMensaje.style.display='flex'
     seccionLargada.style.display='none'
-
-
 }
 
