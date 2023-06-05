@@ -9,10 +9,15 @@
 </head>
 <body>
     <h1>La Carrera de los MuñeLocos</h1>
+    <section id="Intro">
+        <h2 id="mensaje-1">Bienvenido a la carrera de los muñelocos</h2>
+        <h2 id="mensaje-2">Primero elige a tu personaje y luego presiona el boton "Siguiente"</h2>
+        <h2 id="mensaje-3">Cuando la carrera comienze, oprime los botones IZQUIERDA y DERECHA alternadamente para correr</h3>
+        <h2 id="mensaje-4">El primero en llegar al otro lado de la calle gana</h2>  
+        <h2 id="mensaje-5">Oprime el boton "Comenzar" para que inicie la carrera</h2> 
+        <input class="boton" type="button" value="Siguiente" id="botonSiguiente">     
+    </section>
     <section id="inicio">
-        
-        <p>Elige el color de tu personaje</p>
-
         <div id="iconos">
             <input class="radio"type="radio" name="radio" id="radioRojo">
             <label class="icono" for='radioRojo'> <img src='imagenes/rojoIcono.png' alt="" ></label>
@@ -27,12 +32,11 @@
         </div>
 
         <div>
-            <input class="boton" type="button" id="eleccionColor" value="Listo">
+            <input class="boton" type="button" id="eleccionColor" value="Siguiente">
         </div>
     </section>
     <section id="carrera">
-            <p>Oprime las teclas izquierda y derecha alternadamente para correr</p>
-            <p>Nivel°<span id="nivel"></span></p>
+            <h2 id="mensajeNivel">Nivel°<span id="nivel"></span></h2>
             
             <canvas id="canvas"></canvas>
             
@@ -41,12 +45,17 @@
     <section id="largada">
         <p><span id="spanLargada"></span></p>
     </section>
-    <section id="mensaje" >
-        <p><span id="spanMensaje"></span></p>
-        <input class="boton" type="button" id="botonInicio" value="Dale !!">
+    <section  >
+        <p id="mensaje"><span id="spanMensaje"></span></p>
+        <input class="boton" type="button" id="botonInicio" value="Comenzar">
+    </section>
+    <section id="botones">
+        <input class="boton" type="button" id="botonIzquierda" value="IZQUIERDA">
+        <input class="boton" type="button" id="botonDerecha" value="DERECHA">
+
     </section>
     
         
-        <script src="carrera.js"></script>
+    <script src="carrera.js"></script>
 </body>
 </html>

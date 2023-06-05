@@ -4,10 +4,7 @@ const imagenFondo = new Image()
 imagenFondo.src = './imagenes/fondo.png'
 let alturaImagenFondo
 let anchoImagenFondo = window.innerWidth
-const anchoMaxMapa = 1200
-if (anchoImagenFondo > anchoMaxMapa) {
-    anchoImagenFondo = anchoMaxMapa
-}
+
 alturaImagenFondo = anchoImagenFondo * 500 / 1200
 escenario.width = anchoImagenFondo
 escenario.height = alturaImagenFondo 
@@ -109,6 +106,16 @@ let pasoRival2=0
 
 window.addEventListener('load',iniciarJuego)
 
+let mensaje1 = document.getElementById('mensaje-1')
+let mensaje2 = document.getElementById('mensaje-2')
+let mensaje3 = document.getElementById('mensaje-3')
+let mensaje4 = document.getElementById('mensaje-4')
+let mensaje5 = document.getElementById('mensaje-5')
+let mensajeNivel = document.getElementById('mensajeNivel')
+let botonIzquierda = document.getElementById('botonIzquierda')
+let botonDerecha = document.getElementById('botonDerecha')
+
+
 function iniciarJuego() {
     inputRojo  = document.getElementById('radioRojo')
     inputAzul  = document.getElementById('radioAzul')
@@ -119,16 +126,60 @@ function iniciarJuego() {
     document.addEventListener('keyup',correr)
     botonColor.addEventListener('click',prepararCarrera)
     botonInicio.addEventListener('click',cuentaRegresiva)
+    botonIzquierda.addEventListener('click',darPasoIzquierdo)
+    botonDerecha.addEventListener('click',darPasoDerecho)
+
 
     botonColor.disabled=true
 
     revisar =setInterval(revisarEleccion,50)
     
-    seccionInicio.style.display='flex'
-    seccionCarrera.style.display='none'
-    seccionMensaje.style.display='none'
+    seccionInicio.style.display='none'
     seccionLargada.style.display='none'
+    seccionMensaje.style.display='none'
+
+    botonInicio.style.display='none'
+    escenario.style.display='none'
+    mensajeNivel.style.display='none'
+    botonIzquierda.style.display='none'
+    botonDerecha.style.display='none'
+
+
+    mensaje2.style.display='none'
+    mensaje3.style.display='none'
+    mensaje4.style.display='none'
+    mensaje5.style.display='none'
 }
+
+let botonSiguiente = document.getElementById('botonSiguiente')
+botonSiguiente.addEventListener('click',mostrarSiguienteMensaje)
+let contadorMensajes = 1
+function mostrarSiguienteMensaje() {
+    if (contadorMensajes===1) {
+        mensaje1.style.display='none'
+        mensaje2.style.display='flex'
+        seccionInicio.style.display='flex'
+        botonSiguiente.style.display='none'
+        contadorMensajes++
+    } else if (contadorMensajes===2) {
+        mensaje2.style.display='none'
+        mensaje3.style.display='flex'
+        botonSiguiente.style.display='flex'
+        contadorMensajes++
+    } else if (contadorMensajes===3) {
+        mensaje3.style.display='none'
+        mensaje4.style.display='flex'
+        contadorMensajes++
+    } else if (contadorMensajes===4) {
+        mensaje4.style.display='none'
+        mensaje5.style.display='flex'
+        botonSiguiente.style.display='none'
+        botonInicio.style.display='flex'
+        
+    } 
+    console.log(contadorMensajes)
+}
+
 
 function revisarEleccion() {
     if (inputRojo.checked||inputAzul.checked||inputVerde.checked||inputAmarillo.checked||inputRosa.checked) {
@@ -137,8 +188,6 @@ function revisarEleccion() {
 }
 
 function prepararCarrera() {
-    seccionCarrera.style.display='flex'
-    seccionMensaje.style.display='flex'
     seccionInicio.style.display='none'
 
     if (inputRojo.checked) {
@@ -192,10 +241,11 @@ function prepararCarrera() {
         imagenRival2Derecha=muñecoRojoDerecha
     }
 
-    dibujar()
+    mostrarSiguienteMensaje()
 
     spanMensaje.innerHTML='Cuando oprimas el boton empezara la carrera'
     spanNivel.innerHTML= ` ${nivel}`
+    
 }
 
 function dibujar() {
@@ -260,11 +310,17 @@ function cuentaRegresiva() {
     cuenta=setInterval(contar,800)
     dibujar()
     contar()
+    mensajeNivel.style.display='flex'
+    escenario.style.display='flex'
+    mensaje5.style.display='none'
+    botonIzquierda.style.display='flex'
+    botonDerecha.style.display='flex'
 }
 
 function contar() {
     seccionMensaje.style.display='none'
     seccionLargada.style.display='flex'
+    botonInicio.style.display='none'
 
     if (i==0) {
         spanLargada.innerHTML='3...'  
@@ -354,5 +410,8 @@ function victoria() {
 
     seccionMensaje.style.display='flex'
     seccionLargada.style.display='none'
+    botonInicio.style.display='flex'
+    botonIzquierda.style.display='none'
+    botonDerecha.style.display='none'
 }
 
