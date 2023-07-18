@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 
-@media all and (min-width:320px) {
+@media all and (min-width:1px) {
 body {
     font-family: 'Patua One', cursive;
     background-color: rgb(26, 26, 26);
@@ -10,7 +10,7 @@ body {
 }
 
 h1{
-    align-self: center;
+    text-align: center;
 }
 h2{
     margin-left: 2em;
@@ -20,6 +20,12 @@ div{
 }
 #inicio{
     flex-direction: column;
+}
+#mensajeNivel{
+    margin-left: 1em;
+}
+#cuenta-regresiva{
+    margin-left: 1em;
 }
 
 
@@ -36,7 +42,7 @@ input:checked + label {
 }
 
 .boton{
-    margin: 3em;
+    margin: 3em 1em 1em 1em;
     border-radius: 10px;
     align-self: center;
     flex-direction: column;
@@ -83,10 +89,25 @@ input:checked + label {
 }
 
 #botones{
+    width: 100%;
     display: flex;
     justify-content: center;
+    box-sizing: border-box;
 }
 
+}
+
+
+@media all and (min-width:480px)    {
+    #botones{
+        justify-content: space-evenly;
+    }
+}
+
+@media all and (min-width:820px)    {
+    #botones{
+        justify-content: space-between;
+    }
 }
 
 @media all and (min-width:1240px)    {

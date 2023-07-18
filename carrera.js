@@ -1,13 +1,100 @@
-const escenario = document.getElementById('canvas')
-const lienzo = escenario.getContext('2d')
-const imagenFondo = new Image()
-imagenFondo.src = './imagenes/fondo.png'
-let alturaImagenFondo
-let anchoImagenFondo = window.innerWidth
+                                                 /**    INICIO        */
 
-alturaImagenFondo = anchoImagenFondo * 500 / 1200
-escenario.width = anchoImagenFondo
-escenario.height = alturaImagenFondo 
+const botonInicio = document.getElementById('botonInicio')
+const botonColor = document.getElementById('eleccionColor')
+
+const seccionInicio= document.getElementById('inicio')
+const seccionMensaje= document.getElementById('mensaje')
+const seccionLargada= document.getElementById('largada')
+
+let mensaje1 = document.getElementById('mensaje-1')
+let mensaje2 = document.getElementById('mensaje-2')
+let mensaje3 = document.getElementById('mensaje-3')
+let mensaje4 = document.getElementById('mensaje-4')
+let mensaje5 = document.getElementById('mensaje-5')
+let mensajeNivel = document.getElementById('mensajeNivel')
+let botonIzquierda = document.getElementById('botonIzquierda')
+let botonDerecha = document.getElementById('botonDerecha')
+
+window.addEventListener('load',iniciarJuego)
+
+function iniciarJuego() {
+    inputRojo  = document.getElementById('radioRojo')
+    inputAzul  = document.getElementById('radioAzul')
+    inputVerde  = document.getElementById('radioVerde')
+    inputAmarillo  = document.getElementById('radioAmarillo')
+    inputRosa  = document.getElementById('radioRosa')
+    
+    document.addEventListener('keyup',correr)
+    botonColor.addEventListener('click',prepararCarrera)
+    botonInicio.addEventListener('click',cuentaRegresiva)
+    botonIzquierda.addEventListener('click',darPasoIzquierdo)
+    botonDerecha.addEventListener('click',darPasoDerecho)
+
+    botonColor.disabled=true
+
+    revisar =setInterval(revisarEleccion,50)
+    
+    seccionInicio.style.display='none'
+    seccionLargada.style.display='none'
+    seccionMensaje.style.display='none'
+
+    botonInicio.style.display='none'
+    canvas.style.display='none'
+    mensajeNivel.style.display='none'
+    botonIzquierda.style.display='none'
+    botonDerecha.style.display='none'
+
+    mensaje2.style.display='none'
+    mensaje3.style.display='none'
+    mensaje4.style.display='none'
+    mensaje5.style.display='none'
+}
+
+
+                                                 /**    ANTES DE JUGAR        */
+
+
+let botonSiguiente = document.getElementById('botonSiguiente')
+botonSiguiente.addEventListener('click',mostrarSiguienteMensaje)
+let contadorMensajes = 1
+
+function mostrarSiguienteMensaje() {
+    if (contadorMensajes===1) {
+        mensaje1.style.display='none'
+        mensaje2.style.display='flex'
+        seccionInicio.style.display='flex'
+        botonSiguiente.style.display='none'
+        contadorMensajes++
+    } else if (contadorMensajes===2) {
+        mensaje2.style.display='none'
+        mensaje3.style.display='flex'
+        botonSiguiente.style.display='flex'
+        contadorMensajes++
+    } else if (contadorMensajes===3) {
+        mensaje3.style.display='none'
+        mensaje4.style.display='flex'
+        contadorMensajes++
+    } else if (contadorMensajes===4) {
+        mensaje4.style.display='none'
+        mensaje5.style.display='flex'
+        botonSiguiente.style.display='none'
+        botonInicio.style.display='flex'
+    } 
+}
+
+
+let inputRojo
+let inputAzul
+let inputVerde
+let inputAmarillo
+let inputRosa
+
+function revisarEleccion() {
+    if (inputRojo.checked||inputAzul.checked||inputVerde.checked||inputAmarillo.checked||inputRosa.checked) {
+        botonColor.disabled=false
+    }
+}
 
 const muñecoRojo = new Image()
 muñecoRojo.src = './imagenes/rojo.png'
@@ -44,38 +131,6 @@ muñecoAmarilloIzquierda.src = './imagenes/amarilloIzquierda.png'
 const muñecoAmarilloDerecha = new Image()
 muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.png'
 
-const t = {
-    LEFT:37,
-    RIGHT:39
-  };
-
-const botonInicio = document.getElementById('botonInicio')
-const botonColor = document.getElementById('eleccionColor')
-
-const seccionInicio= document.getElementById('inicio')
-const seccionCarrera= document.getElementById('carrera')
-const seccionMensaje= document.getElementById('mensaje')
-const seccionLargada= document.getElementById('largada')
-
-const spanMensaje=document.getElementById('spanMensaje')
-const spanNivel=document.getElementById('nivel')
-const spanLargada=document.getElementById('spanLargada')
-
-let alturaImagenMuñequito =100
-let anchoImagenMuñequito =100
-
-let posicionJugador =10
-let posicionRival1 =10
-let posicionRival2 =10
-
-let movimiento=0
-
-let inputRojo
-let inputAzul
-let inputVerde
-let inputAmarillo
-let inputRosa
-
 let imagenJugador
 let imagenJugadorIzquierda
 let imagenJugadorDerecha
@@ -86,106 +141,8 @@ let imagenRival2
 let imagenRival2Izquierda
 let imagenRival2Derecha
 
+const spanMensaje=document.getElementById('spanMensaje')
 let nivel= 1
-
-let cuenta
-
-let i =0
-
-let validadcionInicio
-let velocidadRival1
-let velocidadRival2
-
-let dificultad = 150
-
-let pasoIzquierdo=0
-let pasoDerecho=0
-
-let pasoRival1=0
-let pasoRival2=0
-
-window.addEventListener('load',iniciarJuego)
-
-let mensaje1 = document.getElementById('mensaje-1')
-let mensaje2 = document.getElementById('mensaje-2')
-let mensaje3 = document.getElementById('mensaje-3')
-let mensaje4 = document.getElementById('mensaje-4')
-let mensaje5 = document.getElementById('mensaje-5')
-let mensajeNivel = document.getElementById('mensajeNivel')
-let botonIzquierda = document.getElementById('botonIzquierda')
-let botonDerecha = document.getElementById('botonDerecha')
-
-
-function iniciarJuego() {
-    inputRojo  = document.getElementById('radioRojo')
-    inputAzul  = document.getElementById('radioAzul')
-    inputVerde  = document.getElementById('radioVerde')
-    inputAmarillo  = document.getElementById('radioAmarillo')
-    inputRosa  = document.getElementById('radioRosa')
-    
-    document.addEventListener('keyup',correr)
-    botonColor.addEventListener('click',prepararCarrera)
-    botonInicio.addEventListener('click',cuentaRegresiva)
-    botonIzquierda.addEventListener('click',darPasoIzquierdo)
-    botonDerecha.addEventListener('click',darPasoDerecho)
-
-
-    botonColor.disabled=true
-
-    revisar =setInterval(revisarEleccion,50)
-    
-    seccionInicio.style.display='none'
-    seccionLargada.style.display='none'
-    seccionMensaje.style.display='none'
-
-    botonInicio.style.display='none'
-    escenario.style.display='none'
-    mensajeNivel.style.display='none'
-    botonIzquierda.style.display='none'
-    botonDerecha.style.display='none'
-
-
-    mensaje2.style.display='none'
-    mensaje3.style.display='none'
-    mensaje4.style.display='none'
-    mensaje5.style.display='none'
-}
-
-let botonSiguiente = document.getElementById('botonSiguiente')
-botonSiguiente.addEventListener('click',mostrarSiguienteMensaje)
-let contadorMensajes = 1
-function mostrarSiguienteMensaje() {
-    if (contadorMensajes===1) {
-        mensaje1.style.display='none'
-        mensaje2.style.display='flex'
-        seccionInicio.style.display='flex'
-        botonSiguiente.style.display='none'
-        contadorMensajes++
-    } else if (contadorMensajes===2) {
-        mensaje2.style.display='none'
-        mensaje3.style.display='flex'
-        botonSiguiente.style.display='flex'
-        contadorMensajes++
-    } else if (contadorMensajes===3) {
-        mensaje3.style.display='none'
-        mensaje4.style.display='flex'
-        contadorMensajes++
-    } else if (contadorMensajes===4) {
-        mensaje4.style.display='none'
-        mensaje5.style.display='flex'
-        botonSiguiente.style.display='none'
-        botonInicio.style.display='flex'
-        
-    } 
-    console.log(contadorMensajes)
-}
-
-
-function revisarEleccion() {
-    if (inputRojo.checked||inputAzul.checked||inputVerde.checked||inputAmarillo.checked||inputRosa.checked) {
-        botonColor.disabled=false
-    }
-}
 
 function prepararCarrera() {
     seccionInicio.style.display='none'
@@ -244,17 +201,38 @@ function prepararCarrera() {
     mostrarSiguienteMensaje()
 
     spanMensaje.innerHTML='Cuando oprimas el boton empezara la carrera'
-    spanNivel.innerHTML= ` ${nivel}`
-    
 }
+
+
+                                                 /**    DIBUJO        */
+
+
+const canvas = document.getElementById('canvas')
+const lienzo = canvas.getContext('2d')
+const imagenFondo = new Image()
+imagenFondo.src = './imagenes/fondo.png'
+
+let anchoImagenFondo = window.innerWidth
+let alturaImagenFondo = anchoImagenFondo * 500 / 1200
+canvas.width = anchoImagenFondo
+canvas.height = alturaImagenFondo 
+let unidad = anchoImagenFondo/10
+
+let posicionJugador = unidad*0.8
+let posicionRival1 =unidad*1.2
+let posicionRival2 = unidad*0.3
+let pasoIzquierdo=0
+let pasoDerecho=0
+let pasoRival1=0
+let pasoRival2=0
 
 function dibujar() {
     lienzo.drawImage(
         imagenFondo,
         0,
         0,
-        escenario.width,
-        escenario.height
+        canvas.width,
+        canvas.height
     )
     
     if (pasoRival1%2==0) {
@@ -265,10 +243,10 @@ function dibujar() {
 
     lienzo.drawImage(
         imagenRival1,
-        posicionRival1+80,
-        alturaImagenFondo*4/5-100-alturaImagenMuñequito/2,
-        anchoImagenMuñequito,
-        alturaImagenMuñequito
+        posicionRival1,
+        (alturaImagenFondo/2)-unidad*0.6,
+        unidad*1.2,
+        unidad*1.2
     )
     
     if (pasoIzquierdo==1) {
@@ -279,10 +257,10 @@ function dibujar() {
 
     lienzo.drawImage(
         imagenJugador,
-        posicionJugador+40,
-        alturaImagenFondo*4/5-50-alturaImagenMuñequito/2,
-        anchoImagenMuñequito,
-        alturaImagenMuñequito
+        posicionJugador,
+        (alturaImagenFondo/2)-unidad*0.2,
+        unidad*1.2,
+        unidad*1.2
     )
     
     if (pasoRival2%2!==0) {
@@ -294,30 +272,39 @@ function dibujar() {
     lienzo.drawImage(
         imagenRival2,
         posicionRival2,
-        alturaImagenFondo*4/5-10-alturaImagenMuñequito/2,
-        anchoImagenMuñequito,
-        alturaImagenMuñequito
+        (alturaImagenFondo/2)+unidad*0.3,
+        unidad*1.2,
+        unidad*1.2
     )
 
-    if (posicionJugador>=anchoImagenFondo-anchoImagenMuñequito||
-        posicionRival1>=anchoImagenFondo-anchoImagenMuñequito-40||
-        posicionRival2>=anchoImagenFondo-anchoImagenMuñequito-80) {
+    if (posicionJugador>=anchoImagenFondo-unidad*1.6||
+        posicionRival1>=anchoImagenFondo-unidad*1.2||
+        posicionRival2>=anchoImagenFondo-unidad*1.8) {
         victoria()
     }
 }
+
+
+let cuenta
 
 function cuentaRegresiva() {
     cuenta=setInterval(contar,800)
     dibujar()
     contar()
     mensajeNivel.style.display='flex'
-    escenario.style.display='flex'
+    canvas.style.display='flex'
     mensaje5.style.display='none'
     botonIzquierda.style.display='flex'
     botonDerecha.style.display='flex'
 }
 
+
+const spanLargada=document.getElementById('spanLargada')
+let i =0
+
 function contar() {
+    const spanNivel=document.getElementById('nivel')
+
     seccionMensaje.style.display='none'
     seccionLargada.style.display='flex'
     botonInicio.style.display='none'
@@ -339,18 +326,40 @@ function contar() {
     if (i==4) {
         i=0
     }
-}
-
-function iniciarCarrera() {
-    intervalo =setInterval(dibujar,50)
-    velocidadRival1 =setInterval(moverRival1,dificultad)
-    velocidadRival2 =setInterval(moverRival2,dificultad+10)
-    validadcionInicio=true
 
     spanNivel.innerHTML= ` ${nivel}`
 }
 
+
+let velocidadRival1
+let velocidadRival2
+let dificultad = 0
+let validadcionInicio
+
+function iniciarCarrera() {
+    let velocidad = aleatorio(100,120)-(dificultad*0.1);
+
+    intervalo =setInterval(dibujar,50)
+    velocidadRival1 =setInterval(moverRival1,velocidad)
+    velocidadRival2 =setInterval(moverRival2,150-dificultad)
+    validadcionInicio=true
+
+}
+
+function aleatorio(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+
+                                                 /**    MOVIMIENTO        */
+
+
 function correr(algo) {
+    const t = {
+        LEFT:37,
+        RIGHT:39
+    };
+
     if (validadcionInicio==true) {
         switch (algo.keyCode){
             case t.LEFT:            
@@ -367,7 +376,7 @@ function correr(algo) {
 
 function darPasoIzquierdo() {
     if (pasoIzquierdo==0) {
-        posicionJugador+=5
+        posicionJugador+=unidad*0.05
         pasoIzquierdo=1
         pasoDerecho=0
     }
@@ -375,21 +384,25 @@ function darPasoIzquierdo() {
 
 function darPasoDerecho() {
     if (pasoDerecho==0) {
-        posicionJugador+=5
+        posicionJugador+=unidad*0.05
         pasoDerecho=1
         pasoIzquierdo=0
     }
 }
 
 function moverRival1() {
-    posicionRival1 += 5
+    posicionRival1 += unidad*0.05
     pasoRival1++
 }
 
 function moverRival2() {
-    posicionRival2 += 5
+    posicionRival2 += unidad*0.05
     pasoRival2++
 }
+
+
+                                                 /**    DESPUES DEL JUEGO        */
+
 
 function victoria() {
     clearInterval(intervalo)
@@ -399,14 +412,14 @@ function victoria() {
     if (posicionJugador>posicionRival1&&posicionJugador>posicionRival2) {
         spanMensaje.innerHTML='Ganaste !! Si oprimes el boton pasaras al siguiente nivel'
         nivel++
-        dificultad=dificultad-10
+        dificultad=dificultad+10
     }if (posicionRival1>=posicionJugador||posicionRival2>=posicionJugador) {
         spanMensaje.innerHTML='Perdiste.. Si oprimes el boton podras intentarlo de nuevo'
     }
 
-    posicionRival1=90
-    posicionJugador=50
-    posicionRival2=10
+    posicionJugador = unidad*0.8
+    posicionRival1 =unidad*1.2
+    posicionRival2 = unidad*0.3
 
     seccionMensaje.style.display='flex'
     seccionLargada.style.display='none'
