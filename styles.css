@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 
 @media all and (min-width:1px) {
+                                                /*   GENERAL    */
 body {
     font-family: 'Patua One', cursive;
     background-color: rgb(26, 26, 26);
@@ -8,37 +9,15 @@ body {
     display: flex;
     flex-direction: column;
 }
-
-h1{
-    text-align: center;
-}
-h2{
-    margin-left: 2em;
-}
 div{
     display: flex;
 }
-#inicio{
-    flex-direction: column;
-}
-#mensajeNivel{
-    margin-left: 1em;
-}
-#cuenta-regresiva{
-    margin-left: 1em;
-}
 
-
-label img:hover {
-    height: 120px;
-    width: 120px;
-    padding: 0px;
-    cursor: pointer;
-
-}
-
-input:checked + label {
-    background-color: #bdf5ff;
+h1{
+    text-align: center;
+    background-color: rgb(196, 196, 196);
+    color: black;
+    border-radius: 0.4em;
 }
 
 .boton{
@@ -48,13 +27,31 @@ input:checked + label {
     flex-direction: column;
     padding: 1em 2em;
 }
+
 .boton:hover{
     background-color: #bdf5ff;
     cursor: pointer;
 }
+                                                /*   INTRO    */
 
-.radio{
-    display: none;
+
+#intro{
+    text-align: center;
+}
+
+#inicio{
+    flex-direction: column;
+}
+
+label img:hover {
+    height: 120px;
+    width: 120px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+input:checked + label {
+    background-color: #bdf5ff;
 }
 
 #iconos{
@@ -62,10 +59,6 @@ input:checked + label {
     flex-wrap: wrap;
     justify-content: space-evenly;
     box-sizing: border-box;
-}
-
-#carrera{
-    flex-direction: column;
 }
 
 .icono{
@@ -81,8 +74,37 @@ input:checked + label {
     box-sizing: border-box;
     padding: 10px;
     margin: 10px;
-
 }
+
+.radio{
+    display: none;
+}
+
+#section-btn-inicio{
+    display: flex;
+    align-items: flex-start;
+}
+
+                                                /*   JUEGO    */
+
+
+#carrera{
+    flex-direction: column;
+}
+
+#mensajeNivel{
+    margin-left: 1em;
+}
+
+#resultado{
+    padding: 0.4em;
+    height: 10em;
+}
+
+#cuenta-regresiva{
+    margin-left: 1em;
+}
+
 
 #canvas{
     width: 100%;
@@ -98,6 +120,9 @@ input:checked + label {
 }
 
 
+                                                /*   RESPONSIVE    */
+
+
 @media all and (min-width:480px)    {
     #botones{
         justify-content: space-evenly;
@@ -107,6 +132,10 @@ input:checked + label {
 @media all and (min-width:820px)    {
     #botones{
         justify-content: space-between;
+    }
+    #intro{
+        text-align: start;
+        margin-left: 1em;
     }
 }
 
