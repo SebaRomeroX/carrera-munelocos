@@ -1,21 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="description" content="juego de carreras con personajes graciosos">
+    <meta name="author" content="Sebastian A. Romero">
+
+    <!--  ESTILOS  -->
     <link rel="stylesheet" href="./styles.css">
-    <title>Enero2023</title>
+
+    <!-- TITULO -->
+    <link rel="shortcut icon" href="imagenes/rojoIcono.png" type="image/x-icon">
+    <title>Carrera de Muñelocos</title>
 </head>
 <body>
     <h1>La Carrera de los MuñeLocos</h1>
+
     
+    <!--  MENSAJES  -->
     <section id="intro">
+
         <h2 id="mensajeNivel"><span id="nivel"> </span></h2>
         <h2 id="mensaje"><span id="spanMensaje"></span></h2>
         <input class="boton" type="button" value="Siguiente" id="botonSiguiente">     
+
+        <input class="boton" type="button" id="botonInicio" value="Comenzar">
     </section>
 
+
+    <!-- ICONOS PARA SELECCION -->
     <section id="inicio">
         <div id="iconos">
             <input class="radio"type="radio" name="radio" id="radioRojo">
@@ -30,21 +44,20 @@
             <label class="icono" for='radioRosa'> <img src='imagenes/rosaIcono.png' alt="" ></label>
         </div>
 
-        <div>
+        <div class="contenedor-btn-eleccion">
             <input class="boton" type="button" id="eleccionColor" value="Siguiente">
         </div>
     </section>
 
-    <section id="section-btn-inicio">
-        <input class="boton" type="button" id="botonInicio" value="Comenzar">
-    </section>
 
-
+    <!--  CANVAS  -->
     <canvas id="canvas"></canvas>
    
+
+    <!-- BOTONES PARA JUGAR EN MOBILE -->
     <section id="botones">
-        <input class="boton" type="button" id="botonIzquierda" value="IZQUIERDA">
-        <input class="boton" type="button" id="botonDerecha" value="DERECHA">
+        <input class="boton btn-correr" type="button" id="botonIzquierda" value="IZQUIERDA">
+        <input class="boton btn-correr" type="button" id="botonDerecha" value="DERECHA">
     </section>
     
         
