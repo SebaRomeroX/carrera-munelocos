@@ -1,23 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
-
-                                                /*   GENERAL    */
+    /* ---------------------------------------------------------  GENERAL    */
 
 :root{
     --marca:rgb(0, 119, 255);
 
 }   
+
 *{
     margin: 0;
     padding: 0;
     border: 0;
-}                                             
+}     
+
 body {
-    font-family: 'Patua One', cursive;
+    font-family: cursive;
     background-image: url('imagenes/fondo-pantalla.png');
-    color: black;
     display: flex;
     flex-direction: column;
 }
+
 div{
     display: flex;
 }
@@ -34,8 +34,6 @@ h1{
 
 .boton{
     border-radius: 10px;
-    align-self: center;
-    flex-direction: column;
     padding: 1em 2em;
     user-select: none;
 }
@@ -44,10 +42,16 @@ h1{
     background-color: #bdf5ff;
     cursor: pointer;
 }
-                                                /*   INTRO    */
 
 
-#intro{
+.radio{
+    display: none;
+}
+
+    /* ---------------------------------------------  INICIO MENSAJES    */
+
+
+.intro{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,11 +64,12 @@ h1{
     min-height: 25vh;
     background-color: var(--marca);
 }
-#intro .boton{
+
+.intro .boton{
     margin-top: 2em;
 }
 
-#inicio{
+.section-seleccion{
     flex-direction: column;
 }
 
@@ -76,10 +81,10 @@ label img:hover {
 }
 
 input:checked + label {
-    background-color: #bdf5ff;
+    background-color: var(--marca);
 }
 
-#iconos{
+.iconos{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -89,25 +94,19 @@ input:checked + label {
 .icono{
     height: 120px;
     width: 120px;
-    border-radius: 58px;
+    border-radius: 50%;
     margin: 20px;
+    padding: 0.6em;
 }
 
 .icono img {
-    height: 100px;
-    width: 100px;
-    box-sizing: border-box;
-    padding: 10px;
-    margin: 10px;
+    height: 90%;
+    width: 90%;
+    margin: 5%;
 }
 
-.radio{
-    display: none;
-}
 
 .contenedor-btn-eleccion{
-    display: flex;
-    align-items: flex-start;
     background-color: var(--marca);
     width: fit-content;
     padding: 1.6em 3em;
@@ -116,38 +115,20 @@ input:checked + label {
 }
 
 
-                                                /*   JUEGO    */
+        /* -------------------------------------------------  JUEGO    */
 
 
-#carrera{
-    flex-direction: column;
-}
 
-#mensajeNivel{
-    margin-left: 1em;
-}
-
-#resultado{
-    padding: 0.4em;
-    height: 10em;
-}
-
-#cuenta-regresiva{
-    margin-left: 1em;
-}
-
-
-#canvas{
+canvas{
     width: 100%;
-    margin: 0.6em 0;
+    padding: 1em 0;
+    margin: 1em 0;
+    background-color: var(--marca);
 }
 
-
-#botones{
-    width: 100%;
+.botones-correr{
     display: flex;
     justify-content: center;
-    box-sizing: border-box;
 }
 
 .btn-correr{
@@ -157,11 +138,11 @@ input:checked + label {
 
 
 
-                                                /*   RESPONSIVE    */
+    /*  -----------------------------------------------------------   RESPONSIVE    */
 
 
 @media all and (min-width:480px)    {
-    #botones{
+    .botones-correr{
         justify-content: space-evenly;
     }
 }
@@ -170,12 +151,12 @@ input:checked + label {
     h1{
         width: 80%;
     }
-    #botones{
+    .botones-correr{
         justify-content: space-between;
         width: 90%;
         margin: auto;
     }
-    #intro{
+    .intro{
         text-align: start;
         min-height: 16vh;
         padding: 0.4em 1em;
@@ -188,7 +169,7 @@ input:checked + label {
         width: 60%;
 
     }
-    #botones{
+    .botones-correr{
         display: none;
     }
 }
