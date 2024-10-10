@@ -13,10 +13,25 @@
 
 body {
     font-family: cursive;
-    background-image: url('imagenes/fondo-pantalla.png');
+    background-image: url('imagenes/bg-blue.avif');
     display: flex;
     flex-direction: column;
+
+    
+    color: aliceblue;
+
+    opacity: 0;
+    animation: carga 1s .6s forwards;
 }
+
+@keyframes carga{   /*  Animcion carga inicial    */
+    to{
+        opacity: 1;
+    }
+}
+
+
+/*    --------- Cabecera    ---------------    */
 
 div{
     display: flex;
@@ -24,22 +39,24 @@ div{
 
 h1{
     text-align: center;
-    color: black;
+
     border-radius: 0.4em;
     padding: 0.4em 0 1em 0;
-    margin: 0 auto 1em auto;
+    margin:auto;
     width: 96%;
-    background-color: var(--marca);
 }
 
 .boton{
-    border-radius: 10px;
-    padding: 1em 2em;
+    border-radius: 1em;
+    padding: .6em 1em;
     user-select: none;
+
+    font-family: cursive;
+    font-size: 1.2em;
 }
 
 .boton:hover{
-    background-color: #bdf5ff;
+    scale: 1.08;
     cursor: pointer;
 }
 
@@ -56,17 +73,17 @@ h1{
     flex-direction: column;
     align-items: center;
     text-align: center;
+
     margin: auto;
     padding-bottom: 0.4em;
     width: 96%;
     border-radius: 1em;
-    height: min-content;
-    min-height: 25vh;
-    background-color: var(--marca);
+
+    height: 20vh;
 }
 
 .intro .boton{
-    margin-top: 2em;
+    margin-top: 1.2em;
 }
 
 .section-seleccion{
@@ -81,7 +98,19 @@ label img:hover {
 }
 
 input:checked + label {
-    background-color: var(--marca);
+    scale: 1.4;
+    transition: all .1s;
+
+    animation: cabecear 3s infinite;
+}
+
+@keyframes cabecear{
+    33%{
+        rotate: 20deg;
+    }
+    66%{
+        rotate: -20deg;
+    }
 }
 
 .iconos{
@@ -97,17 +126,23 @@ input:checked + label {
     border-radius: 50%;
     margin: 20px;
     padding: 0.6em;
+
+    
 }
 
 .icono img {
     height: 90%;
     width: 90%;
     margin: 5%;
+
+    transition: all .1s;
+}
+.icono img:hover{
+    translate: -5px -15px;
 }
 
 
 .contenedor-btn-eleccion{
-    background-color: var(--marca);
     width: fit-content;
     padding: 1.6em 3em;
     margin: 0 2em 0.4em 2em;
@@ -117,13 +152,9 @@ input:checked + label {
 
         /* -------------------------------------------------  JUEGO    */
 
-
-
 canvas{
     width: 100%;
-    padding: 1em 0;
     margin: 1em 0;
-    background-color: var(--marca);
 }
 
 .botones-correr{
