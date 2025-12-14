@@ -372,7 +372,7 @@ function contar() {
     }
 
     //MOSTRAR NIVEL   
-    let spanNivel=document.getElementById('nivel')
+    let spanNivel=document.getElementById('mensajeNivel')
     spanNivel.innerHTML=`Nivel°  ${nivel}`;
 }
 
@@ -401,8 +401,14 @@ function iniciarCarrera() {
 document.addEventListener('keyup',correr);
 
 //BOTONES EN PANTALLA (MOBILE)
-botonIzquierda.addEventListener('click',darPasoIzquierdo);
-botonDerecha.addEventListener('click',darPasoDerecho);
+botonIzquierda.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    darPasoIzquierdo()
+});
+botonDerecha.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    darPasoDerecho()
+});
 
 //TECLADO
 function correr(tecla) {

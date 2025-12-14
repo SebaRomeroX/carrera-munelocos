@@ -1,10 +1,4 @@
     /* ---------------------------------------------------------  GENERAL    */
-
-:root{
-    --marca:rgb(0, 119, 255);
-
-}   
-
 *{
     margin: 0;
     padding: 0;
@@ -12,20 +6,27 @@
 }     
 
 body {
-    font-family: cursive;
-    background-image: url('imagenes/bg-blue.avif');
+    font-family: system-ui;
+
+    background: url('imagenes/bg-blue.avif');
+    background-size: cover;
+
     display: flex;
     flex-direction: column;
-
+    align-items: center;
     
     color: aliceblue;
 
     opacity: 0;
     animation: carga 1s .6s forwards;
+
+    height: 98vh;
+    width: 98vw;
+    margin: 1vh 1vw;
 }
 
-@keyframes carga{   /*  Animcion carga inicial    */
-    to{
+@keyframes carga {   /*  Animcion carga inicial    */
+    to {
         opacity: 1;
     }
 }
@@ -37,13 +38,14 @@ div{
     display: flex;
 }
 
-h1{
+.titulo{
     text-align: center;
+    font-size: 1.6em;
 
     border-radius: 0.4em;
-    padding: 0.4em 0 1em 0;
-    margin:auto;
-    width: 96%;
+    
+
+    height: 8vh;
 }
 
 .boton{
@@ -68,26 +70,30 @@ h1{
     /* ---------------------------------------------  INICIO MENSAJES    */
 
 
-.intro{
+.mensajes{
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 
-    margin: auto;
-    padding-bottom: 0.4em;
-    width: 96%;
-    border-radius: 1em;
+    font-size: .8em;
 
-    height: 20vh;
+    width: 96%;
+    height: 26vh;
+    border-radius: 1em;
 }
 
-.intro .boton{
-    margin-top: 1.2em;
+#mensaje {
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .section-seleccion{
     flex-direction: column;
+    align-items: center;
 }
 
 label img:hover {
@@ -98,7 +104,7 @@ label img:hover {
 }
 
 input:checked + label {
-    scale: 1.4;
+    scale: 1.1;
     transition: all .1s;
 
     animation: cabecear 3s infinite;
@@ -121,13 +127,9 @@ input:checked + label {
 }
 
 .icono{
-    height: 120px;
-    width: 120px;
-    border-radius: 50%;
+    height: 80px;
+    width: 80px;
     margin: 20px;
-    padding: 0.6em;
-
-    
 }
 
 .icono img {
@@ -158,13 +160,16 @@ canvas{
 }
 
 .botones-correr{
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .btn-correr{
     user-select: none;
-    border: 2px solid black;
+    padding: 1em 1.6em;
+
+    touch-action: manipulation;
 }
 
 
@@ -179,7 +184,7 @@ canvas{
 }
 
 @media all and (min-width:768px)    {
-    h1{
+    .titulo{
         width: 80%;
     }
     .botones-correr{
@@ -187,7 +192,7 @@ canvas{
         width: 90%;
         margin: auto;
     }
-    .intro{
+    .mensajes{
         text-align: start;
         min-height: 16vh;
         padding: 0.4em 1em;
@@ -196,7 +201,7 @@ canvas{
 }
 
 @media all and (min-width:1024px)    {
-    h1{
+    .titulo{
         width: 60%;
 
     }
