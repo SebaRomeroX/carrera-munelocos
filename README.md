@@ -1,14 +1,81 @@
-"La Carrera de los Muñelocos": Una Aventura de la mano de JavaScript
+### 🏃‍♂️ La Carrera de los Muñelocos
 
-Se trata de un entretenido juego de carreras desarrollado utilizando HTML5, CSS3 y JavaScript.
-La lógica del juego se implementa mediante JavaScript, aprovechando las capacidades del elemento canvas de HTML5 para renderizar la experiencia de juego.
+[![Jugar Ahora](https://sebaromerox.github.io/carrera-munelocos)]
+[![Código Fuente](https://github.com/SebaRomeroX/carrera-munelocos)]
 
-El diseño y estilo del juego se han creado utilizando CSS3, garantizando una presentación atractiva y responsive en diferentes dispositivos y tamaños de pantalla.
+### 🎮 ¿Cómo Jugar?
 
-La funcionalidad principal del juego, incluyendo la lógica del personaje y la detección de teclas, se ha implementado utilizando JavaScript.
-Además, se utiliza para manipular el canvas y actualizar la interfaz de usuario en tiempo real.
+**¡Presiona izquierda-derecha lo más rápido que puedas y corre contra los bots!** Un juego divertido y adictivo creado con JavaScript puro.
 
-La estructura del juego incluye niveles infinitos, a medida que el jugador avanza, la dificultad se incrementa mediante la alteración de la velocidad.
+1. **Elige tu personaje** entre 5 opciones diferentes
+2. **Presiona alternadamente** las teclas ← y → (botones en móvil)
+3. **¡Corre más rápido que los bots!** Gana para avanzar al siguiente nivel
+4. **Los bots aceleran** con cada nivel. ¿hasta dónde llegarás?
 
-Cómo Jugar:
-Utiliza las teclas de flechas izquierda y derecha para que tu personaje dé pasos hasta el final de la pista, llega en primer lugar para pasar al siguiente nivel.
+### 🖼️ Vista Previa
+
+![Captura del juego: tres personajes corriendo por una calle](./imagenes/carrera.jpg)
+
+### 🛠️ Tecnologías Usadas
+
+- **JavaScript Vanilla**
+- **HTML5 Canvas** para gráficos y animaciones
+- **CSS**
+- **GitHub Pages** para deployment
+
+### ✨ Características Principales
+
+- ✅ **5 personajes seleccionables** con colores y caras únicas
+- ✅ **Sistema de niveles infinitos** (los bots aceleran progresivamente)
+- ✅ **Mecánica de movimiento**: paso izquierdo → paso derecho (no hay trampas)
+- ✅ **Competencia contra IA** con dos bots oponentes
+- ✅ **Juego sin fin** - desafía tus límites de velocidad
+
+### 🎯 **Movimiento Realista del Personaje**
+
+**Problema:** Necesitaba que el personaje alternara pies obligatoriamente (no dos pasos seguidos con el mismo pie).  
+**Solución:** Implementé un sistema de estados con dos imágenes diferentes (pie izquierdo/pie derecho) y validación de secuencia de teclas.
+
+### 📱 Versión Móvil con Controles Táctiles
+
+**Problema:** En móviles no hay teclado físico.
+**Solución:** Creé botones en pantalla que simulan las teclas ← y → con la misma lógica de alternancia.
+
+### 🚀 Cómo Ejecutar Localmente
+
+No necesitas servidores ni dependencias
+**Clona el repositorio:** git clone https://github.com/SebaRomeroX/carrera-munelocos
+Y ejecuta el el archivo index.html en tu navegador
+
+### 📈 Evolución del Proyecto
+
+Este juego fue un proyecto de experimentación donde aplique lo que habia aprendido sobre Desarrollo Web
+
+- **Refactorización gradual** mejor organización y legibilidad
+- **Mejoras de UI/UX** estilos y controles móviles
+- **Deployment** poder compartirlo
+
+### 💡 Lo Que Aprendí / Reflexión
+
+"Este proyecto fue un juego dentro de otro juego.
+Me diverti experimentando y probando lo que iba haciendo,
+puse en practica lo aprendido pero aprendi muchisimo mas mientras lo desarrollaba "
+
+- La simplicidad en la mecánica puede crear diversión pura
+- Refactorizar es parte natural del crecimiento como dev
+- Mobile-first es crucial incluso en proyectos pequeños
+
+### 🔧 ¿Qué Haría Diferente Hoy?
+
+- Usaría **React** para una arquitectura más mantenible
+- Implementaría **spritesheets** en lugar de imágenes separadas
+- Añadiría sistema de **puntuación** y leaderboards
+- Mejoraría la IA de los bots con **comportamientos más variados**
+- Agregaria un modo **multijugador** local
+- Efectos de **sonido y música**
+- Diferentes **escenarios**
+
+### 👨‍💻 Autor
+
+Sebastian A. Romero - [Portfolio](https://sebaromerox.github.io/portafolios/)
+⭐ ¿Lo jugaste? Deja una estrella al repositorio si te divirtió!
