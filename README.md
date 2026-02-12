@@ -1,7 +1,7 @@
 ### 🏃‍♂️ La Carrera de los Muñelocos
 
-[![Jugar Ahora](https://sebaromerox.github.io/carrera-munelocos)]
-[![Código Fuente](https://github.com/SebaRomeroX/carrera-munelocos)]
+[Jugar Ahora](https://sebaromerox.github.io/carrera-munelocos)
+[Código Fuente](https://github.com/SebaRomeroX/carrera-munelocos)
 
 ### 🎮 ¿Cómo Jugar?
 
@@ -38,13 +38,13 @@
 
 ### 📱 Versión Móvil con Controles Táctiles
 
-**Problema:** En móviles no hay teclado físico.
+**Problema:** En móviles no hay teclado físico.  
 **Solución:** Creé botones en pantalla que simulan las teclas ← y → con la misma lógica de alternancia.
 
 ### 🚀 Cómo Ejecutar Localmente
 
-No necesitas servidores ni dependencias
-**Clona el repositorio:** git clone https://github.com/SebaRomeroX/carrera-munelocos
+No necesitas servidores ni dependencias  
+**Clona el repositorio:** git clone https://github.com/SebaRomeroX/carrera-munelocos  
 Y ejecuta el el archivo index.html en tu navegador
 
 ### 📈 Evolución del Proyecto
@@ -77,5 +77,5 @@ puse en practica lo aprendido pero aprendi muchisimo mas mientras lo desarrollab
 
 ### 👨‍💻 Autor
 
-Sebastian A. Romero - [Portfolio](https://sebaromerox.github.io/portafolios/)
+Sebastian A. Romero - [Portfolio](https://sebaromerox.github.io/portafolios/)  
 ⭐ ¿Lo jugaste? Deja una estrella al repositorio si te divirtió!

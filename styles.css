@@ -1,4 +1,6 @@
-    /* ---------------------------------------------------------  GENERAL    */
+
+/* ------------------------ GENERAL ------------------------ */
+
 *{
     margin: 0;
     padding: 0;
@@ -7,6 +9,8 @@
 
 body {
     font-family: system-ui;
+    letter-spacing: .04em;
+    text-align: center;
 
     background: url('imagenes/bg-blue.avif');
     background-size: cover;
@@ -31,56 +35,41 @@ body {
     }
 }
 
-
-/*    --------- Cabecera    ---------------    */
-
-div{
-    display: flex;
-}
-
-.titulo{
-    text-align: center;
-    font-size: 1.6em;
-
-    border-radius: 0.4em;
-    
-
-    height: 8vh;
-}
-
-.boton{
+button{
     border-radius: 1em;
     padding: .6em 1em;
     user-select: none;
 
-    font-family: cursive;
     font-size: 1.2em;
+    letter-spacing: .08em;
 }
 
-.boton:hover{
+button:hover{
     scale: 1.08;
     cursor: pointer;
 }
-
 
 .radio{
     display: none;
 }
 
-    /* ---------------------------------------------  INICIO MENSAJES    */
 
+/* ------------------------ MENSAJES ------------------------ */
+
+
+.titulo{
+    font-size: 1.6em;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+}
 
 .mensajes{
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
-
     font-size: .8em;
-
-    width: 96%;
     height: 26vh;
-    border-radius: 1em;
 }
 
 #mensaje {
@@ -96,17 +85,40 @@ div{
     align-items: center;
 }
 
-label img:hover {
-    height: 120px;
-    width: 120px;
-    padding: 0px;
-    cursor: pointer;
+
+/* -- ICONOS -- */
+.iconos{
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    place-content: center;
+
+    width: 80%;
+    gap: 40px;
 }
 
-input:checked + label {
+.icono{
+    height: 80px;
+    width: 80px;
+}
+
+.icono img {
+    height: 90%;
+    width: 90%;
+    margin: 5%;
+    transition: all .1s;
+}
+
+.icono:hover img {
+    height: 120px;
+    width: 120px;
+    cursor: pointer;
+    translate: -5px -15px;
+}
+
+.icono:has(input:checked) {
     scale: 1.1;
     transition: all .1s;
-
     animation: cabecear 3s infinite;
 }
 
@@ -119,40 +131,8 @@ input:checked + label {
     }
 }
 
-.iconos{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    box-sizing: border-box;
-}
 
-.icono{
-    height: 80px;
-    width: 80px;
-    margin: 20px;
-}
-
-.icono img {
-    height: 90%;
-    width: 90%;
-    margin: 5%;
-
-    transition: all .1s;
-}
-.icono img:hover{
-    translate: -5px -15px;
-}
-
-
-.contenedor-btn-eleccion{
-    width: fit-content;
-    padding: 1.6em 3em;
-    margin: 0 2em 0.4em 2em;
-    border-radius: 1em;
-}
-
-
-        /* -------------------------------------------------  JUEGO    */
+/* ------------------------  JUEGO ------------------------ */
 
 canvas{
     width: 100%;
@@ -166,47 +146,30 @@ canvas{
 }
 
 .btn-correr{
-    user-select: none;
     padding: 1em 1.6em;
-
-    touch-action: manipulation;
 }
 
 
-
-    /*  -----------------------------------------------------------   RESPONSIVE    */
-
-
-@media all and (min-width:480px)    {
-    .botones-correr{
-        justify-content: space-evenly;
-    }
-}
-
-@media all and (min-width:768px)    {
-    .titulo{
-        width: 80%;
-    }
-    .botones-correr{
-        justify-content: space-between;
-        width: 90%;
-        margin: auto;
-    }
-    .mensajes{
-        text-align: start;
-        min-height: 16vh;
-        padding: 0.4em 1em;
-        width: 96%;
-    }
-}
+/* ------------------------  RESPONSIVE ------------------------ */
 
 @media all and (min-width:1024px)    {
-    .titulo{
-        width: 60%;
-
+    .mensajes{
+        height: 24vh;
     }
+    .mensaje{
+        height: 18vh;
+    }
+
+    .iconos {
+        gap: 60px;
+    }
+
     .botones-correr{
         display: none;
     }
+    
+    canvas {
+        max-width: 1204px;
+        border-radius: .6em;
+    }
 }
-
