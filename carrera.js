@@ -2,7 +2,7 @@
 /**   -------------------------------------  INICIO   -------------------------------     */
 
 //ELEMENTOS     
-const seccionEleccion= document.getElementById('inicio');
+const seccionIconos= document.getElementById('iconos');
 const mensajeNivel = document.getElementById('mensajeNivel');
 const botonIzquierda = document.getElementById('botonIzquierda');
 const botonDerecha = document.getElementById('botonDerecha');
@@ -13,7 +13,7 @@ botonSiguiente.addEventListener('click',mostrarMensajeIntro);
 function cargarElementos() {
     
     // DISPLAY ELEMENTOS
-    seccionEleccion.style.display='none';
+    seccionIconos.style.display='none';
     canvas.style.display='none';
     mensajeNivel.style.display='none';
     botonIzquierda.style.display='none';
@@ -48,7 +48,7 @@ function mostrarMensajeIntro() {
     }
     if (contadorMensajes==2) {
         mensaje='Primero elige a tu personaje';
-        seccionEleccion.style.display ='flex';
+        seccionIconos.style.display ='flex';
         botonSiguiente.style.display = 'none';
 
         //REVISAR ELECCION PERSONAJE
@@ -134,7 +134,7 @@ function revisarEleccion() {
 
 //DETERMINAR PERSONAJE SEGUN ELECCION
 function determinarPersonaje() {
-    seccionEleccion.style.display = 'none';
+    seccionIconos.style.display = 'none';
     botonSiguiente.removeEventListener('click',determinarPersonaje);
 
     let eleccion;

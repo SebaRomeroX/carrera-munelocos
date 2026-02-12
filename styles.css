@@ -69,20 +69,15 @@ button:hover{
     flex-direction: column;
     align-items: center;
     font-size: .8em;
-    height: 26vh;
+    height: 20vh;
 }
 
 #mensaje {
-    height: 20vh;
+    height: 16vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-}
-
-.section-seleccion{
-    flex-direction: column;
-    align-items: center;
 }
 
 
@@ -93,8 +88,9 @@ button:hover{
     box-sizing: border-box;
     place-content: center;
 
+    padding: 2em 0;
     width: 80%;
-    gap: 40px;
+    gap: 60px;
 }
 
 .icono{
@@ -136,19 +132,35 @@ button:hover{
 
 canvas{
     width: 100%;
-    margin: 1em 0;
+    margin: 2em 0;
 }
 
 .botones-correr{
     width: 100%;
     display: flex;
     justify-content: space-evenly;
+    margin-top: 1em;
 }
 
 .btn-correr{
     padding: 1em 1.6em;
 }
 
+
+/* ------------------------  FOOTER ------------------------ */
+
+footer {
+    position: fixed;
+    bottom: 0;
+    padding: 1em;
+}
+
+a {
+    text-decoration: none;
+    color: aliceblue;
+    font-size: 1.2em;
+    font-weight: 700;
+}
 
 /* ------------------------  RESPONSIVE ------------------------ */
 
