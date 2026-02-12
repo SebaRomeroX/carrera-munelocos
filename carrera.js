@@ -1,19 +1,19 @@
-     /**   -------------------------------------  INICIO   -------------------------------     */
+
+/**   -------------------------------------  INICIO   -------------------------------     */
 
 //ELEMENTOS     
-const botonInicio = document.getElementById('botonInicio');
-const botonColor = document.getElementById('eleccionColor');
 const seccionEleccion= document.getElementById('inicio');
 const mensajeNivel = document.getElementById('mensajeNivel');
 const botonIzquierda = document.getElementById('botonIzquierda');
 const botonDerecha = document.getElementById('botonDerecha');
 
+const botonSiguiente = document.getElementById('botonSiguiente');
+botonSiguiente.addEventListener('click',mostrarMensajeIntro);
+
 function cargarElementos() {
     
     // DISPLAY ELEMENTOS
-    botonColor.disabled=true;
     seccionEleccion.style.display='none';
-    botonInicio.style.display='none';
     canvas.style.display='none';
     mensajeNivel.style.display='none';
     botonIzquierda.style.display='none';
@@ -41,40 +41,38 @@ let revisar;
 //MENSAJES 
 function mostrarMensajeIntro() {
     let mensaje = '';
-    if (contadorMensajes==1) {
+
+    if (contadorMensajes == 1) {
         mensaje='Bienvenido a la carrera de los muñelocos';
+        botonSiguiente.innerText = 'Siguiente';
     }
     if (contadorMensajes==2) {
-        mensaje='Primero elige a tu personaje y luego presiona el boton "Siguiente"'  ;
-        seccionEleccion.style.display='flex';
-        botonSiguiente.style.display='none';
+        mensaje='Primero elige a tu personaje';
+        seccionEleccion.style.display ='flex';
+        botonSiguiente.style.display = 'none';
 
         //REVISAR ELECCION PERSONAJE
-        revisar =setInterval(revisarEleccion,50);
-        botonColor.addEventListener('click',determinarPersonaje);
+        revisar = setInterval(revisarEleccion,50);
     } 
     if (contadorMensajes==3) {
         mensaje='Cuando la carrera comienze, oprime los botones IZQUIERDA y DERECHA alternadamente para correr';
-        botonSiguiente.style.display='flex';
+        botonSiguiente.style.display = 'flex';
     } 
     if (contadorMensajes==4) {
-        mensaje='El primero en llegar al otro lado de la calle gana';
+        mensaje='El primero en llegar al final de la calle gana';
+        botonSiguiente.innerText = 'Siguiente';
     } 
     if (contadorMensajes==5) {
-        mensaje='Oprime el boton "Comenzar" para que inicie la carrera';
-        botonSiguiente.style.display='none';
+        mensaje='Estas listo ?';
 
         //MANDA INICIO DE CARRERA
-        botonInicio.style.display='flex';
-        botonInicio.addEventListener('click',cuentaRegresiva);
-
+        botonSiguiente.innerText = 'Comenzar';
+        botonSiguiente.addEventListener('click',cuentaRegresiva);
     } 
-    spanMensaje.innerHTML=mensaje;
+    spanMensaje.innerText=mensaje;
     contadorMensajes++;
 }
 
-const botonSiguiente = document.getElementById('botonSiguiente');
-botonSiguiente.addEventListener('click',mostrarMensajeIntro);
 
 
 
@@ -119,8 +117,15 @@ muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.png'
 
 //HABILITA BOTON CUANDO SE ELIGE
 function revisarEleccion() {
-    if (inputRojo.checked||inputAzul.checked||inputVerde.checked||inputAmarillo.checked||inputRosa.checked) {
-        botonColor.disabled=false;
+    if (inputRojo.checked
+        ||inputAzul.checked
+        ||inputVerde.checked
+        ||inputAmarillo.checked
+        ||inputRosa.checked) {
+
+        botonSiguiente.style.display = 'flex';
+        botonSiguiente.innerText = 'Confirmar'
+        botonSiguiente.addEventListener('click',determinarPersonaje);
 
         clearInterval(revisar);
     }
@@ -129,7 +134,9 @@ function revisarEleccion() {
 
 //DETERMINAR PERSONAJE SEGUN ELECCION
 function determinarPersonaje() {
-    seccionEleccion.style.display='none';
+    seccionEleccion.style.display = 'none';
+    botonSiguiente.removeEventListener('click',determinarPersonaje);
+
     let eleccion;
 
     if (inputRojo.checked) {
@@ -350,7 +357,7 @@ let indice =0
 let nivel= 1
 
 function contar() {
-    botonInicio.style.display='none'
+    botonSiguiente.style.display='none'
 
     //CUENTA REGRESIVA
     if (indice==0) {
@@ -373,7 +380,7 @@ function contar() {
 
     //MOSTRAR NIVEL   
     let spanNivel=document.getElementById('mensajeNivel')
-    spanNivel.innerHTML=`Nivel°  ${nivel}`;
+    spanNivel.innerText=`Nivel ${nivel}`;
 }
 
 let velocidadRival1
@@ -468,13 +475,15 @@ function victoria() {
     
     //RESULTADO
     if (posicionJugador>posicionRival1&&posicionJugador>posicionRival2) {
-        spanMensaje.innerHTML='Ganaste !! Si oprimes el boton pasaras al siguiente nivel'
+        spanMensaje.innerText = 'Ganaste!! Pasas al siguiente nivel'
+         botonSiguiente.innerText = 'Siguiente';
 
         //AUMENTA DIFICULTAD
         nivel++
         dificultad=dificultad+10
     }if (posicionRival1>=posicionJugador||posicionRival2>=posicionJugador) {
-        spanMensaje.innerHTML='Perdiste.. Si oprimes el boton podras intentarlo de nuevo'
+        spanMensaje.innerText = 'Perdiste.. Quieres intentarlo de nuevo ?'
+        botonSiguiente.innerText = 'Repetir';
     }
 
     //RESET POSICIONES
@@ -482,8 +491,8 @@ function victoria() {
     posicionRival1 =unidad*1.2
     posicionRival2 = unidad*0.3
 
-    botonInicio.style.display='flex'
-    botonIzquierda.style.display='none'
-    botonDerecha.style.display='none'
+    botonSiguiente.style.display = 'flex';
+    botonIzquierda.style.display = 'none';
+    botonDerecha.style.display = 'none';
 }
 
