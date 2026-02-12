@@ -1,7 +1,7 @@
 ### 🏃‍♂️ La Carrera de los Muñelocos
 
-[![Jugar Ahora](https://sebaromerox.github.io/carrera-munelocos)]
-[![Código Fuente](https://github.com/SebaRomeroX/carrera-munelocos)]
+[Jugar Ahora](https://sebaromerox.github.io/carrera-munelocos/)
+[Código Fuente](https://github.com/SebaRomeroX/carrera-munelocos)
 
 ### 🎮 ¿Cómo Jugar?
 
@@ -33,7 +33,7 @@
 
 ### 🎯 **Movimiento Realista del Personaje**
 
-**Problema:** Necesitaba que el personaje alternara pies obligatoriamente (no dos pasos seguidos con el mismo pie).  
+**Problema:** Necesitaba que el personaje alternara pies obligatoriamente (no dos pasos seguidos con el mismo pie).
 **Solución:** Implementé un sistema de estados con dos imágenes diferentes (pie izquierdo/pie derecho) y validación de secuencia de teclas.
 
 ### 📱 Versión Móvil con Controles Táctiles
