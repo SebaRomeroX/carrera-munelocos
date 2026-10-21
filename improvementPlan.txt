@@ -6,7 +6,7 @@
 P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
 ====================================================================
 
-[ ] 1. HTML inválido: falta cerrar el span en index.html (línea ~24)
+[x] 1. HTML inválido: falta cerrar el span en index.html (línea ~24)  (HECHO 2026-10-21)
        `<span id="spanMensaje">` nunca se cierra antes de `</h2>`.
        -> Cerrar el span. Validar con https://validator.w3.org
 
