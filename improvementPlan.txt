@@ -10,7 +10,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
        `<span id="spanMensaje">` nunca se cierra antes de `</h2>`.
        -> Cerrar el span. Validar con https://validator.w3.org
 
-[ ] 2. Línea de meta injusta (carrera.js, función dibujar())
+[x] 2. Línea de meta injusta (carrera.js, función dibujar())  (HECHO 2026-10-21)
        El jugador necesita `ancho - unidad*1.6`, rival1 `ancho - unidad*1.2`,
        rival2 `ancho - unidad*1.8`. El jugador SIEMPRE corre más que los bots.
        -> Definir UNA constante META = anchoImagenFondo - unidad*1.2

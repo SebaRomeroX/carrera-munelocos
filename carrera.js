@@ -261,6 +261,9 @@ canvas.width = anchoImagenFondo
 canvas.height = alturaImagenFondo 
 let unidad = anchoImagenFondo/10
 
+//META COMPARTIDA (misma distancia para todos los corredores)
+const META = anchoImagenFondo - unidad*1.2
+
 //POSICION INICIAL
 let posicionJugador = unidad*0.8
 let posicionRival1 =unidad*1.2
@@ -328,9 +331,9 @@ function dibujar() {
     )
 
     //FIN DE CARRERA
-    if (posicionJugador>=anchoImagenFondo-unidad*1.6||
-        posicionRival1>=anchoImagenFondo-unidad*1.2||
-        posicionRival2>=anchoImagenFondo-unidad*1.8) {
+    if (posicionJugador>=META||
+        posicionRival1>=META||
+        posicionRival2>=META) {
         victoria()
     }
 }
@@ -473,15 +476,19 @@ function victoria() {
     clearInterval(velocidadRival1)
     clearInterval(velocidadRival2)
     
-    //RESULTADO
-    if (posicionJugador>posicionRival1&&posicionJugador>posicionRival2) {
+    //RESULTADO (gana quien llego mas lejos de la meta en el frame final)
+    const llegadaJugador = posicionJugador - META
+    const llegadaRival1 = posicionRival1 - META
+    const llegadaRival2 = posicionRival2 - META
+
+    if (llegadaJugador>llegadaRival1&&llegadaJugador>llegadaRival2) {
         spanMensaje.innerText = 'Ganaste!! Pasas al siguiente nivel'
          botonSiguiente.innerText = 'Siguiente';
 
         //AUMENTA DIFICULTAD
         nivel++
         dificultad=dificultad+10
-    }if (posicionRival1>=posicionJugador||posicionRival2>=posicionJugador) {
+    }if (llegadaRival1>=llegadaJugador||llegadaRival2>=llegadaJugador) {
         spanMensaje.innerText = 'Perdiste.. Quieres intentarlo de nuevo ?'
         botonSiguiente.innerText = 'Repetir';
     }
