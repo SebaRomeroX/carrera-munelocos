@@ -1,0 +1,224 @@
+# PLAN DE MEJORAS — La Carrera de los MuñeLocos
+# Grade actual: 5/10   →   Objetivo: 8.5/10
+# Orden sugerido: P0 (bugs) → P1 (calidad) → P2 (features) → P3 (DX)
+
+====================================================================
+P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
+====================================================================
+
+[ ] 1. HTML inválido: falta cerrar el span en index.html (línea ~24)
+       `<span id="spanMensaje">` nunca se cierra antes de `</h2>`.
+       -> Cerrar el span. Validar con https://validator.w3.org
+
+[ ] 2. Línea de meta injusta (carrera.js, función dibujar())
+       El jugador necesita `ancho - unidad*1.6`, rival1 `ancho - unidad*1.2`,
+       rival2 `ancho - unidad*1.8`. El jugador SIEMPRE corre más que los bots.
+       -> Definir UNA constante META = anchoImagenFondo - unidad*1.2
+          y usarla para los tres corredores.
+
+[ ] 3. Variables implícitas globales (rompe en "use strict" / módulos)
+       Falta declarar: imagenIzquierda, imagenDerecha, intervalo,
+       imagenRival1, imagenRival2.
+       -> Agregar let/const a todas. Agregar "use strict" al inicio
+          (o convertir a módulo ES: <script type="module">).
+
+[ ] 4. Acumulación de event listeners en #botonSiguiente
+       mostrarMensajeIntro() agrega addEventListener('click', cuentaRegresiva)
+       CADA vez que pasa por el mensaje 5, y 'determinarPersonaje' se agrega
+       desde revisarEleccion() cada vez que se detecta una elección.
+       -> Definar UN solo listener al inicio y despachar con una máquina
+          de estados (ver item 10) en vez de agregar/quitar listeners.
+
+[ ] 5. validadcionInicio nunca se pone en false
+       Después de victoria() se puede seguir moviendo al personaje
+       (las posiciones ya se resetearon, así que el muñeco "camina"
+       en la pantalla de resultado).
+       -> Poner validadcionInicio=false dentro de victoria(),
+          y también resetear pasoIzquierdo/pasoDerecho.
+
+[ ] 6. Balanza rota por niveles (imposible ~nivel 15)
+       velocidadRival1 = aleatorio(120,130) - dificultad*0.1
+       velocidadRival2 = 150 - dificultad          <- crece 10x más rápido
+       Con dificultad += 10 por nivel, ambos llegan a <= 0 ms
+       (setInterval lo clampa a 1ms → ganan siempre).
+       -> Usar un modelo acotado, p. ej.:
+          intervalo = Math.max(MIN_MS, BASE - nivel * DELTA)
+          con MIN_MS ~ 45-60ms y DELTA distinto para cada rival,
+          más un pequeño factor aleatorio (±5%) para que cada carrera
+          se sienta distinta. Ver item 12 para mejor IA.
+
+[ ] 7. Detección de elección por polling
+       setInterval(revisarEleccion, 50) cada 50ms consulta 5 inputs.
+       -> Reemplazar por un listener 'change' en el contenedor #iconos
+          (event delegation). Cero polling, código más corto.
+
+[ ] 8. Teclado: keyCode está deprecado y el listener es global
+       correr() usa tecla.keyCode (deprecated) y está registrado en
+       document aunque la carrera no esté activa.
+       -> Usar e.key === 'ArrowLeft' / 'ArrowRight',
+          y registrar el listener solo durante la carrera
+          (o guardar un estado 'fase' y salir temprano).
+
+[ ] 9. Fondo/canvas pueden dibujarse antes de cargar las imágenes
+       dibujar() se llama sin esperar a que imagenFondo cargue
+       (primeros frames en blanco / personajes invisibles).
+       -> Precargar todas las imágenes con Promise.all y solo entonces
+          habilitar el botón "Comenzar". Mostrar un "Cargando..." simple.
+
+[ ] 10. Sin máquina de estados (causa raíz de 1, 4, 5, 8)
+       El flujo se controla con contadorMensajes + addEventListener sueltos.
+       -> Introducir una variable `fase`:
+          'intro' | 'seleccion' | 'instrucciones' | 'cuenta' |
+          'carrera' | 'resultado'
+          Un único handler en el botón que hace switch(fase).
+          Esto hace trivial agregar reinicio total, pausa, etc.
+
+====================================================================
+P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
+====================================================================
+
+[ ] 11. Renderizar con requestAnimationFrame, no setInterval(dibujar, 50)
+       setInterval a 50ms causa jank y gasta batería en móvil.
+       -> loop con rAF + cálculo de movimiento con delta-time
+          (los bots y el jugador se moverán igual de rápido en
+          cualquier refresh rate, incluidas pantallas 120Hz).
+
+[ ] 12. Mejorar la IA de los bots
+       Hoy: avance constante a intervalo fijo (predecible y plano).
+       -> Darles "rachas": pausas ocasionales de 100-300ms y
+          sprints. Mantener la velocidad media calculada para que
+          el nivel se sienta retador pero siempre ganable.
+
+[ ] 13. Accesibilidad del selector de personajes
+       `.radio{display:none}` hace los inputs NO enfocables con teclado
+       ni leídos por lectores de pantalla de forma usable.
+       -> Cambiar a .radio{ position:absolute; opacity:0 } (sigue focusable)
+          + estilo de foco visible en .icono:has(input:focus-visible)
+          + aria-label en cada label.
+
+[ ] 14. Canvas y botones accesibles
+       -> canvas con aria-label / contenido fallback
+          botones ◀ ▶ con aria-label="Paso izquierdo"/"Paso derecho"
+
+[ ] 15. Móvil: quitar el delay táctil en los botones de correr
+       -> Agregar touch-action: manipulation y -webkit-tap-highlight-color:
+          transparent a .btn-correr; considerar pointerdown en vez de
+          touchstart (funciona igual en stylus/trackpad).
+
+[ ] 16. Layout: body con 98vw/98vh + margin provoca scrollbars
+       por redondeo, y el footer fixed tapa contenido en pantallas chicas.
+       -> Quitar width/height del body, usar min-height: 100dvh
+          (dvh resuelve el salto de la barra de direcciones en iOS).
+          Footer estático o con padding-bottom en el main.
+
+[ ] 17. CSS: reglas muertas y typos
+       `.mensaje{...}` dentro del media query no existe la clase
+       (el id es #mensaje). `.iconos{gap:60px}` duplicado.
+       `max-width: 1204px` probablemente era 1200px.
+       -> Limpiar. Agregar al menos un breakpoint intermedio (640px)
+          ya que hoy solo hay min-width:1024px.
+
+[ ] 18. Optimizar assets (~1 MB ahorrable)
+       - Borrar imágenes no referenciadas: rojo.png, azul.png, verde.png,
+         rosa.png, amarillo.png (~1 MB en total, ninguna se usa).
+       - fondo.png (776 KB) -> convertir a WebP/AVIF (~80-150 KB).
+       - Los muñecos PNG de 120-240 KB -> WebP con transparencia.
+       Repo hoy pesa 6.28 MiB en el pack de git; bajaría a < 2 MiB.
+
+[ ] 19. innerHTML -> textContent
+       spanMensaje.innerHTML='3...' etc. Usar textContent
+       (más rápido y sin riesgo si algún día se interpola input del usuario).
+
+[ ] 20. Sonido y feedback
+       -> WebAudio API sin archivos: pasos (blip corto), cuenta regresiva,
+          fanfarria de victoria. Con toggle de mute persistido.
+
+[ ] 21. prefers-reduced-motion
+       -> Respetar la media query: desactivar animaciones de cabeceo
+          y la transición de carga del body.
+
+====================================================================
+P2 — FEATURES QUE SUBEN EL VALOR
+====================================================================
+
+[ ] 22. Puntuación persistente (localStorage)
+       Nivel máximo alcanzado + tiempo del mejor nivel.
+       Mostrar "Récord: Nivel X" en la intro. Motiva a reintentar.
+
+[ ] 23. Pantalla de resultado con datos reales
+       Hoy solo "Ganaste!!" / "Perdiste..".
+       -> Mostrar distancia recorrida de cada corredor, margen de
+          victoria, y qué tan cerca estuvo de perder.
+
+[ ] 24. Pausa / reinicio
+       Tecla Escape o botón para reiniciar la partida completa
+       (reset de nivel, dificultad y posiciones).
+
+[ ] 25. Diferentes escenarios
+       Ya existe bg-blue.avif sin usar. -> 2-3 fondos que rotan por nivel
+       con distintas velocidades/apariencia de calle.
+
+[ ] 26. Modo multijugador local (2 jugadores en un teclado)
+       Jugador 1: A/D, Jugador 2: ◀/▶. Reutiliza toda la lógica
+       existente; solo cambia quién controla a cada muñeco.
+
+[ ] 27. Meta y sonido de llegada
+       Dibujar una línea de meta real en el canvas (ahora no se ve),
+       más un efecto de "cruzando la línea".
+
+====================================================================
+P3 — DX / MANTENIMIENTO
+====================================================================
+
+[ ] 28. Agregar package.json + scripts
+       npm run dev (live-server o vite), npm run lint, npm run format.
+
+[ ] 29. ESLint + Prettier
+       Config con reglas que detecten justo los problemas actuales
+       (no-undef habría atrapado los globals implícitos del item 3).
+
+[ ] 30. .editorconfig + mejorar .gitignore
+       .gitignore solo contiene "Roadmap.txt".
+       -> Agregar node_modules/, .DS_Store, *.log, dist/.
+
+[ ] 31. CI con GitHub Actions
+       Lint en cada push + link check del README.
+       Opcional: Lighthouse CI con presupuesto de performance.
+
+[ ] 32. Tests del núcleo del juego
+       Extraer la lógica pura (moverCorredor, determinarGanador,
+       calcularVelocidadBot) a un módulo sin DOM y testear con Vitest:
+       - la meta es la misma para los tres
+       - los bots nunca tienen intervalo < MIN_MS
+       - elegirRival* siempre devuelve 3 colores distintos
+         (hoy es recursión aleatoria sin límite → reemplazar por shuffle)
+
+[ ] 33. Refactor de carrera.js (500 líneas -> módulos)
+       -> src/state.js (máquina de estados)
+          src/assets.js (preloader)
+          src/render.js (canvas + rAF)
+          src/input.js (teclado + táctil)
+          src/game.js (física, bots, niveles)
+          Alternativa sin bundler: ES modules nativos + import en index.html.
+
+[ ] 34. Typos en textos visibles y README
+       "comienze" -> "comience"
+       "Estas listo ?" -> "¿Estás listo?"
+       "Perdiste.." -> "Perdiste..."
+       README: "diverti" -> "divertí", "aprendi" -> "aprendí",
+       "habia" -> "había", "ejecuta el el archivo" -> "ejecuta el archivo"
+
+[ ] 35. SEO básico para compartir en redes
+       -> Open Graph tags (og:title, og:description, og:image con
+          imagenes/carrera.jpg), canonical URL, y favicon PNG->ICO.
+
+====================================================================
+MÉTRICA DE ÉXITO
+====================================================================
+- W3C validator: 0 errores
+- ESLint: 0 problemas, 0 variables implícitas
+- Todos los corredores usan la misma línea de meta
+- Nivel 20 todavía superable por un humano
+- Lighthouse >= 90 en Performance y Accessibility
+- Repo < 2 MiB, imágenes < 500 KB en total
+- Nunca se puede mover el muñeco fuera de la fase 'carrera'
