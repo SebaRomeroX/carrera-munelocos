@@ -16,7 +16,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
        -> Definir UNA constante META = anchoImagenFondo - unidad*1.2
           y usarla para los tres corredores.
 
-[ ] 3. Variables implícitas globales (rompe en "use strict" / módulos)
+[x] 3. Variables implícitas globales (rompe en "use strict" / módulos)  (HECHO 2026-10-21)
        Falta declarar: imagenIzquierda, imagenDerecha, intervalo,
        imagenRival1, imagenRival2.
        -> Agregar let/const a todas. Agregar "use strict" al inicio

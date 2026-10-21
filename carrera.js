@@ -157,6 +157,10 @@ function determinarPersonaje() {
     mostrarMensajeIntro();
 }
 
+//IMAGENES DEL MUÑECO ACTUAL (temporales, compartidas por jugador y rivales)
+let imagenIzquierda
+let imagenDerecha
+
 //ASIGNA IMAGENES CORRESPONDIENTES A MUÑECO
 function determinarImagenMuñeco(eleccion) {
     if (eleccion==1) {
@@ -273,6 +277,10 @@ let pasoDerecho=0
 let pasoRival1=0
 let pasoRival2=0
 
+//IMAGENES DE RIVALES EN EL FRAME ACTUAL
+let imagenRival1
+let imagenRival2
+
 function dibujar() {
     imagenJugador = imagenJugadorDerecha
 
@@ -342,6 +350,7 @@ function dibujar() {
     /** ----------------------------------------------------------   INICIO DE CARRERA        */
 
 let cuenta
+let intervalo
 
 //INICIAR CUENTA
 function cuentaRegresiva() {
