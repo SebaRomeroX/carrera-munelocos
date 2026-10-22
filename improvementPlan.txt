@@ -52,7 +52,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
        -> Reemplazar por un listener 'change' en el contenedor #iconos
           (event delegation). Cero polling, código más corto.
 
-[ ] 8. Teclado: keyCode está deprecado y el listener es global
+[x] 8. Teclado: keyCode está deprecado y el listener es global  (HECHO 2026-10-22)
        correr() usa tecla.keyCode (deprecated) y está registrado en
        document aunque la carrera no esté activa.
        -> Usar e.key === 'ArrowLeft' / 'ArrowRight',

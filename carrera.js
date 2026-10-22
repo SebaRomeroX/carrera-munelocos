@@ -443,20 +443,15 @@ botonDerecha.addEventListener('touchstart', (e) => {
 
 //TECLADO
 function correr(tecla) {
-    const t = {
-        LEFT:37,
-        RIGHT:39
-    };
+    //solo corre durante la carrera
+    if (!validadcionInicio) {
+        return;
+    }
 
-    if (validadcionInicio==true) {
-        switch (tecla.keyCode){
-            case t.LEFT:            
-                darPasoIzquierdo()
-                break;
-            case t.RIGHT:
-                darPasoDerecho()
-                break;
-        }
+    if (tecla.key === 'ArrowLeft') {
+        darPasoIzquierdo()
+    } else if (tecla.key === 'ArrowRight') {
+        darPasoDerecho()
     }
 }
 
