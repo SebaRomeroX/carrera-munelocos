@@ -65,7 +65,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
        -> Precargar todas las imágenes con Promise.all y solo entonces
           habilitar el botón "Comenzar". Mostrar un "Cargando..." simple.
 
-[ ] 10. Sin máquina de estados (causa raíz de 1, 4, 5, 8)
+[x] 10. Sin máquina de estados (causa raíz de 1, 4, 5, 8)  (HECHO 2026-10-22)
        El flujo se controla con contadorMensajes + addEventListener sueltos.
        -> Introducir una variable `fase`:
           'intro' | 'seleccion' | 'instrucciones' | 'cuenta' |

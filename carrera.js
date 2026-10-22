@@ -9,17 +9,23 @@ const botonDerecha = document.getElementById('botonDerecha');
 
 const botonSiguiente = document.getElementById('botonSiguiente');
 
-//FASE ACTUAL DEL JUEGO (define que hace el boton Siguiente)
+//FASE ACTUAL DEL JUEGO (maquina de estados: un solo origen de verdad)
 let fase = 'intro';
 
 //UN SOLO LISTENER: despacha segun la fase actual (evita listeners acumulados)
 botonSiguiente.addEventListener('click', () => {
-    if (fase == 'seleccion') {
-        determinarPersonaje();
-    } else if (fase == 'listo') {
-        cuentaRegresiva();
-    } else {
-        mostrarMensajeIntro();
+    switch (fase) {
+        case 'seleccion':
+            determinarPersonaje();
+            break;
+        case 'listo':
+        case 'resultado':
+            cuentaRegresiva();
+            break;
+        case 'intro':
+            mostrarMensajeIntro();
+            break;
+        // 'cuenta' y 'carrera': el boton esta oculto, no hace nada
     }
 });
 
@@ -51,6 +57,9 @@ let spanMensaje=document.getElementById('spanMensaje');
 //MENSAJES 
 function mostrarMensajeIntro() {
     let mensaje = '';
+
+    //por defecto avanza mensajes de intro; msg5 lo cambia a 'listo'
+    fase = 'intro';
 
     if (contadorMensajes == 1) {
         mensaje='Bienvenido a la carrera de los muñelocos';
@@ -389,6 +398,9 @@ function cuentaRegresiva() {
         return
     }
 
+    //RECURSOS LISTOS: entrar en fase de cuenta regresiva
+    fase = 'cuenta'
+
     cuenta=setInterval(contar,800)
     dibujar()
     contar()
@@ -432,7 +444,6 @@ function contar() {
 
 let velocidadRival1
 let velocidadRival2
-let validadcionInicio
 
 //TUNING DE DIFICULTAD (ms de intervalo por rival; menor = mas rapido)
 const INTERVALO_MIN = 55   //techo de velocidad: nunca mas rapido que esto
@@ -452,8 +463,8 @@ function iniciarCarrera() {
     velocidadRival1 =setInterval(moverRival1,msRival1)
     velocidadRival2 =setInterval(moverRival2,msRival2)
 
-    //PERMITIR MOVIMIENTO
-    validadcionInicio=true
+    //PERMITIR MOVIMIENTO (fase de carrera activa)
+    fase = 'carrera'
 
     //ACTUALIZAR DIBUJO
     intervalo =setInterval(dibujar,50)
@@ -479,7 +490,7 @@ botonDerecha.addEventListener('touchstart', (e) => {
 //TECLADO
 function correr(tecla) {
     //solo corre durante la carrera
-    if (!validadcionInicio) {
+    if (fase !== 'carrera') {
         return;
     }
 
@@ -527,8 +538,8 @@ function victoria() {
     clearInterval(velocidadRival1)
     clearInterval(velocidadRival2)
 
-    //BLOQUEAR MOVIMIENTO YA QUE LA CARRERA TERMINO
-    validadcionInicio=false
+    //BLOQUEAR MOVIMIENTO: la carrera termino (fase de resultado)
+    fase = 'resultado'
     pasoIzquierdo=0
     pasoDerecho=0
     
