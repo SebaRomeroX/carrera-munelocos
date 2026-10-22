@@ -29,7 +29,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
        -> Definar UN solo listener al inicio y despachar con una máquina
           de estados (ver item 10) en vez de agregar/quitar listeners.
 
-[ ] 5. validadcionInicio nunca se pone en false
+[x] 5. validadcionInicio nunca se pone en false  (HECHO 2026-10-22)
        Después de victoria() se puede seguir moviendo al personaje
        (las posiciones ya se resetearon, así que el muñeco "camina"
        en la pantalla de resultado).

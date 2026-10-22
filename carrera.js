@@ -496,6 +496,11 @@ function victoria() {
     clearInterval(intervalo)
     clearInterval(velocidadRival1)
     clearInterval(velocidadRival2)
+
+    //BLOQUEAR MOVIMIENTO YA QUE LA CARRERA TERMINO
+    validadcionInicio=false
+    pasoIzquierdo=0
+    pasoDerecho=0
     
     //RESULTADO (gana quien llego mas lejos de la meta en el frame final)
     const llegadaJugador = posicionJugador - META
