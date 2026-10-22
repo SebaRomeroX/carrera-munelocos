@@ -36,7 +36,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
        -> Poner validadcionInicio=false dentro de victoria(),
           y también resetear pasoIzquierdo/pasoDerecho.
 
-[ ] 6. Balanza rota por niveles (imposible ~nivel 15)
+[x] 6. Balanza rota por niveles (imposible ~nivel 15)  (HECHO 2026-10-22)
        velocidadRival1 = aleatorio(120,130) - dificultad*0.1
        velocidadRival2 = 150 - dificultad          <- crece 10x más rápido
        Con dificultad += 10 por nivel, ambos llegan a <= 0 ms

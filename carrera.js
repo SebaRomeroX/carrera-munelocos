@@ -409,13 +409,25 @@ function contar() {
 
 let velocidadRival1
 let velocidadRival2
-let dificultad = 0
 let validadcionInicio
 
+//TUNING DE DIFICULTAD (ms de intervalo por rival; menor = mas rapido)
+const INTERVALO_MIN = 55   //techo de velocidad: nunca mas rapido que esto
+const BASE_RIVAL1   = 125  //ms en nivel 1
+const BASE_RIVAL2   = 150  //ms en nivel 1
+const DELTA_RIVAL1  = 1.2  //ms mas rapido por nivel
+const DELTA_RIVAL2  = 2.5  //ms mas rapido por nivel (un poco mas agresivo)
+
 function iniciarCarrera() {
-    let velocidad = aleatorio(120,130)-(dificultad*0.1);
-    velocidadRival1 =setInterval(moverRival1,velocidad)
-    velocidadRival2 =setInterval(moverRival2,150-dificultad)
+    //pequena variacion por carrera para que no se sienta identico
+    const jitter = aleatorio(-4,4);
+
+    //velocidad acotada: nunca baja de INTERVALO_MIN (el nivel siempre es ganable)
+    const msRival1 = Math.max(INTERVALO_MIN, BASE_RIVAL1-(nivel-1)*DELTA_RIVAL1+jitter);
+    const msRival2 = Math.max(INTERVALO_MIN, BASE_RIVAL2-(nivel-1)*DELTA_RIVAL2+jitter);
+
+    velocidadRival1 =setInterval(moverRival1,msRival1)
+    velocidadRival2 =setInterval(moverRival2,msRival2)
 
     //PERMITIR MOVIMIENTO
     validadcionInicio=true
@@ -511,9 +523,8 @@ function victoria() {
         spanMensaje.innerText = 'Ganaste!! Pasas al siguiente nivel'
          botonSiguiente.innerText = 'Siguiente';
 
-        //AUMENTA DIFICULTAD
+        //PASA AL SIGUIENTE NIVEL
         nivel++
-        dificultad=dificultad+10
     }if (llegadaRival1>=llegadaJugador||llegadaRival2>=llegadaJugador) {
         spanMensaje.innerText = 'Perdiste.. Quieres intentarlo de nuevo ?'
         botonSiguiente.innerText = 'Repetir';
