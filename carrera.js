@@ -8,7 +8,20 @@ const botonIzquierda = document.getElementById('botonIzquierda');
 const botonDerecha = document.getElementById('botonDerecha');
 
 const botonSiguiente = document.getElementById('botonSiguiente');
-botonSiguiente.addEventListener('click',mostrarMensajeIntro);
+
+//FASE ACTUAL DEL JUEGO (define que hace el boton Siguiente)
+let fase = 'intro';
+
+//UN SOLO LISTENER: despacha segun la fase actual (evita listeners acumulados)
+botonSiguiente.addEventListener('click', () => {
+    if (fase == 'seleccion') {
+        determinarPersonaje();
+    } else if (fase == 'listo') {
+        cuentaRegresiva();
+    } else {
+        mostrarMensajeIntro();
+    }
+});
 
 function cargarElementos() {
     
@@ -67,7 +80,7 @@ function mostrarMensajeIntro() {
 
         //MANDA INICIO DE CARRERA
         botonSiguiente.innerText = 'Comenzar';
-        botonSiguiente.addEventListener('click',cuentaRegresiva);
+        fase = 'listo';
     } 
     spanMensaje.innerText=mensaje;
     contadorMensajes++;
@@ -125,7 +138,7 @@ function revisarEleccion() {
 
         botonSiguiente.style.display = 'flex';
         botonSiguiente.innerText = 'Confirmar'
-        botonSiguiente.addEventListener('click',determinarPersonaje);
+        fase = 'seleccion';
 
         clearInterval(revisar);
     }
@@ -135,7 +148,6 @@ function revisarEleccion() {
 //DETERMINAR PERSONAJE SEGUN ELECCION
 function determinarPersonaje() {
     seccionIconos.style.display = 'none';
-    botonSiguiente.removeEventListener('click',determinarPersonaje);
 
     let eleccion;
 

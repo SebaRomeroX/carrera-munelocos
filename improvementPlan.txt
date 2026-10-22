@@ -22,7 +22,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
        -> Agregar let/const a todas. Agregar "use strict" al inicio
           (o convertir a módulo ES: <script type="module">).
 
-[ ] 4. Acumulación de event listeners en #botonSiguiente
+[x] 4. Acumulación de event listeners en #botonSiguiente  (HECHO 2026-10-22)
        mostrarMensajeIntro() agrega addEventListener('click', cuentaRegresiva)
        CADA vez que pasa por el mensaje 5, y 'determinarPersonaje' se agrega
        desde revisarEleccion() cada vez que se detecta una elección.
