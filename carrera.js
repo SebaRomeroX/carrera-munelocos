@@ -48,9 +48,6 @@ let contadorMensajes = 1;
 // SPAN MENSAJE
 let spanMensaje=document.getElementById('spanMensaje');
 
-/** INTERVALO ELECCION PERSONAJE */
-let revisar;
-
 //MENSAJES 
 function mostrarMensajeIntro() {
     let mensaje = '';
@@ -63,9 +60,6 @@ function mostrarMensajeIntro() {
         mensaje='Primero elige a tu personaje';
         seccionIconos.style.display ='flex';
         botonSiguiente.style.display = 'none';
-
-        //REVISAR ELECCION PERSONAJE
-        revisar = setInterval(revisarEleccion,50);
     } 
     if (contadorMensajes==3) {
         mensaje='Cuando la carrera comienze, oprime los botones IZQUIERDA y DERECHA alternadamente para correr';
@@ -100,6 +94,9 @@ let inputVerde= document.getElementById('radioVerde');
 let inputAmarillo = document.getElementById('radioAmarillo');
 let inputRosa  = document.getElementById('radioRosa');
 
+// EVENTO 'change' (delegation): se dispara apenas se elige un personaje
+seccionIconos.addEventListener('change', revisarEleccion);
+
 
 //IMAGENES
 const muñecoRojoIzquierda = new Image()
@@ -130,18 +127,9 @@ muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.png'
 
 //HABILITA BOTON CUANDO SE ELIGE
 function revisarEleccion() {
-    if (inputRojo.checked
-        ||inputAzul.checked
-        ||inputVerde.checked
-        ||inputAmarillo.checked
-        ||inputRosa.checked) {
-
-        botonSiguiente.style.display = 'flex';
-        botonSiguiente.innerText = 'Confirmar'
-        fase = 'seleccion';
-
-        clearInterval(revisar);
-    }
+    botonSiguiente.style.display = 'flex';
+    botonSiguiente.innerText = 'Confirmar'
+    fase = 'seleccion';
 }
 
 

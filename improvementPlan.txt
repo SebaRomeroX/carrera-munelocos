@@ -47,7 +47,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
           más un pequeño factor aleatorio (±5%) para que cada carrera
           se sienta distinta. Ver item 12 para mejor IA.
 
-[ ] 7. Detección de elección por polling
+[x] 7. Detección de elección por polling  (HECHO 2026-10-22)
        setInterval(revisarEleccion, 50) cada 50ms consulta 5 inputs.
        -> Reemplazar por un listener 'change' en el contenedor #iconos
           (event delegation). Cero polling, código más corto.
