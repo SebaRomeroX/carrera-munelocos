@@ -59,7 +59,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
           y registrar el listener solo durante la carrera
           (o guardar un estado 'fase' y salir temprano).
 
-[ ] 9. Fondo/canvas pueden dibujarse antes de cargar las imágenes
+[x] 9. Fondo/canvas pueden dibujarse antes de cargar las imágenes  (HECHO 2026-10-22)
        dibujar() se llama sin esperar a que imagenFondo cargue
        (primeros frames en blanco / personajes invisibles).
        -> Precargar todas las imágenes con Promise.all y solo entonces

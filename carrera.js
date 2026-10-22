@@ -259,6 +259,33 @@ const lienzo = canvas.getContext('2d')
 const imagenFondo = new Image()
 imagenFondo.src = './imagenes/fondo.png'
 
+//PRECARGA DE IMAGENES (evita dibujar frames en blanco)
+let recursosListos = false
+
+const listaRecursos = [
+    imagenFondo,
+    muñecoRojoIzquierda, muñecoRojoDerecha,
+    muñecoAzulIzquierda, muñecoAzulDerecha,
+    muñecoVerdeIzquierda, muñecoVerdeDerecha,
+    muñecoRosaIzquierda, muñecoRosaDerecha,
+    muñecoAmarilloIzquierda, muñecoAmarilloDerecha
+]
+
+function cargarRecurso(img) {
+    return new Promise((resolver) => {
+        if (img.complete && img.naturalWidth > 0) {
+            resolver()  //ya estaba cargada
+        } else {
+            img.onload = resolver
+            img.onerror = resolver  //si falla, no bloquea el juego
+        }
+    })
+}
+
+Promise.all(listaRecursos.map(cargarRecurso)).then(() => {
+    recursosListos = true
+})
+
 let anchoImagenFondo = window.innerWidth
 let alturaImagenFondo = anchoImagenFondo * 500 / 1200
 canvas.width = anchoImagenFondo
@@ -354,6 +381,14 @@ let intervalo
 
 //INICIAR CUENTA
 function cuentaRegresiva() {
+    //ESPERAR A QUE LAS IMAGENES SEAN VISIBLES ANTES DE EMPEZAR
+    if (!recursosListos) {
+        spanMensaje.innerText = 'Cargando...'
+        botonSiguiente.style.display = 'none'
+        setTimeout(cuentaRegresiva, 100)
+        return
+    }
+
     cuenta=setInterval(contar,800)
     dibujar()
     contar()
