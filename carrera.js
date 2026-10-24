@@ -386,7 +386,13 @@ function dibujar() {
     /** ----------------------------------------------------------   INICIO DE CARRERA        */
 
 let cuenta
-let intervalo
+
+//ESTADO DEL LOOP DE ANIMACION (rAF + delta-time)
+let msRival1 = 0
+let msRival2 = 0
+let acumRival1 = 0
+let acumRival2 = 0
+let ultimoTiempo = 0
 
 //INICIAR CUENTA
 function cuentaRegresiva() {
@@ -442,9 +448,6 @@ function contar() {
     spanNivel.innerText=`Nivel ${nivel}`;
 }
 
-let velocidadRival1
-let velocidadRival2
-
 //TUNING DE DIFICULTAD (ms de intervalo por rival; menor = mas rapido)
 const INTERVALO_MIN = 55   //techo de velocidad: nunca mas rapido que esto
 const BASE_RIVAL1   = 125  //ms en nivel 1
@@ -457,17 +460,51 @@ function iniciarCarrera() {
     const jitter = aleatorio(-4,4);
 
     //velocidad acotada: nunca baja de INTERVALO_MIN (el nivel siempre es ganable)
-    const msRival1 = Math.max(INTERVALO_MIN, BASE_RIVAL1-(nivel-1)*DELTA_RIVAL1+jitter);
-    const msRival2 = Math.max(INTERVALO_MIN, BASE_RIVAL2-(nivel-1)*DELTA_RIVAL2+jitter);
+    msRival1 = Math.max(INTERVALO_MIN, BASE_RIVAL1-(nivel-1)*DELTA_RIVAL1+jitter);
+    msRival2 = Math.max(INTERVALO_MIN, BASE_RIVAL2-(nivel-1)*DELTA_RIVAL2+jitter);
 
-    velocidadRival1 =setInterval(moverRival1,msRival1)
-    velocidadRival2 =setInterval(moverRival2,msRival2)
+    //reiniciar acumuladores del loop
+    acumRival1 = 0
+    acumRival2 = 0
 
     //PERMITIR MOVIMIENTO (fase de carrera activa)
     fase = 'carrera'
 
-    //ACTUALIZAR DIBUJO
-    intervalo =setInterval(dibujar,50)
+    //ARRANCAR LOOP DE ANIMACION (rAF) que dibuja y mueve a los rivales
+    ultimoTiempo = performance.now()
+    requestAnimationFrame(bucleAnimacion)
+}
+
+//LOOP PRINCIPAL: un solo reloj (rAF) para dibujo + movimiento de rivales
+function bucleAnimacion(tiempoAhora) {
+    //detener al terminar la carrera
+    if (fase !== 'carrera') {
+        return
+    }
+
+    //delta-time con tope: evita saltos tras volver de otra pestana
+    const dt = Math.min(tiempoAhora - ultimoTiempo, 100)
+    ultimoTiempo = tiempoAhora
+
+    //rivales: acumulan tiempo y dan un paso cada msRivalN (misma cadencia de siempre)
+    acumRival1 += dt
+    while (acumRival1 >= msRival1) {
+        moverRival1()
+        acumRival1 -= msRival1
+    }
+    acumRival2 += dt
+    while (acumRival2 >= msRival2) {
+        moverRival2()
+        acumRival2 -= msRival2
+    }
+
+    //dibuja y detecta la meta (puede llamar a victoria)
+    dibujar()
+
+    //no re-agendar si ya hay ganador
+    if (fase === 'carrera') {
+        requestAnimationFrame(bucleAnimacion)
+    }
 }
 
 
@@ -534,9 +571,7 @@ function moverRival2() {
 
 
 function victoria() {
-    clearInterval(intervalo)
-    clearInterval(velocidadRival1)
-    clearInterval(velocidadRival2)
+    //el loop rAF se detiene solo (fase !== 'carrera'); no hay intervalos que limpiar
 
     //BLOQUEAR MOVIMIENTO: la carrera termino (fase de resultado)
     fase = 'resultado'

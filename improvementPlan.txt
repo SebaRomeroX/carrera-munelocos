@@ -77,7 +77,7 @@ P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
 P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
 ====================================================================
 
-[ ] 11. Renderizar con requestAnimationFrame, no setInterval(dibujar, 50)
+[x] 11. Renderizar con requestAnimationFrame, no setInterval(dibujar, 50)  (HECHO 2026-10-23)
        setInterval a 50ms causa jank y gasta batería en móvil.
        -> loop con rAF + cálculo de movimiento con delta-time
           (los bots y el jugador se moverán igual de rápido en
