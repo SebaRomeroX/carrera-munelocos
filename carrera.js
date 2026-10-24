@@ -394,6 +394,24 @@ let acumRival1 = 0
 let acumRival2 = 0
 let ultimoTiempo = 0
 
+//RACHAS DE LOS BOTS (multiplicador de velocidad y tiempo restante en el modo)
+let escalaRival1 = 1
+let escalaRival2 = 1
+let restoRival1 = 0
+let restoRival2 = 0
+
+//RACHAS DE LOS BOTS: sprint / pausa / normal, conservando la velocidad media
+function elegirModoRival() {
+    const r = Math.random()
+    if (r < 0.15) {
+        return { escala: 0.7, dur: aleatorio(400,900) }   //SPRINT
+    }
+    if (r < 0.30) {
+        return { escala: 3.0, dur: aleatorio(250,550) }   //PAUSA (duda)
+    }
+    return { escala: 1.0, dur: aleatorio(700,1500) }      //NORMAL
+}
+
 //INICIAR CUENTA
 function cuentaRegresiva() {
     //ESPERAR A QUE LAS IMAGENES SEAN VISIBLES ANTES DE EMPEZAR
@@ -467,6 +485,12 @@ function iniciarCarrera() {
     acumRival1 = 0
     acumRival2 = 0
 
+    //reiniciar rachas de los bots
+    escalaRival1 = 1
+    escalaRival2 = 1
+    restoRival1 = 0
+    restoRival2 = 0
+
     //PERMITIR MOVIMIENTO (fase de carrera activa)
     fase = 'carrera'
 
@@ -487,15 +511,32 @@ function bucleAnimacion(tiempoAhora) {
     ultimoTiempo = tiempoAhora
 
     //rivales: acumulan tiempo y dan un paso cada msRivalN (misma cadencia de siempre)
+    //rival 1: cambiar de modo si vencio
+    restoRival1 -= dt
+    if (restoRival1 <= 0) {
+        const modo1 = elegirModoRival()
+        escalaRival1 = modo1.escala
+        restoRival1 = modo1.dur + restoRival1      //conserva el exceso
+    }
     acumRival1 += dt
-    while (acumRival1 >= msRival1) {
+    const pasoMs1 = Math.max(INTERVALO_MIN, msRival1 * escalaRival1)
+    while (acumRival1 >= pasoMs1) {
         moverRival1()
-        acumRival1 -= msRival1
+        acumRival1 -= pasoMs1
+    }
+
+    //rival 2: cambiar de modo si vencio
+    restoRival2 -= dt
+    if (restoRival2 <= 0) {
+        const modo2 = elegirModoRival()
+        escalaRival2 = modo2.escala
+        restoRival2 = modo2.dur + restoRival2      //conserva el exceso
     }
     acumRival2 += dt
-    while (acumRival2 >= msRival2) {
+    const pasoMs2 = Math.max(INTERVALO_MIN, msRival2 * escalaRival2)
+    while (acumRival2 >= pasoMs2) {
         moverRival2()
-        acumRival2 -= msRival2
+        acumRival2 -= pasoMs2
     }
 
     //dibuja y detecta la meta (puede llamar a victoria)

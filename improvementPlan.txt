@@ -83,7 +83,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
           (los bots y el jugador se moverán igual de rápido en
           cualquier refresh rate, incluidas pantallas 120Hz).
 
-[ ] 12. Mejorar la IA de los bots
+[x] 12. Mejorar la IA de los bots  (HECHO 2026-10-23)
        Hoy: avance constante a intervalo fijo (predecible y plano).
        -> Darles "rachas": pausas ocasionales de 100-300ms y
           sprints. Mantener la velocidad media calculada para que
