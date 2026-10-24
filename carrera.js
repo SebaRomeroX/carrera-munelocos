@@ -555,15 +555,17 @@ function bucleAnimacion(tiempoAhora) {
 
 document.addEventListener('keyup',correr);
 
-//BOTONES EN PANTALLA (MOBILE)
-botonIzquierda.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    darPasoIzquierdo()
-});
-botonDerecha.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    darPasoDerecho()
-});
+//BOTONES EN PANTALLA (MOBILE): pointerdown responde al instante (sin delay de tap)
+function pasoEnBoton(e, mover) {
+    e.preventDefault()  //evita seleccion de texto y menu contextual en iOS
+    if (fase !== 'carrera') {
+        return  //igual que el teclado: solo se corre durante la carrera
+    }
+    mover()
+}
+
+botonIzquierda.addEventListener('pointerdown', (e) => pasoEnBoton(e, darPasoIzquierdo));
+botonDerecha.addEventListener('pointerdown', (e) => pasoEnBoton(e, darPasoDerecho));
 
 //TECLADO
 function correr(tecla) {

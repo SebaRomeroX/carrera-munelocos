@@ -100,7 +100,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
        -> canvas con aria-label / contenido fallback
           botones ◀ ▶ con aria-label="Paso izquierdo"/"Paso derecho"
 
-[ ] 15. Móvil: quitar el delay táctil en los botones de correr
+[x] 15. Móvil: quitar el delay táctil en los botones de correr  (HECHO 2026-10-23)
        -> Agregar touch-action: manipulation y -webkit-tap-highlight-color:
           transparent a .btn-correr; considerar pointerdown en vez de
           touchstart (funciona igual en stylus/trackpad).

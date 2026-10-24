@@ -159,6 +159,10 @@ canvas{
 
 .btn-correr{
     padding: 1em 1.6em;
+
+    /* sin delay de tap ni destello gris en movil (clave para un juego de mashing) */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
