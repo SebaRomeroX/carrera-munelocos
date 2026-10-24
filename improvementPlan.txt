@@ -96,7 +96,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
           + estilo de foco visible en .icono:has(input:focus-visible)
           + aria-label en cada label.
 
-[ ] 14. Canvas y botones accesibles
+[x] 14. Canvas y botones accesibles  (HECHO 2026-10-23)
        -> canvas con aria-label / contenido fallback
           botones ◀ ▶ con aria-label="Paso izquierdo"/"Paso derecho"
 
