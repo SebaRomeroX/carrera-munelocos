@@ -89,7 +89,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
           sprints. Mantener la velocidad media calculada para que
           el nivel se sienta retador pero siempre ganable.
 
-[ ] 13. Accesibilidad del selector de personajes
+[x] 13. Accesibilidad del selector de personajes  (HECHO 2026-10-23)
        `.radio{display:none}` hace los inputs NO enfocables con teclado
        ni leídos por lectores de pantalla de forma usable.
        -> Cambiar a .radio{ position:absolute; opacity:0 } (sigue focusable)

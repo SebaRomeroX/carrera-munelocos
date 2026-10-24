@@ -50,7 +50,14 @@ button:hover{
 }
 
 .radio{
-    display: none;
+    /* oculto visualmente pero SI enfocable con teclado (accessibility) */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
 }
 
 
@@ -94,6 +101,7 @@ button:hover{
 }
 
 .icono{
+    position: relative;
     height: 80px;
     width: 80px;
 }
@@ -116,6 +124,13 @@ button:hover{
     scale: 1.1;
     transition: all .1s;
     animation: cabecear 3s infinite;
+}
+
+/* indicador de foco visible al navegar con teclado */
+.icono:has(input:focus-visible) {
+    outline: 3px solid aliceblue;
+    outline-offset: 6px;
+    border-radius: 8px;
 }
 
 @keyframes cabecear{
