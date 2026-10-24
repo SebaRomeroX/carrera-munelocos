@@ -185,16 +185,19 @@ a {
 
 /* ------------------------  RESPONSIVE ------------------------ */
 
+/* tablets y pantallas medianas */
+@media (min-width: 640px) {
+    .titulo {
+        font-size: 2em;
+    }
+    .mensajes {
+        height: 22vh;
+    }
+}
+
 @media all and (min-width:1024px)    {
     .mensajes{
         height: 24vh;
-    }
-    .mensaje{
-        height: 18vh;
-    }
-
-    .iconos {
-        gap: 60px;
     }
 
     .botones-correr{
@@ -202,7 +205,7 @@ a {
     }
     
     canvas {
-        max-width: 1204px;
+        max-width: 1200px;
         border-radius: .6em;
     }
 }

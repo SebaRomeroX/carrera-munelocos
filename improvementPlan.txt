@@ -111,7 +111,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
           (dvh resuelve el salto de la barra de direcciones en iOS).
           Footer estático o con padding-bottom en el main.
 
-[ ] 17. CSS: reglas muertas y typos
+[x] 17. CSS: reglas muertas y typos  (HECHO 2026-10-23)
        `.mensaje{...}` dentro del media query no existe la clase
        (el id es #mensaje). `.iconos{gap:60px}` duplicado.
        `max-width: 1204px` probablemente era 1200px.
