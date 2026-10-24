@@ -105,7 +105,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
           transparent a .btn-correr; considerar pointerdown en vez de
           touchstart (funciona igual en stylus/trackpad).
 
-[ ] 16. Layout: body con 98vw/98vh + margin provoca scrollbars
+[x] 16. Layout: body con 98vw/98vh + margin provoca scrollbars  (HECHO 2026-10-23)
        por redondeo, y el footer fixed tapa contenido en pantallas chicas.
        -> Quitar width/height del body, usar min-height: 100dvh
           (dvh resuelve el salto de la barra de direcciones en iOS).

@@ -24,9 +24,11 @@ body {
     opacity: 0;
     animation: carga 1s .6s forwards;
 
-    height: 98vh;
-    width: 98vw;
-    margin: 1vh 1vw;
+    /* sin width/height fijos con vw/vh: evita scrollbars por redondeo y desbordes */
+    box-sizing: border-box;
+    min-height: 100vh;   /* fallback */
+    min-height: 100dvh;  /* dvh evita el salto de la barra de direcciones en iOS */
+    padding: 1vh 1vw;
 }
 
 @keyframes carga {   /*  Animcion carga inicial    */
@@ -169,8 +171,8 @@ canvas{
 /* ------------------------  FOOTER ------------------------ */
 
 footer {
-    position: fixed;
-    bottom: 0;
+    /* en el flujo normal (no tapa el canvas); margin-top lo empuja al fondo */
+    margin-top: auto;
     padding: 1em;
 }
 
