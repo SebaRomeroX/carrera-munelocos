@@ -118,7 +118,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
        -> Limpiar. Agregar al menos un breakpoint intermedio (640px)
           ya que hoy solo hay min-width:1024px.
 
-[ ] 18. Optimizar assets (~1 MB ahorrable)
+[x] 18. Optimizar assets (~1 MB ahorrable)  (HECHO 2026-10-24)
        - Borrar imágenes no referenciadas: rojo.png, azul.png, verde.png,
          rosa.png, amarillo.png (~1 MB en total, ninguna se usa).
        - fondo.png (776 KB) -> convertir a WebP/AVIF (~80-150 KB).

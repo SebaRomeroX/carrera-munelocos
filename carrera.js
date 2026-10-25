@@ -109,29 +109,29 @@ seccionIconos.addEventListener('change', revisarEleccion);
 
 //IMAGENES
 const muñecoRojoIzquierda = new Image()
-muñecoRojoIzquierda.src = './imagenes/rojoIzquierda.png'
+muñecoRojoIzquierda.src = './imagenes/rojoIzquierda.webp'
 const muñecoRojoDerecha = new Image()
-muñecoRojoDerecha.src = './imagenes/rojoDerecha.png'
+muñecoRojoDerecha.src = './imagenes/rojoDerecha.webp'
 
 const muñecoAzulIzquierda = new Image()
-muñecoAzulIzquierda.src = './imagenes/azulIzquierda.png'
+muñecoAzulIzquierda.src = './imagenes/azulIzquierda.webp'
 const muñecoAzulDerecha = new Image()
-muñecoAzulDerecha.src = './imagenes/azulDerecha.png'
+muñecoAzulDerecha.src = './imagenes/azulDerecha.webp'
 
 const muñecoVerdeIzquierda = new Image()
-muñecoVerdeIzquierda.src = './imagenes/verdeIzquierda.png'
+muñecoVerdeIzquierda.src = './imagenes/verdeIzquierda.webp'
 const muñecoVerdeDerecha = new Image()
-muñecoVerdeDerecha.src = './imagenes/verdeDerecha.png'
+muñecoVerdeDerecha.src = './imagenes/verdeDerecha.webp'
 
 const muñecoRosaIzquierda = new Image()
-muñecoRosaIzquierda.src = './imagenes/rosaIzquierda.png'
+muñecoRosaIzquierda.src = './imagenes/rosaIzquierda.webp'
 const muñecoRosaDerecha = new Image()
-muñecoRosaDerecha.src = './imagenes/rosaDerecha.png'
+muñecoRosaDerecha.src = './imagenes/rosaDerecha.webp'
 
 const muñecoAmarilloIzquierda = new Image()
-muñecoAmarilloIzquierda.src = './imagenes/amarilloIzquierda.png'
+muñecoAmarilloIzquierda.src = './imagenes/amarilloIzquierda.webp'
 const muñecoAmarilloDerecha = new Image()
-muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.png'
+muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.webp'
 
 
 //HABILITA BOTON CUANDO SE ELIGE
@@ -266,7 +266,7 @@ function armarMuñecoRival2(){
 const canvas = document.getElementById('canvas')
 const lienzo = canvas.getContext('2d')
 const imagenFondo = new Image()
-imagenFondo.src = './imagenes/fondo.png'
+imagenFondo.src = './imagenes/fondo.webp'
 
 //PRECARGA DE IMAGENES (evita dibujar frames en blanco)
 let recursosListos = false
