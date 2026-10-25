@@ -63,7 +63,7 @@ function mostrarMensajeIntro() {
 
     if (contadorMensajes == 1) {
         mensaje='Bienvenido a la carrera de los muñelocos';
-        botonSiguiente.innerText = 'Siguiente';
+        botonSiguiente.textContent = 'Siguiente';
     }
     if (contadorMensajes==2) {
         mensaje='Primero elige a tu personaje';
@@ -76,16 +76,16 @@ function mostrarMensajeIntro() {
     } 
     if (contadorMensajes==4) {
         mensaje='El primero en llegar al final de la calle gana';
-        botonSiguiente.innerText = 'Siguiente';
+        botonSiguiente.textContent = 'Siguiente';
     } 
     if (contadorMensajes==5) {
         mensaje='Estas listo ?';
 
         //MANDA INICIO DE CARRERA
-        botonSiguiente.innerText = 'Comenzar';
+        botonSiguiente.textContent = 'Comenzar';
         fase = 'listo';
     } 
-    spanMensaje.innerText=mensaje;
+    spanMensaje.textContent=mensaje;
     contadorMensajes++;
 }
 
@@ -137,7 +137,7 @@ muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.webp'
 //HABILITA BOTON CUANDO SE ELIGE
 function revisarEleccion() {
     botonSiguiente.style.display = 'flex';
-    botonSiguiente.innerText = 'Confirmar'
+    botonSiguiente.textContent = 'Confirmar'
     fase = 'seleccion';
 }
 
@@ -416,7 +416,7 @@ function elegirModoRival() {
 function cuentaRegresiva() {
     //ESPERAR A QUE LAS IMAGENES SEAN VISIBLES ANTES DE EMPEZAR
     if (!recursosListos) {
-        spanMensaje.innerText = 'Cargando...'
+        spanMensaje.textContent = 'Cargando...'
         botonSiguiente.style.display = 'none'
         setTimeout(cuentaRegresiva, 100)
         return
@@ -444,13 +444,13 @@ function contar() {
 
     //CUENTA REGRESIVA
     if (indice==0) {
-        spanMensaje.innerHTML='3...'  
+        spanMensaje.textContent='3...'  
     }if (indice==1) {
-        spanMensaje.innerHTML='3...2...'
+        spanMensaje.textContent='3...2...'
     }if (indice==2) {
-        spanMensaje.innerHTML='3...2...1...'
+        spanMensaje.textContent='3...2...1...'
     }if (indice==3) {
-        spanMensaje.innerHTML='3...2...1...YA !!!'
+        spanMensaje.textContent='3...2...1...YA !!!'
         clearInterval(cuenta)
         iniciarCarrera()
     }
@@ -463,7 +463,7 @@ function contar() {
 
     //MOSTRAR NIVEL   
     let spanNivel=document.getElementById('mensajeNivel')
-    spanNivel.innerText=`Nivel ${nivel}`;
+    spanNivel.textContent=`Nivel ${nivel}`;
 }
 
 //TUNING DE DIFICULTAD (ms de intervalo por rival; menor = mas rapido)
@@ -627,14 +627,14 @@ function victoria() {
     const llegadaRival2 = posicionRival2 - META
 
     if (llegadaJugador>llegadaRival1&&llegadaJugador>llegadaRival2) {
-        spanMensaje.innerText = 'Ganaste!! Pasas al siguiente nivel'
-         botonSiguiente.innerText = 'Siguiente';
+        spanMensaje.textContent = 'Ganaste!! Pasas al siguiente nivel'
+         botonSiguiente.textContent = 'Siguiente';
 
         //PASA AL SIGUIENTE NIVEL
         nivel++
     }if (llegadaRival1>=llegadaJugador||llegadaRival2>=llegadaJugador) {
-        spanMensaje.innerText = 'Perdiste.. Quieres intentarlo de nuevo ?'
-        botonSiguiente.innerText = 'Repetir';
+        spanMensaje.textContent = 'Perdiste.. Quieres intentarlo de nuevo ?'
+        botonSiguiente.textContent = 'Repetir';
     }
 
     //RESET POSICIONES

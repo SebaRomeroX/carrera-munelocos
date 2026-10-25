@@ -125,7 +125,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
        - Los muñecos PNG de 120-240 KB -> WebP con transparencia.
        Repo hoy pesa 6.28 MiB en el pack de git; bajaría a < 2 MiB.
 
-[ ] 19. innerHTML -> textContent
+[x] 19. innerHTML -> textContent  (HECHO 2026-10-24)
        spanMensaje.innerHTML='3...' etc. Usar textContent
        (más rápido y sin riesgo si algún día se interpola input del usuario).
 
