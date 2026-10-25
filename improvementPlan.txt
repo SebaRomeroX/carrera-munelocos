@@ -133,7 +133,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
        -> WebAudio API sin archivos: pasos (blip corto), cuenta regresiva,
           fanfarria de victoria. Con toggle de mute persistido.
 
-[ ] 21. prefers-reduced-motion
+[x] 21. prefers-reduced-motion  (HECHO 2026-10-25)
        -> Respetar la media query: desactivar animaciones de cabeceo
           y la transición de carga del body.
 

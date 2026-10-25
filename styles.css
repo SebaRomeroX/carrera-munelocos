@@ -230,3 +230,26 @@ a {
         border-radius: .6em;
     }
 }
+
+/* ------------------------  REDUCED MOTION  ------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+    /* OJO: el body arranca en opacity: 0 y la animacion "carga" es lo que lo
+       hace visible; sin ella hay que forzar opacity: 1 o la pagina queda invisible */
+    body {
+        animation: none;
+        opacity: 1;
+    }
+
+    /* el muñeco seleccionado deja de cabecear (rotacion infinita) pero
+       conserva el scale: 1.1 como feedback de seleccion */
+    .icono:has(input:checked) {
+        animation: none;
+    }
+
+    /* sin micro-transiciones al pasar el cursor o seleccionar */
+    .icono img,
+    .icono:has(input:checked) {
+        transition: none;
+    }
+}
