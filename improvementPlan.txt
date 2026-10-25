@@ -129,7 +129,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
        spanMensaje.innerHTML='3...' etc. Usar textContent
        (más rápido y sin riesgo si algún día se interpola input del usuario).
 
-[ ] 20. Sonido y feedback
+[x] 20. Sonido y feedback  (HECHO 2026-10-25)
        -> WebAudio API sin archivos: pasos (blip corto), cuenta regresiva,
           fanfarria de victoria. Con toggle de mute persistido.
 

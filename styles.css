@@ -168,6 +168,27 @@ canvas{
 }
 
 
+/* ------------------------  SONIDO  ------------------------ */
+
+#botonSonido {
+    position: fixed;
+    top: .5em;
+    right: .5em;
+    z-index: 10;
+
+    background: transparent;
+    color: aliceblue;
+    font-size: 1.5em;
+    line-height: 1;
+    padding: .35em .5em;
+    border-radius: .5em;
+}
+
+#botonSonido:hover {
+    background: rgba(255, 255, 255, .12);
+}
+
+
 /* ------------------------  FOOTER ------------------------ */
 
 footer {
