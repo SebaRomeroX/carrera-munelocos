@@ -158,6 +158,68 @@ document.addEventListener('keydown', asegurarAudio);
 
 
 
+/**   -------------------------------------  RECORD PERSISTENTE (localStorage)  --------------  */
+
+const CLAVE_RECORD = 'record';
+const elementoRecord = document.getElementById('record');
+
+//LEE Y VALIDA: JSON corrupto, storage bloqueado o datos invalidos -> null (sin record)
+function leerRecord() {
+    try {
+        const r = JSON.parse(localStorage.getItem(CLAVE_RECORD));
+        if (!r) return null;
+        const nivelMax = Number.isFinite(r.nivelMax) && r.nivelMax >= 1 ? r.nivelMax : null;
+        const mejorTiempo = Number.isFinite(r.mejorTiempo) && r.mejorTiempo > 0 ? r.mejorTiempo : null;
+        if (nivelMax === null && mejorTiempo === null) return null;
+        return { nivelMax, mejorTiempo };
+    } catch (e) { /* sin storage o JSON corrupto */ }
+    return null;
+}
+
+//GUARDA SOLO LOS CAMPOS VALIDOS (el objeto almacenado queda limpio)
+function guardarRecord(r) {
+    const limpio = {};
+    if (Number.isFinite(r.nivelMax) && r.nivelMax >= 1) limpio.nivelMax = Math.round(r.nivelMax);
+    if (Number.isFinite(r.mejorTiempo) && r.mejorTiempo > 0) limpio.mejorTiempo = Math.round(r.mejorTiempo);
+    try { localStorage.setItem(CLAVE_RECORD, JSON.stringify(limpio)); } catch (e) { /* sin storage */ }
+}
+
+//NIVEL ALCANZADO: se guarda al INICIAR la carrera (gane o pierda)
+function guardarNivelAlcanzado(nivelAlcanzado) {
+    const r = leerRecord() || {};
+    if (!Number.isFinite(r.nivelMax) || nivelAlcanzado > r.nivelMax) {
+        r.nivelMax = nivelAlcanzado;
+        guardarRecord(r);
+    }
+}
+
+//MEJOR TIEMPO: se guarda en CADA fin de carrera (victoria o derrota), conservando el minimo
+function guardarTiempo(duracion) {
+    const r = leerRecord() || {};
+    if (!Number.isFinite(r.mejorTiempo) || duracion < r.mejorTiempo) {
+        r.mejorTiempo = Math.round(duracion);
+        guardarRecord(r);
+    }
+}
+
+//TEXTO DEL RECORD PARA LA INTRO
+function pintarRecord() {
+    const r = leerRecord();
+
+    if (!r) {
+        elementoRecord.textContent = 'Juega y marca tus propios récords';
+    } else if (Number.isFinite(r.mejorTiempo)) {
+        const tiempo = (r.mejorTiempo / 1000).toFixed(1);
+        elementoRecord.textContent = Number.isFinite(r.nivelMax)
+            ? `Récord: Nivel ${r.nivelMax} · mejor tiempo ${tiempo} s`
+            : `Récord: mejor tiempo ${tiempo} s`;
+    } else {
+        elementoRecord.textContent = `Récord: Nivel ${r.nivelMax}`;
+    }
+}
+
+
+
      /** ---------------------------------------------------------   MENSAJES INTRO        */
 
 // CONTADOR MENSAJES
@@ -198,6 +260,11 @@ function mostrarMensajeIntro() {
         fase = 'listo';
     } 
     spanMensaje.textContent=mensaje;
+
+    //RECORD: visible unicamente en el primer mensaje de la intro
+    elementoRecord.hidden = contadorMensajes !== 1;
+    if (contadorMensajes === 1) pintarRecord();
+
     contadorMensajes++;
 }
 
@@ -550,6 +617,7 @@ function cuentaRegresiva() {
 
 let indice =0
 let nivel= 1
+let inicioCarrera = 0   //marcador de tiempo de la carrera actual (performance.now)
 
 function contar() {
     botonSiguiente.style.display='none'
@@ -590,6 +658,10 @@ const DELTA_RIVAL1  = 1.2  //ms mas rapido por nivel
 const DELTA_RIVAL2  = 2.5  //ms mas rapido por nivel (un poco mas agresivo)
 
 function iniciarCarrera() {
+    //CRONOMETRO DE LA CARRERA ACTUAL + RECORD DE NIVEL ALCANZADO (gane o pierda)
+    inicioCarrera = performance.now()
+    guardarNivelAlcanzado(nivel)
+
     //pequena variacion por carrera para que no se sienta identico
     const jitter = aleatorio(-4,4);
 
@@ -738,6 +810,12 @@ function victoria() {
     fase = 'resultado'
     pasoIzquierdo=0
     pasoDerecho=0
+
+    //DURACION DE LA CARRERA -> record de mejor tiempo (ganes o pierdas)
+    if (inicioCarrera > 0) {
+        guardarTiempo(performance.now() - inicioCarrera)
+        inicioCarrera = 0
+    }
     
     //RESULTADO (gana quien llego mas lejos de la meta en el frame final)
     const llegadaJugador = posicionJugador - META

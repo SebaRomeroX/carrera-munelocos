@@ -141,7 +141,7 @@ P1 — CALIDAD, PERFORMANCE Y ACCESIBILIDAD
 P2 — FEATURES QUE SUBEN EL VALOR
 ====================================================================
 
-[ ] 22. Puntuación persistente (localStorage)
+[x] 22. Puntuación persistente (localStorage)  (HECHO 2026-10-26)
        Nivel máximo alcanzado + tiempo del mejor nivel.
        Mostrar "Récord: Nivel X" en la intro. Motiva a reintentar.
 

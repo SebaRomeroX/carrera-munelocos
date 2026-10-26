@@ -89,6 +89,14 @@ button:hover{
     justify-content: space-evenly;
 }
 
+/* record persistente en la intro: enfatiza menos que el mensaje principal */
+.record {
+    font-size: .8em;
+    font-weight: 400;
+    opacity: .75;
+    letter-spacing: .02em;
+}
+
 
 /* -- ICONOS -- */
 .iconos{
