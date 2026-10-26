@@ -17,8 +17,11 @@
 <body>
 	<h1 class="titulo">La Carrera de los MuñeLocos</h1>
 
-	<!-- TOGGLE DE SONIDO (fijo, siempre accesible) -->
-	<button id="botonSonido" aria-pressed="true" aria-label="Silenciar sonido" title="Silenciar sonido">🔊</button>
+	<!-- CONTROLES FIJOS (siempre visibles) -->
+	<div class="controles-fijos">
+		<button id="botonSonido" aria-pressed="true" aria-label="Silenciar sonido" title="Silenciar sonido">🔊</button>
+		<button id="botonPausa" hidden aria-label="Pausar carrera" title="Pausar carrera">⏸</button>
+	</div>
 	
 	<!--  MENSAJES  -->
 	<section id="intro" class="mensajes">
@@ -69,6 +72,17 @@
 	<footer>
 		<p>Hecho con ❤ por <a target="_blank" href="https://sebaromerox.github.io/portafolios/">Seba Romero</a></p>
 	</footer>
+
+	<!-- PAUSA: overlay con reanudar / repetir nivel / reiniciar partida -->
+	<div id="pausa" class="pausa" hidden role="dialog" aria-modal="true" aria-label="Pausa">
+		<div class="pausa-caja">
+			<h2>Pausa</h2>
+			<button id="btnReanudar">Reanudar</button>
+			<button id="btnRepetirNivel">Repetir nivel</button>
+			<button id="btnReiniciarPartida">Reiniciar partida</button>
+		</div>
+	</div>
+
 	<script src="carrera.js"></script>
 </body>
 </html>

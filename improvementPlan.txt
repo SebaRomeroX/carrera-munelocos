@@ -145,12 +145,12 @@ P2 — FEATURES QUE SUBEN EL VALOR
        Nivel máximo alcanzado + tiempo del mejor nivel.
        Mostrar "Récord: Nivel X" en la intro. Motiva a reintentar.
 
-[ ] 23. Pantalla de resultado con datos reales
+[–] 23. Pantalla de resultado con datos reales  (OMITIDO 2026-10-26, sin interés)
        Hoy solo "Ganaste!!" / "Perdiste..".
        -> Mostrar distancia recorrida de cada corredor, margen de
           victoria, y qué tan cerca estuvo de perder.
 
-[ ] 24. Pausa / reinicio
+[x] 24. Pausa / reinicio  (HECHO 2026-10-26)
        Tecla Escape o botón para reiniciar la partida completa
        (reset de nivel, dificultad y posiciones).
 

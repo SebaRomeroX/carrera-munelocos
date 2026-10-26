@@ -220,6 +220,122 @@ function pintarRecord() {
 
 
 
+/**   -------------------------------------  PAUSA Y REINICIO  ---------------------------  */
+
+const botonPausa = document.getElementById('botonPausa');
+const overlayPausa = document.getElementById('pausa');
+const btnReanudar = document.getElementById('btnReanudar');
+const btnRepetirNivel = document.getElementById('btnRepetirNivel');
+const btnReiniciarPartida = document.getElementById('btnReiniciarPartida');
+
+function actualizarBotonPausa(pausado) {
+    botonPausa.textContent = pausado ? '▶' : '⏸';
+    const texto = pausado ? 'Reanudar carrera' : 'Pausar carrera';
+    botonPausa.setAttribute('aria-label', texto);
+    botonPausa.title = texto;
+}
+
+function mostrarPausa() {
+    overlayPausa.hidden = false;
+    btnReanudar.focus();
+}
+
+function ocultarPausa() {
+    overlayPausa.hidden = true;
+}
+
+//ENTRAR EN PAUSA: cambia la fase y invalida la cadena rAF pendiente
+function entrarEnPausa() {
+    if (fase !== 'carrera') return;
+    fase = 'pausa';
+    idCadena++;
+    actualizarBotonPausa(true);
+    mostrarPausa();
+}
+
+//REANUDAR: vuelve a 'carrera' con reloj fresco (sin salto de tiempo)
+function reanudarCarrera() {
+    if (fase !== 'pausa') return;
+    ocultarPausa();
+    fase = 'carrera';
+    actualizarBotonPausa(false);
+    botonPausa.focus();
+    arrancarLoop();
+}
+
+//ESTADO DE CARRERA A CERO (compartido: repetir nivel y reiniciar partida)
+function reiniciarEstadoCarrera() {
+    posicionJugador = unidad * 0.8;
+    posicionRival1 = unidad * 1.2;
+    posicionRival2 = unidad * 0.3;
+    pasoIzquierdo = 0;
+    pasoDerecho = 0;
+    pasoRival1 = 0;
+    pasoRival2 = 0;
+    acumRival1 = 0;
+    acumRival2 = 0;
+    escalaRival1 = 1;
+    escalaRival2 = 1;
+    restoRival1 = 0;
+    restoRival2 = 0;
+    indice = 0;
+    inicioCarrera = 0;
+}
+
+//REPETIR NIVEL: mismo nivel y personaje, cuenta regresiva y carrera desde cero
+function repetirNivel() {
+    if (fase !== 'pausa') return;
+    ocultarPausa();
+    reiniciarEstadoCarrera();
+    idCadena++;
+    actualizarBotonPausa(false);
+    cuentaRegresiva();   //nueva cuenta 3-2-1 y arranque (fase -> 'cuenta')
+}
+
+//REINICIAR PARTIDA COMPLETA: nivel 1 y vuelta a la intro
+//(el record de localStorage NO se toca: es permanente)
+function reiniciarPartida() {
+    if (fase !== 'pausa') return;
+    ocultarPausa();
+    if (cuenta) {
+        clearInterval(cuenta);
+        cuenta = undefined;
+    }
+    idCadena++;
+    reiniciarEstadoCarrera();
+    nivel = 1;
+
+    //UI: esconder la carrera y volver a la intro
+    canvas.style.display = 'none';
+    botonIzquierda.style.display = 'none';
+    botonDerecha.style.display = 'none';
+    mensajeNivel.style.display = 'none';
+    seccionIconos.style.display = 'none';
+    botonSiguiente.style.display = 'flex';
+    botonPausa.hidden = true;
+
+    //mensaje 1 de la intro + record
+    contadorMensajes = 1;
+    mostrarMensajeIntro();
+}
+
+//ESCAPE: pausa o reanudar (fuera de la carrera no hace nada; e.repeat evita el auto-repeat)
+document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || e.repeat) return;
+    if (fase === 'carrera') entrarEnPausa();
+    else if (fase === 'pausa') reanudarCarrera();
+});
+
+botonPausa.addEventListener('click', () => {
+    if (fase === 'carrera') entrarEnPausa();
+    else if (fase === 'pausa') reanudarCarrera();
+});
+btnReanudar.addEventListener('click', reanudarCarrera);
+btnRepetirNivel.addEventListener('click', repetirNivel);
+btnReiniciarPartida.addEventListener('click', reiniciarPartida);
+
+
+
      /** ---------------------------------------------------------   MENSAJES INTRO        */
 
 // CONTADOR MENSAJES
@@ -573,6 +689,10 @@ let acumRival1 = 0
 let acumRival2 = 0
 let ultimoTiempo = 0
 
+//TOKEN DE CADENA rAF: al pausar/reanudar invalida cualquier frame pendiente
+//(sin esto, un doble Escape rapido dejaria DOS cadenas activas = doble velocidad)
+let idCadena = 0
+
 //RACHAS DE LOS BOTS (multiplicador de velocidad y tiempo restante en el modo)
 let escalaRival1 = 1
 let escalaRival2 = 1
@@ -682,15 +802,25 @@ function iniciarCarrera() {
     //PERMITIR MOVIMIENTO (fase de carrera activa)
     fase = 'carrera'
 
+    //BOTON DE PAUSA VISIBLE MIENTRAS DURE LA CARRERA
+    botonPausa.hidden = false
+    actualizarBotonPausa(false)
+
     //ARRANCAR LOOP DE ANIMACION (rAF) que dibuja y mueve a los rivales
+    arrancarLoop()
+}
+
+//ARRANQUE DEL LOOP CON TOKEN NUEVO (invalida cadenas anteriores)
+function arrancarLoop() {
+    idCadena++
     ultimoTiempo = performance.now()
-    requestAnimationFrame(bucleAnimacion)
+    requestAnimationFrame((t) => bucleAnimacion(t, idCadena))
 }
 
 //LOOP PRINCIPAL: un solo reloj (rAF) para dibujo + movimiento de rivales
-function bucleAnimacion(tiempoAhora) {
-    //detener al terminar la carrera
-    if (fase !== 'carrera') {
+function bucleAnimacion(tiempoAhora, cadena) {
+    //detener al terminar la carrera, al pausar o si la cadena quedo obsoleta
+    if (cadena !== idCadena || fase !== 'carrera') {
         return
     }
 
@@ -730,9 +860,9 @@ function bucleAnimacion(tiempoAhora) {
     //dibuja y detecta la meta (puede llamar a victoria)
     dibujar()
 
-    //no re-agendar si ya hay ganador
-    if (fase === 'carrera') {
-        requestAnimationFrame(bucleAnimacion)
+    //no re-agendar si ya hay ganador o si la cadena quedo obsoleta (pausa/reinicio)
+    if (fase === 'carrera' && cadena === idCadena) {
+        requestAnimationFrame((t) => bucleAnimacion(t, cadena))
     }
 }
 
@@ -811,6 +941,9 @@ function victoria() {
     pasoIzquierdo=0
     pasoDerecho=0
 
+    //EL BOTON DE PAUSA NO APLICA FUERA DE LA CARRERA
+    botonPausa.hidden = true
+    
     //DURACION DE LA CARRERA -> record de mejor tiempo (ganes o pierdas)
     if (inicioCarrera > 0) {
         guardarTiempo(performance.now() - inicioCarrera)
