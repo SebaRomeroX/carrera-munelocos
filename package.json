@@ -1,14 +1,20 @@
 {
-  "name": "carrera-munelocos",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Juego de carrera con muñecos graciosos (HTML + CSS + canvas en JavaScript sin frameworks)",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^8.3.5"
-  }
+    "name": "carrera-munelocos",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Juego de carrera con muñecos graciosos (HTML + CSS + canvas en JavaScript sin frameworks)",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint .",
+        "format": "prettier --write ."
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.13.0",
+        "globals": "^17.13.0",
+        "prettier": "^3.9.10",
+        "vite": "^8.3.5"
+    }
 }

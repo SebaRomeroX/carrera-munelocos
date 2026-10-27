@@ -1,94 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-	<meta name="description" content="juego de carreras con personajes graciosos">
-	<meta name="author" content="Sebastian A. Romero">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="juego de carreras con personajes graciosos" />
+		<meta name="author" content="Sebastian A. Romero" />
 
-	<!--  ESTILOS  -->
-	<link rel="stylesheet" href="./styles.css">
+		<!--  ESTILOS  -->
+		<link rel="stylesheet" href="./styles.css" />
 
-	<!-- TITULO -->
-	<link rel="shortcut icon" href="imagenes/rojoIcono.png" type="image/x-icon">
-	<title>Carrera de Muñelocos</title>
-</head>
-<body>
-	<h1 class="titulo">La Carrera de los MuñeLocos</h1>
+		<!-- TITULO -->
+		<link rel="shortcut icon" href="imagenes/rojoIcono.png" type="image/x-icon" />
+		<title>Carrera de Muñelocos</title>
+	</head>
+	<body>
+		<h1 class="titulo">La Carrera de los MuñeLocos</h1>
 
-	<!-- CONTROLES FIJOS (siempre visibles) -->
-	<div class="controles-fijos">
-		<button id="botonSonido" aria-pressed="true" aria-label="Silenciar sonido" title="Silenciar sonido">🔊</button>
-		<button id="botonPausa" hidden aria-label="Pausar carrera" title="Pausar carrera">⏸</button>
-	</div>
-	
-	<!--  MENSAJES  -->
-	<section id="intro" class="mensajes">
-		<h2 id="mensaje">
-			<span id="mensajeNivel"></span>
-			<span id="spanMensaje"></span>
-			<span id="record" class="record" hidden></span>
-		</h2>
-
-		<button id="botonSiguiente"></button>
-	</section>
-
-	<!-- SELECCION DE NUMERO DE JUGADORES (se elige antes que el muñeco) -->
-	<section id="modos" class="modos" hidden aria-label="Número de jugadores">
-		<button id="btn1Jugador" class="btn-modo">1 Jugador</button>
-		<button id="btn2Jugadores" class="btn-modo">2 Jugadores</button>
-	</section>
-
-	<!-- SELECCION DE PERSONAJES -->
-	<section id="iconos" class="iconos" >
-		<label class="icono" for='radioRojo'>
-			<input class="radio" type="radio" name="radio" id="radioRojo">
-			<img src='imagenes/rojoIcono.webp' alt="Muñeco rojo" >
-		</label>
-		<label class="icono" for='radioAzul'>
-			<input class="radio" type="radio" name="radio" id='radioAzul'>
-			<img src='imagenes/azulIcono.webp' alt="Muñeco azul" >
-		</label>
-		<label class="icono" for='radioVerde'>
-			<input class="radio" type="radio" name="radio" id='radioVerde'>
-			<img src='imagenes/verdeIcono.webp' alt="Muñeco verde" >
-		</label>
-		<label class="icono" for='radioAmarillo'>
-			<input class="radio" type="radio" name="radio" id='radioAmarillo'>
-			<img src='imagenes/amarilloIcono.webp' alt="Muñeco amarillo" >
-		</label>
-		<label class="icono" for='radioRosa'>
-			<input class="radio" type="radio" name="radio" id='radioRosa'>
-			<img src='imagenes/rosaIcono.webp' alt="Muñeco rosa" >
-		</label>
-	</section>
-
-	<!--  CANVAS  -->
-	<canvas id="canvas" role="img" aria-label="Carrera de muñecos en una calle">
-		Tu navegador no soporta el elemento canvas. El juego muestra tres muñecos corriendo por una calle hacia la meta.
-	</canvas>
-
-	<!-- BOTONES PARA JUGAR EN MOBILE -->
-	<section id="botones" class="botones-correr" aria-label="Controles de carrera">
-		<button class="btn-correr" id="botonIzquierda" aria-label="Paso izquierdo">◀</button>
-		<button class="btn-correr" id="botonDerecha" aria-label="Paso derecho">▶</button>
-	</section>
-		
-	<footer>
-		<p>Hecho con ❤ por <a target="_blank" href="https://sebaromerox.github.io/portafolios/">Seba Romero</a></p>
-	</footer>
-
-	<!-- PAUSA: overlay con reanudar / repetir nivel / reiniciar partida -->
-	<div id="pausa" class="pausa" hidden role="dialog" aria-modal="true" aria-label="Pausa">
-		<div class="pausa-caja">
-			<h2>Pausa</h2>
-			<button id="btnReanudar">Reanudar</button>
-			<button id="btnRepetirNivel">Repetir nivel</button>
-			<button id="btnReiniciarPartida">Reiniciar partida</button>
+		<!-- CONTROLES FIJOS (siempre visibles) -->
+		<div class="controles-fijos">
+			<button id="botonSonido" aria-pressed="true" aria-label="Silenciar sonido" title="Silenciar sonido">
+				🔊
+			</button>
+			<button id="botonPausa" hidden aria-label="Pausar carrera" title="Pausar carrera">⏸</button>
 		</div>
-	</div>
 
-	<script src="carrera.js"></script>
-</body>
+		<!--  MENSAJES  -->
+		<section id="intro" class="mensajes">
+			<h2 id="mensaje">
+				<span id="mensajeNivel"></span>
+				<span id="spanMensaje"></span>
+				<span id="record" class="record" hidden></span>
+			</h2>
+
+			<button id="botonSiguiente"></button>
+		</section>
+
+		<!-- SELECCION DE NUMERO DE JUGADORES (se elige antes que el muñeco) -->
+		<section id="modos" class="modos" hidden aria-label="Número de jugadores">
+			<button id="btn1Jugador" class="btn-modo">1 Jugador</button>
+			<button id="btn2Jugadores" class="btn-modo">2 Jugadores</button>
+		</section>
+
+		<!-- SELECCION DE PERSONAJES -->
+		<section id="iconos" class="iconos">
+			<label class="icono" for="radioRojo">
+				<input class="radio" type="radio" name="radio" id="radioRojo" />
+				<img src="imagenes/rojoIcono.webp" alt="Muñeco rojo" />
+			</label>
+			<label class="icono" for="radioAzul">
+				<input class="radio" type="radio" name="radio" id="radioAzul" />
+				<img src="imagenes/azulIcono.webp" alt="Muñeco azul" />
+			</label>
+			<label class="icono" for="radioVerde">
+				<input class="radio" type="radio" name="radio" id="radioVerde" />
+				<img src="imagenes/verdeIcono.webp" alt="Muñeco verde" />
+			</label>
+			<label class="icono" for="radioAmarillo">
+				<input class="radio" type="radio" name="radio" id="radioAmarillo" />
+				<img src="imagenes/amarilloIcono.webp" alt="Muñeco amarillo" />
+			</label>
+			<label class="icono" for="radioRosa">
+				<input class="radio" type="radio" name="radio" id="radioRosa" />
+				<img src="imagenes/rosaIcono.webp" alt="Muñeco rosa" />
+			</label>
+		</section>
+
+		<!--  CANVAS  -->
+		<canvas id="canvas" role="img" aria-label="Carrera de muñecos en una calle">
+			Tu navegador no soporta el elemento canvas. El juego muestra tres muñecos corriendo por una calle hacia la
+			meta.
+		</canvas>
+
+		<!-- BOTONES PARA JUGAR EN MOBILE -->
+		<section id="botones" class="botones-correr" aria-label="Controles de carrera">
+			<button class="btn-correr" id="botonIzquierda" aria-label="Paso izquierdo">◀</button>
+			<button class="btn-correr" id="botonDerecha" aria-label="Paso derecho">▶</button>
+		</section>
+
+		<footer>
+			<p>Hecho con ❤ por <a target="_blank" href="https://sebaromerox.github.io/portafolios/">Seba Romero</a></p>
+		</footer>
+
+		<!-- PAUSA: overlay con reanudar / repetir nivel / reiniciar partida -->
+		<div id="pausa" class="pausa" hidden role="dialog" aria-modal="true" aria-label="Pausa">
+			<div class="pausa-caja">
+				<h2>Pausa</h2>
+				<button id="btnReanudar">Reanudar</button>
+				<button id="btnRepetirNivel">Repetir nivel</button>
+				<button id="btnReiniciarPartida">Reiniciar partida</button>
+			</div>
+		</div>
+
+		<script src="carrera.js"></script>
+	</body>
 </html>

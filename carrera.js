@@ -1,8 +1,7 @@
-
 /**   -------------------------------------  INICIO   -------------------------------     */
 
-//ELEMENTOS     
-const seccionIconos= document.getElementById('iconos');
+//ELEMENTOS
+const seccionIconos = document.getElementById('iconos');
 const seccionModos = document.getElementById('modos');
 const mensajeNivel = document.getElementById('mensajeNivel');
 const botonIzquierda = document.getElementById('botonIzquierda');
@@ -31,21 +30,19 @@ botonSiguiente.addEventListener('click', () => {
 });
 
 function cargarElementos() {
-    
     // DISPLAY ELEMENTOS
-    seccionModos.style.display='none';
-    seccionIconos.style.display='none';
-    canvas.style.display='none';
-    mensajeNivel.style.display='none';
-    botonIzquierda.style.display='none';
-    botonDerecha.style.display='none';
+    seccionModos.style.display = 'none';
+    seccionIconos.style.display = 'none';
+    canvas.style.display = 'none';
+    mensajeNivel.style.display = 'none';
+    botonIzquierda.style.display = 'none';
+    botonDerecha.style.display = 'none';
 
     //SIGUIENTE
     mostrarMensajeIntro();
 }
 
-window.addEventListener('load',cargarElementos);
-
+window.addEventListener('load', cargarElementos);
 
 /**   -------------------------------------  SONIDO (WebAudio, sin archivos)  ------------------  */
 
@@ -53,17 +50,21 @@ const botonSonido = document.getElementById('botonSonido');
 
 //ESTADO PERSISTIDO: '1' activo (default), '0' silenciado
 let sonidoActivo = true;
-try { sonidoActivo = localStorage.getItem('sonido') !== '0'; } catch (e) { /* sin storage */ }
+try {
+    sonidoActivo = localStorage.getItem('sonido') !== '0';
+} catch (e) {
+    /* sin storage */
+}
 
 const VOLUMEN_MASTER = 0.3;
 
-let contextoAudio = null;   //se crea en el primer gesto (politica de autoplay)
+let contextoAudio = null; //se crea en el primer gesto (politica de autoplay)
 let gananciaMaster = null;
 
 function asegurarAudio() {
     if (!contextoAudio) {
         const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (!Ctx) return;   //navegador sin WebAudio: el juego funciona sin sonido
+        if (!Ctx) return; //navegador sin WebAudio: el juego funciona sin sonido
         contextoAudio = new Ctx();
         gananciaMaster = contextoAudio.createGain();
         gananciaMaster.gain.value = sonidoActivo ? VOLUMEN_MASTER : 0;
@@ -91,8 +92,8 @@ function tono({ frecuencia, duracion, tipo = 'square', retraso = 0, volumen = 1,
     }
 
     env.gain.setValueAtTime(0.0001, t0);
-    env.gain.exponentialRampToValueAtTime(volumen, t0 + 0.012);          //ataque
-    env.gain.exponentialRampToValueAtTime(0.0001, t0 + duracion);        //release
+    env.gain.exponentialRampToValueAtTime(volumen, t0 + 0.012); //ataque
+    env.gain.exponentialRampToValueAtTime(0.0001, t0 + duracion); //release
 
     osc.connect(env);
     env.connect(gananciaMaster);
@@ -117,13 +118,15 @@ function sonarCuenta(indice) {
 //VICTORIA: fanfarria en arpegio Do5-Mi5-Sol5-Do6
 function fanfarria() {
     const notas = [523, 659, 784, 1047];
-    notas.forEach((f, i) => tono({
-        frecuencia: f,
-        duracion: i === notas.length - 1 ? 0.4 : 0.14,
-        tipo: 'triangle',
-        retraso: i * 0.11,
-        volumen: 0.9
-    }));
+    notas.forEach((f, i) =>
+        tono({
+            frecuencia: f,
+            duracion: i === notas.length - 1 ? 0.4 : 0.14,
+            tipo: 'triangle',
+            retraso: i * 0.11,
+            volumen: 0.9,
+        }),
+    );
 }
 
 //DERROTA: tono grave descendente (Do3 -> Do2)
@@ -141,12 +144,17 @@ function actualizarBotonSonido() {
 
 function alternarSonido() {
     sonidoActivo = !sonidoActivo;
-    try { localStorage.setItem('sonido', sonidoActivo ? '1' : '0'); } catch (e) { /* sin storage */ }
+    try {
+        localStorage.setItem('sonido', sonidoActivo ? '1' : '0');
+    } catch (e) {
+        /* sin storage */
+    }
     if (gananciaMaster) {
         gananciaMaster.gain.value = sonidoActivo ? VOLUMEN_MASTER : 0;
     }
     actualizarBotonSonido();
-    if (sonidoActivo) {   //corto blip de confirmacion al reactivar
+    if (sonidoActivo) {
+        //corto blip de confirmacion al reactivar
         tono({ frecuencia: 880, duracion: 0.06, volumen: 0.5 });
     }
 }
@@ -157,8 +165,6 @@ actualizarBotonSonido();
 //POLITICA DE AUTOPLAY: el contexto necesita un gesto del usuario para arrancar
 document.addEventListener('pointerdown', asegurarAudio);
 document.addEventListener('keydown', asegurarAudio);
-
-
 
 /**   -------------------------------------  RECORD PERSISTENTE (localStorage)  --------------  */
 
@@ -174,7 +180,9 @@ function leerRecord() {
         const mejorTiempo = Number.isFinite(r.mejorTiempo) && r.mejorTiempo > 0 ? r.mejorTiempo : null;
         if (nivelMax === null && mejorTiempo === null) return null;
         return { nivelMax, mejorTiempo };
-    } catch (e) { /* sin storage o JSON corrupto */ }
+    } catch (e) {
+        /* sin storage o JSON corrupto */
+    }
     return null;
 }
 
@@ -183,7 +191,11 @@ function guardarRecord(r) {
     const limpio = {};
     if (Number.isFinite(r.nivelMax) && r.nivelMax >= 1) limpio.nivelMax = Math.round(r.nivelMax);
     if (Number.isFinite(r.mejorTiempo) && r.mejorTiempo > 0) limpio.mejorTiempo = Math.round(r.mejorTiempo);
-    try { localStorage.setItem(CLAVE_RECORD, JSON.stringify(limpio)); } catch (e) { /* sin storage */ }
+    try {
+        localStorage.setItem(CLAVE_RECORD, JSON.stringify(limpio));
+    } catch (e) {
+        /* sin storage */
+    }
 }
 
 //NIVEL ALCANZADO: se guarda al INICIAR la carrera (gane o pierda)
@@ -219,8 +231,6 @@ function pintarRecord() {
         elementoRecord.textContent = `Récord: Nivel ${r.nivelMax}`;
     }
 }
-
-
 
 /**   -------------------------------------  PAUSA Y REINICIO  ---------------------------  */
 
@@ -293,7 +303,7 @@ function repetirNivel() {
     reiniciarEstadoCarrera();
     idCadena++;
     actualizarBotonPausa(false);
-    cuentaRegresiva();   //nueva cuenta 3-2-1 y arranque (fase -> 'cuenta')
+    cuentaRegresiva(); //nueva cuenta 3-2-1 y arranque (fase -> 'cuenta')
 }
 
 //REINICIAR PARTIDA COMPLETA: nivel 1 y vuelta a la intro
@@ -312,7 +322,9 @@ function reiniciarPartida() {
     //SELECCION A CERO: radios libres y sin eleccion pendiente del J2
     esperandoEleccionP2 = false;
     eleccionP1 = 0;
-    radiosPersonajes.forEach(r => { r.disabled = false; });
+    radiosPersonajes.forEach((r) => {
+        r.disabled = false;
+    });
 
     //UI: esconder la carrera y volver a la intro
     canvas.style.display = 'none';
@@ -344,8 +356,6 @@ btnReanudar.addEventListener('click', reanudarCarrera);
 btnRepetirNivel.addEventListener('click', repetirNivel);
 btnReiniciarPartida.addEventListener('click', reiniciarPartida);
 
-
-
 /**   -------------------------------------  MODO DE JUEGO (1P / 2P)  ---------------------  */
 
 //MODO DE LA PARTIDA: false = 1 jugador (default), true = 2 jugadores en un teclado
@@ -354,23 +364,21 @@ let modo2Jugadores = false;
 function elegirModo(jugadores) {
     modo2Jugadores = jugadores === 2;
     seccionModos.style.display = 'none';
-    mostrarMensajeIntro();   //siguiente mensaje: eleccion de muñeco
+    mostrarMensajeIntro(); //siguiente mensaje: eleccion de muñeco
 }
 
 document.getElementById('btn1Jugador').addEventListener('click', () => elegirModo(1));
 document.getElementById('btn2Jugadores').addEventListener('click', () => elegirModo(2));
 
-
-
-     /** ---------------------------------------------------------   MENSAJES INTRO        */
+/** ---------------------------------------------------------   MENSAJES INTRO        */
 
 // CONTADOR MENSAJES
 let contadorMensajes = 1;
 
 // SPAN MENSAJE
-let spanMensaje=document.getElementById('spanMensaje');
+let spanMensaje = document.getElementById('spanMensaje');
 
-//MENSAJES 
+//MENSAJES
 function mostrarMensajeIntro() {
     let mensaje = '';
 
@@ -378,39 +386,39 @@ function mostrarMensajeIntro() {
     fase = 'intro';
 
     if (contadorMensajes == 1) {
-        mensaje='Bienvenido a la carrera de los muñelocos';
+        mensaje = 'Bienvenido a la carrera de los muñelocos';
         botonSiguiente.textContent = 'Siguiente';
     }
-    if (contadorMensajes==2) {
+    if (contadorMensajes == 2) {
         //ELEGIR MODO ANTES QUE EL MUÑECO: 1 o 2 jugadores
-        mensaje='¿Cuántos juegan esta partida?';
+        mensaje = '¿Cuántos juegan esta partida?';
         seccionModos.style.display = 'flex';
         botonSiguiente.style.display = 'none';
         fase = 'modo';
-    } 
-    if (contadorMensajes==3) {
+    }
+    if (contadorMensajes == 3) {
         mensaje = modo2Jugadores ? 'Jugador 1: elige tu muñeco' : 'Primero elige a tu personaje';
-        seccionIconos.style.display ='flex';
+        seccionIconos.style.display = 'flex';
         botonSiguiente.style.display = 'none';
-    } 
-    if (contadorMensajes==4) {
+    }
+    if (contadorMensajes == 4) {
         mensaje = modo2Jugadores
             ? 'Jugador 1: usa A y D  |  Jugador 2: usa las flechas IZQUIERDA y DERECHA, alternando para correr'
             : 'Cuando la carrera comienze, oprime los botones IZQUIERDA y DERECHA alternadamente para correr';
         botonSiguiente.style.display = 'flex';
-    } 
-    if (contadorMensajes==5) {
-        mensaje='El primero en llegar al final de la calle gana';
+    }
+    if (contadorMensajes == 5) {
+        mensaje = 'El primero en llegar al final de la calle gana';
         botonSiguiente.textContent = 'Siguiente';
-    } 
-    if (contadorMensajes==6) {
-        mensaje='Estas listo ?';
+    }
+    if (contadorMensajes == 6) {
+        mensaje = 'Estas listo ?';
 
         //MANDA INICIO DE CARRERA
         botonSiguiente.textContent = 'Comenzar';
         fase = 'listo';
-    } 
-    spanMensaje.textContent=mensaje;
+    }
+    spanMensaje.textContent = mensaje;
 
     //RECORD: visible unicamente en el primer mensaje de la intro
     elementoRecord.hidden = contadorMensajes !== 1;
@@ -419,19 +427,14 @@ function mostrarMensajeIntro() {
     contadorMensajes++;
 }
 
-
-
-
-
-        /** ------------------------------------------------------------    ELECCION PERSONAJES        */
-
+/** ------------------------------------------------------------    ELECCION PERSONAJES        */
 
 // INPUTS
-let inputRojo= document.getElementById('radioRojo');
-let inputAzul= document.getElementById('radioAzul');
-let inputVerde= document.getElementById('radioVerde');
+let inputRojo = document.getElementById('radioRojo');
+let inputAzul = document.getElementById('radioAzul');
+let inputVerde = document.getElementById('radioVerde');
 let inputAmarillo = document.getElementById('radioAmarillo');
-let inputRosa  = document.getElementById('radioRosa');
+let inputRosa = document.getElementById('radioRosa');
 
 // EVENTO 'change' (delegation): se dispara apenas se elige un personaje
 seccionIconos.addEventListener('change', revisarEleccion);
@@ -439,41 +442,38 @@ seccionIconos.addEventListener('change', revisarEleccion);
 //ORDEN DE LOS RADIOS = ORDEN DE ELECCION (1..5)
 const radiosPersonajes = [inputRojo, inputAzul, inputVerde, inputRosa, inputAmarillo];
 
-
 //IMAGENES
-const muñecoRojoIzquierda = new Image()
-muñecoRojoIzquierda.src = './imagenes/rojoIzquierda.webp'
-const muñecoRojoDerecha = new Image()
-muñecoRojoDerecha.src = './imagenes/rojoDerecha.webp'
+const muñecoRojoIzquierda = new Image();
+muñecoRojoIzquierda.src = './imagenes/rojoIzquierda.webp';
+const muñecoRojoDerecha = new Image();
+muñecoRojoDerecha.src = './imagenes/rojoDerecha.webp';
 
-const muñecoAzulIzquierda = new Image()
-muñecoAzulIzquierda.src = './imagenes/azulIzquierda.webp'
-const muñecoAzulDerecha = new Image()
-muñecoAzulDerecha.src = './imagenes/azulDerecha.webp'
+const muñecoAzulIzquierda = new Image();
+muñecoAzulIzquierda.src = './imagenes/azulIzquierda.webp';
+const muñecoAzulDerecha = new Image();
+muñecoAzulDerecha.src = './imagenes/azulDerecha.webp';
 
-const muñecoVerdeIzquierda = new Image()
-muñecoVerdeIzquierda.src = './imagenes/verdeIzquierda.webp'
-const muñecoVerdeDerecha = new Image()
-muñecoVerdeDerecha.src = './imagenes/verdeDerecha.webp'
+const muñecoVerdeIzquierda = new Image();
+muñecoVerdeIzquierda.src = './imagenes/verdeIzquierda.webp';
+const muñecoVerdeDerecha = new Image();
+muñecoVerdeDerecha.src = './imagenes/verdeDerecha.webp';
 
-const muñecoRosaIzquierda = new Image()
-muñecoRosaIzquierda.src = './imagenes/rosaIzquierda.webp'
-const muñecoRosaDerecha = new Image()
-muñecoRosaDerecha.src = './imagenes/rosaDerecha.webp'
+const muñecoRosaIzquierda = new Image();
+muñecoRosaIzquierda.src = './imagenes/rosaIzquierda.webp';
+const muñecoRosaDerecha = new Image();
+muñecoRosaDerecha.src = './imagenes/rosaDerecha.webp';
 
-const muñecoAmarilloIzquierda = new Image()
-muñecoAmarilloIzquierda.src = './imagenes/amarilloIzquierda.webp'
-const muñecoAmarilloDerecha = new Image()
-muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.webp'
-
+const muñecoAmarilloIzquierda = new Image();
+muñecoAmarilloIzquierda.src = './imagenes/amarilloIzquierda.webp';
+const muñecoAmarilloDerecha = new Image();
+muñecoAmarilloDerecha.src = './imagenes/amarilloDerecha.webp';
 
 //HABILITA BOTON CUANDO SE ELIGE
 function revisarEleccion() {
     botonSiguiente.style.display = 'flex';
-    botonSiguiente.textContent = 'Confirmar'
+    botonSiguiente.textContent = 'Confirmar';
     fase = 'seleccion';
 }
-
 
 //LECTURA DE LA ELECCION ACTUAL
 function eleccionActual() {
@@ -499,11 +499,11 @@ function determinarPersonaje() {
     if (modo2Jugadores && !esperandoEleccionP2) {
         eleccionP1 = eleccion;
         esperandoEleccionP2 = true;
-        radiosPersonajes[eleccionP1 - 1].disabled = true;   //el J2 no puede repetir muñeco
+        radiosPersonajes[eleccionP1 - 1].disabled = true; //el J2 no puede repetir muñeco
 
         spanMensaje.textContent = 'Jugador 2: elige tu muñeco';
         seccionIconos.style.display = 'flex';
-        return;   //la eleccion del J2 vuelve a disparar 'change' -> 'Confirmar'
+        return; //la eleccion del J2 vuelve a disparar 'change' -> 'Confirmar'
     }
 
     if (esperandoEleccionP2) {
@@ -514,8 +514,8 @@ function determinarPersonaje() {
         determinarImagenMuñeco(eleccionP1);
         armarMuñecoJugador();
         determinarImagenMuñeco(eleccion);
-        armarMuñecoRival1();                       //carril 1: en 2P lo controla el Jugador 2
-        elegirRival2(eleccionP1, eleccion);        //bot distinto de los dos muñecos
+        armarMuñecoRival1(); //carril 1: en 2P lo controla el Jugador 2
+        elegirRival2(eleccionP1, eleccion); //bot distinto de los dos muñecos
     } else {
         determinarImagenMuñeco(eleccion);
         armarMuñecoJugador();
@@ -526,430 +526,403 @@ function determinarPersonaje() {
 }
 
 //IMAGENES DEL MUÑECO ACTUAL (temporales, compartidas por jugador y rivales)
-let imagenIzquierda
-let imagenDerecha
+let imagenIzquierda;
+let imagenDerecha;
 
 //ASIGNA IMAGENES CORRESPONDIENTES A MUÑECO
 function determinarImagenMuñeco(eleccion) {
-    if (eleccion==1) {
-        imagenIzquierda=muñecoRojoIzquierda;
-        imagenDerecha=muñecoRojoDerecha;
+    if (eleccion == 1) {
+        imagenIzquierda = muñecoRojoIzquierda;
+        imagenDerecha = muñecoRojoDerecha;
     }
-    if (eleccion==2) {
-        imagenIzquierda=muñecoAzulIzquierda;
-        imagenDerecha=muñecoAzulDerecha;
+    if (eleccion == 2) {
+        imagenIzquierda = muñecoAzulIzquierda;
+        imagenDerecha = muñecoAzulDerecha;
     }
-    if (eleccion==3) {
-        imagenIzquierda=muñecoVerdeIzquierda;
-        imagenDerecha=muñecoVerdeDerecha;
+    if (eleccion == 3) {
+        imagenIzquierda = muñecoVerdeIzquierda;
+        imagenDerecha = muñecoVerdeDerecha;
     }
-    if (eleccion==4) {
-        imagenIzquierda=muñecoRosaIzquierda;
-        imagenDerecha=muñecoRosaDerecha;
+    if (eleccion == 4) {
+        imagenIzquierda = muñecoRosaIzquierda;
+        imagenDerecha = muñecoRosaDerecha;
     }
-    if (eleccion==5) {
-        imagenIzquierda=muñecoAmarilloIzquierda;
-        imagenDerecha=muñecoAmarilloDerecha;
+    if (eleccion == 5) {
+        imagenIzquierda = muñecoAmarilloIzquierda;
+        imagenDerecha = muñecoAmarilloDerecha;
     }
 }
 
-
 //----------------------- JUGADOR
-let imagenJugador
-let imagenJugadorIzquierda
-let imagenJugadorDerecha
+let imagenJugador;
+let imagenJugadorIzquierda;
+let imagenJugadorDerecha;
 
 //ASIGNAR IMAGENES
-function armarMuñecoJugador(){
-    imagenJugadorIzquierda=imagenIzquierda
-    imagenJugadorDerecha=imagenDerecha
+function armarMuñecoJugador() {
+    imagenJugadorIzquierda = imagenIzquierda;
+    imagenJugadorDerecha = imagenDerecha;
 }
 
 //ALEATORIO
 function aleatorio(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 //-------------------------- RIVAL 1
 
 // ELEGIR DISTINTO A JUGADOR
 function elegirRival1(jugador) {
-    let rival1=aleatorio(1,5)
-    if (rival1!=jugador) {
-        determinarImagenMuñeco(rival1)
-        armarMuñecoRival1()
-        elegirRival2(jugador,rival1)
+    let rival1 = aleatorio(1, 5);
+    if (rival1 != jugador) {
+        determinarImagenMuñeco(rival1);
+        armarMuñecoRival1();
+        elegirRival2(jugador, rival1);
     } else {
-        elegirRival1(jugador)
-    }    
+        elegirRival1(jugador);
+    }
 }
 
-let imagenRival1Izquierda
-let imagenRival1Derecha
+let imagenRival1Izquierda;
+let imagenRival1Derecha;
 
 //ASIGNAR IMAGENES
-function armarMuñecoRival1(){
-    imagenRival1Izquierda=imagenIzquierda
-    imagenRival1Derecha=imagenDerecha
+function armarMuñecoRival1() {
+    imagenRival1Izquierda = imagenIzquierda;
+    imagenRival1Derecha = imagenDerecha;
 }
-
-
 
 //----------------------------------- RIVAL 2
 
 // ELEGIR DISTINTO A JUGADOR Y RIVAL
-function elegirRival2(jugador,rival1) {
-    let rival2=aleatorio(1,5)
-    if (rival2!=jugador&&rival2!=rival1) {
-        determinarImagenMuñeco(rival2)
-        armarMuñecoRival2()
+function elegirRival2(jugador, rival1) {
+    let rival2 = aleatorio(1, 5);
+    if (rival2 != jugador && rival2 != rival1) {
+        determinarImagenMuñeco(rival2);
+        armarMuñecoRival2();
     } else {
-        elegirRival2(jugador,rival1)
+        elegirRival2(jugador, rival1);
     }
 }
 
-let imagenRival2Izquierda
-let imagenRival2Derecha
+let imagenRival2Izquierda;
+let imagenRival2Derecha;
 
 //ASIGNAR IMAGENES
-function armarMuñecoRival2(){
-    imagenRival2Izquierda=imagenIzquierda
-    imagenRival2Derecha=imagenDerecha
+function armarMuñecoRival2() {
+    imagenRival2Izquierda = imagenIzquierda;
+    imagenRival2Derecha = imagenDerecha;
 }
-
-
 
 /** -----------------------------------------------------------------   DIBUJO        */
 
 //ELEMENTOS
-const canvas = document.getElementById('canvas')
-const lienzo = canvas.getContext('2d')
-const imagenFondo = new Image()
-imagenFondo.src = './imagenes/fondo.webp'
+const canvas = document.getElementById('canvas');
+const lienzo = canvas.getContext('2d');
+const imagenFondo = new Image();
+imagenFondo.src = './imagenes/fondo.webp';
 
 //PRECARGA DE IMAGENES (evita dibujar frames en blanco)
-let recursosListos = false
+let recursosListos = false;
 
 const listaRecursos = [
     imagenFondo,
-    muñecoRojoIzquierda, muñecoRojoDerecha,
-    muñecoAzulIzquierda, muñecoAzulDerecha,
-    muñecoVerdeIzquierda, muñecoVerdeDerecha,
-    muñecoRosaIzquierda, muñecoRosaDerecha,
-    muñecoAmarilloIzquierda, muñecoAmarilloDerecha
-]
+    muñecoRojoIzquierda,
+    muñecoRojoDerecha,
+    muñecoAzulIzquierda,
+    muñecoAzulDerecha,
+    muñecoVerdeIzquierda,
+    muñecoVerdeDerecha,
+    muñecoRosaIzquierda,
+    muñecoRosaDerecha,
+    muñecoAmarilloIzquierda,
+    muñecoAmarilloDerecha,
+];
 
 function cargarRecurso(img) {
     return new Promise((resolver) => {
         if (img.complete && img.naturalWidth > 0) {
-            resolver()  //ya estaba cargada
+            resolver(); //ya estaba cargada
         } else {
-            img.onload = resolver
-            img.onerror = resolver  //si falla, no bloquea el juego
+            img.onload = resolver;
+            img.onerror = resolver; //si falla, no bloquea el juego
         }
-    })
+    });
 }
 
 Promise.all(listaRecursos.map(cargarRecurso)).then(() => {
-    recursosListos = true
-})
+    recursosListos = true;
+});
 
-let anchoImagenFondo = window.innerWidth
-let alturaImagenFondo = anchoImagenFondo * 500 / 1200
-canvas.width = anchoImagenFondo
-canvas.height = alturaImagenFondo 
-let unidad = anchoImagenFondo/10
+let anchoImagenFondo = window.innerWidth;
+let alturaImagenFondo = (anchoImagenFondo * 500) / 1200;
+canvas.width = anchoImagenFondo;
+canvas.height = alturaImagenFondo;
+let unidad = anchoImagenFondo / 10;
 
 //META COMPARTIDA (misma distancia para todos los corredores)
-const META = anchoImagenFondo - unidad*1.2
+const META = anchoImagenFondo - unidad * 1.2;
 
 //POSICION INICIAL
-let posicionJugador = unidad*0.8
-let posicionRival1 =unidad*1.2
-let posicionRival2 = unidad*0.3
-let pasoIzquierdo=0
-let pasoDerecho=0
+let posicionJugador = unidad * 0.8;
+let posicionRival1 = unidad * 1.2;
+let posicionRival2 = unidad * 0.3;
+let pasoIzquierdo = 0;
+let pasoDerecho = 0;
 //pasos del JUGADOR 2 (carril 1): misma regla de alternancia que el J1
-let pasoIzquierdo2=0
-let pasoDerecho2=0
-let pasoRival1=0
-let pasoRival2=0
+let pasoIzquierdo2 = 0;
+let pasoDerecho2 = 0;
+let pasoRival1 = 0;
+let pasoRival2 = 0;
 
 //IMAGENES DE RIVALES EN EL FRAME ACTUAL
-let imagenRival1
-let imagenRival2
+let imagenRival1;
+let imagenRival2;
 
 function dibujar() {
-    imagenJugador = imagenJugadorDerecha
+    imagenJugador = imagenJugadorDerecha;
 
     //FONDO
-    lienzo.drawImage(
-        imagenFondo,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    )
-    
+    lienzo.drawImage(imagenFondo, 0, 0, canvas.width, canvas.height);
+
     //RIVAL 1
-    if (pasoRival1%2==0) {
-        imagenRival1=imagenRival1Izquierda
-    } else if (pasoRival1%2!==0) {
-        imagenRival1=imagenRival1Derecha
-    }  
-
-    lienzo.drawImage(
-        imagenRival1,
-        posicionRival1,
-        (alturaImagenFondo/2)-unidad*0.6,
-        unidad*1.2,
-        unidad*1.2
-    )
-    
-    //JUGADOR
-    if (pasoIzquierdo==1) {
-        imagenJugador=imagenJugadorIzquierda
-    } else if (pasoDerecho==1) {
-        imagenJugador=imagenJugadorDerecha
-    }    
-
-    lienzo.drawImage(
-        imagenJugador,
-        posicionJugador,
-        (alturaImagenFondo/2)-unidad*0.2,
-        unidad*1.2,
-        unidad*1.2
-    )
-    
-    //RIVAL 2
-    if (pasoRival2%2!==0) {
-        imagenRival2=imagenRival2Izquierda
-    } else if (pasoRival2%2==0) {
-        imagenRival2=imagenRival2Derecha
+    if (pasoRival1 % 2 == 0) {
+        imagenRival1 = imagenRival1Izquierda;
+    } else if (pasoRival1 % 2 !== 0) {
+        imagenRival1 = imagenRival1Derecha;
     }
 
-    lienzo.drawImage(
-        imagenRival2,
-        posicionRival2,
-        (alturaImagenFondo/2)+unidad*0.3,
-        unidad*1.2,
-        unidad*1.2
-    )
+    lienzo.drawImage(imagenRival1, posicionRival1, alturaImagenFondo / 2 - unidad * 0.6, unidad * 1.2, unidad * 1.2);
+
+    //JUGADOR
+    if (pasoIzquierdo == 1) {
+        imagenJugador = imagenJugadorIzquierda;
+    } else if (pasoDerecho == 1) {
+        imagenJugador = imagenJugadorDerecha;
+    }
+
+    lienzo.drawImage(imagenJugador, posicionJugador, alturaImagenFondo / 2 - unidad * 0.2, unidad * 1.2, unidad * 1.2);
+
+    //RIVAL 2
+    if (pasoRival2 % 2 !== 0) {
+        imagenRival2 = imagenRival2Izquierda;
+    } else if (pasoRival2 % 2 == 0) {
+        imagenRival2 = imagenRival2Derecha;
+    }
+
+    lienzo.drawImage(imagenRival2, posicionRival2, alturaImagenFondo / 2 + unidad * 0.3, unidad * 1.2, unidad * 1.2);
 
     //FIN DE CARRERA
-    if (posicionJugador>=META||
-        posicionRival1>=META||
-        posicionRival2>=META) {
-        victoria()
+    if (posicionJugador >= META || posicionRival1 >= META || posicionRival2 >= META) {
+        victoria();
     }
 }
 
+/** ----------------------------------------------------------   INICIO DE CARRERA        */
 
-    /** ----------------------------------------------------------   INICIO DE CARRERA        */
-
-let cuenta
+let cuenta;
 
 //ESTADO DEL LOOP DE ANIMACION (rAF + delta-time)
-let msRival1 = 0
-let msRival2 = 0
-let acumRival1 = 0
-let acumRival2 = 0
-let ultimoTiempo = 0
+let msRival1 = 0;
+let msRival2 = 0;
+let acumRival1 = 0;
+let acumRival2 = 0;
+let ultimoTiempo = 0;
 
 //TOKEN DE CADENA rAF: al pausar/reanudar invalida cualquier frame pendiente
 //(sin esto, un doble Escape rapido dejaria DOS cadenas activas = doble velocidad)
-let idCadena = 0
+let idCadena = 0;
 
 //RACHAS DE LOS BOTS (multiplicador de velocidad y tiempo restante en el modo)
-let escalaRival1 = 1
-let escalaRival2 = 1
-let restoRival1 = 0
-let restoRival2 = 0
+let escalaRival1 = 1;
+let escalaRival2 = 1;
+let restoRival1 = 0;
+let restoRival2 = 0;
 
 //RACHAS DE LOS BOTS: sprint / pausa / normal, conservando la velocidad media
 function elegirModoRival() {
-    const r = Math.random()
+    const r = Math.random();
     if (r < 0.15) {
-        return { escala: 0.7, dur: aleatorio(400,900) }   //SPRINT
+        return { escala: 0.7, dur: aleatorio(400, 900) }; //SPRINT
     }
-    if (r < 0.30) {
-        return { escala: 3.0, dur: aleatorio(250,550) }   //PAUSA (duda)
+    if (r < 0.3) {
+        return { escala: 3.0, dur: aleatorio(250, 550) }; //PAUSA (duda)
     }
-    return { escala: 1.0, dur: aleatorio(700,1500) }      //NORMAL
+    return { escala: 1.0, dur: aleatorio(700, 1500) }; //NORMAL
 }
 
 //INICIAR CUENTA
 function cuentaRegresiva() {
     //ESPERAR A QUE LAS IMAGENES SEAN VISIBLES ANTES DE EMPEZAR
     if (!recursosListos) {
-        spanMensaje.textContent = 'Cargando...'
-        botonSiguiente.style.display = 'none'
-        setTimeout(cuentaRegresiva, 100)
-        return
+        spanMensaje.textContent = 'Cargando...';
+        botonSiguiente.style.display = 'none';
+        setTimeout(cuentaRegresiva, 100);
+        return;
     }
 
     //RECURSOS LISTOS: entrar en fase de cuenta regresiva
-    fase = 'cuenta'
+    fase = 'cuenta';
 
-    cuenta=setInterval(contar,800)
-    dibujar()
-    contar()
+    cuenta = setInterval(contar, 800);
+    dibujar();
+    contar();
 
     //MOSTRAR DIBUJO
-    mensajeNivel.style.display='flex'
-    canvas.style.display='flex'
-    botonIzquierda.style.display='flex'
-    botonDerecha.style.display='flex'
+    mensajeNivel.style.display = 'flex';
+    canvas.style.display = 'flex';
+    botonIzquierda.style.display = 'flex';
+    botonDerecha.style.display = 'flex';
 }
 
-let indice =0
-let nivel= 1
-let inicioCarrera = 0   //marcador de tiempo de la carrera actual (performance.now)
+let indice = 0;
+let nivel = 1;
+let inicioCarrera = 0; //marcador de tiempo de la carrera actual (performance.now)
 
 function contar() {
-    botonSiguiente.style.display='none'
+    botonSiguiente.style.display = 'none';
 
     //CUENTA REGRESIVA
-    if (indice==0) {
-        spanMensaje.textContent='3...'  
-        sonarCuenta(0)
-    }if (indice==1) {
-        spanMensaje.textContent='3...2...'
-        sonarCuenta(1)
-    }if (indice==2) {
-        spanMensaje.textContent='3...2...1...'
-        sonarCuenta(2)
-    }if (indice==3) {
-        spanMensaje.textContent='3...2...1...YA !!!'
-        sonarCuenta(3)
-        clearInterval(cuenta)
-        iniciarCarrera()
+    if (indice == 0) {
+        spanMensaje.textContent = '3...';
+        sonarCuenta(0);
     }
-    indice++
-    
+    if (indice == 1) {
+        spanMensaje.textContent = '3...2...';
+        sonarCuenta(1);
+    }
+    if (indice == 2) {
+        spanMensaje.textContent = '3...2...1...';
+        sonarCuenta(2);
+    }
+    if (indice == 3) {
+        spanMensaje.textContent = '3...2...1...YA !!!';
+        sonarCuenta(3);
+        clearInterval(cuenta);
+        iniciarCarrera();
+    }
+    indice++;
+
     //TERMINAR
-    if (indice==4) {
-        indice=0
+    if (indice == 4) {
+        indice = 0;
     }
 
-    //MOSTRAR NIVEL   
-    let spanNivel=document.getElementById('mensajeNivel')
-    spanNivel.textContent=`Nivel ${nivel}`;
+    //MOSTRAR NIVEL
+    let spanNivel = document.getElementById('mensajeNivel');
+    spanNivel.textContent = `Nivel ${nivel}`;
 }
 
 //TUNING DE DIFICULTAD (ms de intervalo por rival; menor = mas rapido)
-const INTERVALO_MIN = 55   //techo de velocidad: nunca mas rapido que esto
-const BASE_RIVAL1   = 125  //ms en nivel 1
-const BASE_RIVAL2   = 150  //ms en nivel 1
-const DELTA_RIVAL1  = 1.2  //ms mas rapido por nivel
-const DELTA_RIVAL2  = 2.5  //ms mas rapido por nivel (un poco mas agresivo)
+const INTERVALO_MIN = 55; //techo de velocidad: nunca mas rapido que esto
+const BASE_RIVAL1 = 125; //ms en nivel 1
+const BASE_RIVAL2 = 150; //ms en nivel 1
+const DELTA_RIVAL1 = 1.2; //ms mas rapido por nivel
+const DELTA_RIVAL2 = 2.5; //ms mas rapido por nivel (un poco mas agresivo)
 
 function iniciarCarrera() {
     //CRONOMETRO DE LA CARRERA ACTUAL + RECORD DE NIVEL ALCANZADO (gane o pierda)
-    inicioCarrera = performance.now()
-    guardarNivelAlcanzado(nivel)
+    inicioCarrera = performance.now();
+    guardarNivelAlcanzado(nivel);
 
     //pequena variacion por carrera para que no se sienta identico
-    const jitter = aleatorio(-4,4);
+    const jitter = aleatorio(-4, 4);
 
     //velocidad acotada: nunca baja de INTERVALO_MIN (el nivel siempre es ganable)
-    msRival1 = Math.max(INTERVALO_MIN, BASE_RIVAL1-(nivel-1)*DELTA_RIVAL1+jitter);
-    msRival2 = Math.max(INTERVALO_MIN, BASE_RIVAL2-(nivel-1)*DELTA_RIVAL2+jitter);
+    msRival1 = Math.max(INTERVALO_MIN, BASE_RIVAL1 - (nivel - 1) * DELTA_RIVAL1 + jitter);
+    msRival2 = Math.max(INTERVALO_MIN, BASE_RIVAL2 - (nivel - 1) * DELTA_RIVAL2 + jitter);
 
     //reiniciar acumuladores del loop
-    acumRival1 = 0
-    acumRival2 = 0
+    acumRival1 = 0;
+    acumRival2 = 0;
 
     //reiniciar rachas de los bots
-    escalaRival1 = 1
-    escalaRival2 = 1
-    restoRival1 = 0
-    restoRival2 = 0
+    escalaRival1 = 1;
+    escalaRival2 = 1;
+    restoRival1 = 0;
+    restoRival2 = 0;
 
     //PERMITIR MOVIMIENTO (fase de carrera activa)
-    fase = 'carrera'
+    fase = 'carrera';
 
     //BOTON DE PAUSA VISIBLE MIENTRAS DURE LA CARRERA
-    botonPausa.hidden = false
-    actualizarBotonPausa(false)
+    botonPausa.hidden = false;
+    actualizarBotonPausa(false);
 
     //ARRANCAR LOOP DE ANIMACION (rAF) que dibuja y mueve a los rivales
-    arrancarLoop()
+    arrancarLoop();
 }
 
 //ARRANQUE DEL LOOP CON TOKEN NUEVO (invalida cadenas anteriores)
 function arrancarLoop() {
-    idCadena++
-    ultimoTiempo = performance.now()
-    requestAnimationFrame((t) => bucleAnimacion(t, idCadena))
+    idCadena++;
+    ultimoTiempo = performance.now();
+    requestAnimationFrame((t) => bucleAnimacion(t, idCadena));
 }
 
 //LOOP PRINCIPAL: un solo reloj (rAF) para dibujo + movimiento de rivales
 function bucleAnimacion(tiempoAhora, cadena) {
     //detener al terminar la carrera, al pausar o si la cadena quedo obsoleta
     if (cadena !== idCadena || fase !== 'carrera') {
-        return
+        return;
     }
 
     //delta-time con tope: evita saltos tras volver de otra pestana
-    const dt = Math.min(tiempoAhora - ultimoTiempo, 100)
-    ultimoTiempo = tiempoAhora
+    const dt = Math.min(tiempoAhora - ultimoTiempo, 100);
+    ultimoTiempo = tiempoAhora;
 
     //rivales: acumulan tiempo y dan un paso cada msRivalN (misma cadencia de siempre)
     //carril 1: es el bot en 1 jugador; en 2 jugadores lo mueve el Jugador 2 (WASD/flechas)
     if (!modo2Jugadores) {
         //rival 1: cambiar de modo si vencio
-        restoRival1 -= dt
+        restoRival1 -= dt;
         if (restoRival1 <= 0) {
-            const modo1 = elegirModoRival()
-            escalaRival1 = modo1.escala
-            restoRival1 = modo1.dur + restoRival1      //conserva el exceso
+            const modo1 = elegirModoRival();
+            escalaRival1 = modo1.escala;
+            restoRival1 = modo1.dur + restoRival1; //conserva el exceso
         }
-        acumRival1 += dt
-        const pasoMs1 = Math.max(INTERVALO_MIN, msRival1 * escalaRival1)
+        acumRival1 += dt;
+        const pasoMs1 = Math.max(INTERVALO_MIN, msRival1 * escalaRival1);
         while (acumRival1 >= pasoMs1) {
-            moverRival1()
-            acumRival1 -= pasoMs1
+            moverRival1();
+            acumRival1 -= pasoMs1;
         }
     }
 
     //rival 2: cambiar de modo si vencio
-    restoRival2 -= dt
+    restoRival2 -= dt;
     if (restoRival2 <= 0) {
-        const modo2 = elegirModoRival()
-        escalaRival2 = modo2.escala
-        restoRival2 = modo2.dur + restoRival2      //conserva el exceso
+        const modo2 = elegirModoRival();
+        escalaRival2 = modo2.escala;
+        restoRival2 = modo2.dur + restoRival2; //conserva el exceso
     }
-    acumRival2 += dt
-    const pasoMs2 = Math.max(INTERVALO_MIN, msRival2 * escalaRival2)
+    acumRival2 += dt;
+    const pasoMs2 = Math.max(INTERVALO_MIN, msRival2 * escalaRival2);
     while (acumRival2 >= pasoMs2) {
-        moverRival2()
-        acumRival2 -= pasoMs2
+        moverRival2();
+        acumRival2 -= pasoMs2;
     }
 
     //dibuja y detecta la meta (puede llamar a victoria)
-    dibujar()
+    dibujar();
 
     //no re-agendar si ya hay ganador o si la cadena quedo obsoleta (pausa/reinicio)
     if (fase === 'carrera' && cadena === idCadena) {
-        requestAnimationFrame((t) => bucleAnimacion(t, cadena))
+        requestAnimationFrame((t) => bucleAnimacion(t, cadena));
     }
 }
 
-
-
 /**  ---------------------------------------------------------  MOVIMIENTO        */
 
-
-document.addEventListener('keyup',correr);
+document.addEventListener('keyup', correr);
 
 //BOTONES EN PANTALLA (MOBILE): pointerdown responde al instante (sin delay de tap)
 function pasoEnBoton(e, mover) {
-    e.preventDefault()  //evita seleccion de texto y menu contextual en iOS
+    e.preventDefault(); //evita seleccion de texto y menu contextual en iOS
     if (fase !== 'carrera') {
-        return  //igual que el teclado: solo se corre durante la carrera
+        return; //igual que el teclado: solo se corre durante la carrera
     }
-    mover()
+    mover();
 }
 
 botonIzquierda.addEventListener('pointerdown', (e) => pasoEnBoton(e, darPasoIzquierdo));
@@ -966,141 +939,137 @@ function correr(tecla) {
     if (modo2Jugadores) {
         const k = typeof tecla.key === 'string' ? tecla.key.toLowerCase() : '';
         if (k === 'a') {
-            darPasoIzquierdo()
+            darPasoIzquierdo();
         } else if (k === 'd') {
-            darPasoDerecho()
+            darPasoDerecho();
         } else if (tecla.key === 'ArrowLeft') {
-            darPasoIzquierdo2()
+            darPasoIzquierdo2();
         } else if (tecla.key === 'ArrowRight') {
-            darPasoDerecho2()
+            darPasoDerecho2();
         }
         return;
     }
 
     //MODO 1 JUGADOR: las flechas mueven al jugador (como siempre)
     if (tecla.key === 'ArrowLeft') {
-        darPasoIzquierdo()
+        darPasoIzquierdo();
     } else if (tecla.key === 'ArrowRight') {
-        darPasoDerecho()
+        darPasoDerecho();
     }
 }
 
 function darPasoIzquierdo() {
-    if (pasoIzquierdo==0) {
-        posicionJugador+=unidad*0.05
-        pasoIzquierdo=1
-        pasoDerecho=0
-        sonarPaso(true)
+    if (pasoIzquierdo == 0) {
+        posicionJugador += unidad * 0.05;
+        pasoIzquierdo = 1;
+        pasoDerecho = 0;
+        sonarPaso(true);
     }
 }
 
 function darPasoDerecho() {
-    if (pasoDerecho==0) {
-        posicionJugador+=unidad*0.05
-        pasoDerecho=1
-        pasoIzquierdo=0
-        sonarPaso(false)
+    if (pasoDerecho == 0) {
+        posicionJugador += unidad * 0.05;
+        pasoDerecho = 1;
+        pasoIzquierdo = 0;
+        sonarPaso(false);
     }
 }
 
 //PASOS DEL JUGADOR 2: avanza el carril 1 (la variable "rival1" en 1 jugador)
 function darPasoIzquierdo2() {
-    if (pasoIzquierdo2==0) {
-        posicionRival1+=unidad*0.05
-        pasoIzquierdo2=1
-        pasoDerecho2=0
-        sonarPaso(true)
+    if (pasoIzquierdo2 == 0) {
+        posicionRival1 += unidad * 0.05;
+        pasoIzquierdo2 = 1;
+        pasoDerecho2 = 0;
+        sonarPaso(true);
     }
 }
 
 function darPasoDerecho2() {
-    if (pasoDerecho2==0) {
-        posicionRival1+=unidad*0.05
-        pasoDerecho2=1
-        pasoIzquierdo2=0
-        sonarPaso(false)
+    if (pasoDerecho2 == 0) {
+        posicionRival1 += unidad * 0.05;
+        pasoDerecho2 = 1;
+        pasoIzquierdo2 = 0;
+        sonarPaso(false);
     }
 }
 
-
 //MOVIMIENTO RIVALES
 function moverRival1() {
-    posicionRival1 += unidad*0.05
-    pasoRival1++
+    posicionRival1 += unidad * 0.05;
+    pasoRival1++;
 }
 
 function moverRival2() {
-    posicionRival2 += unidad*0.05
-    pasoRival2++
+    posicionRival2 += unidad * 0.05;
+    pasoRival2++;
 }
 
-
-            /**    LLEGADA  A LA META        */
-
+/**    LLEGADA  A LA META        */
 
 function victoria() {
     //el loop rAF se detiene solo (fase !== 'carrera'); no hay intervalos que limpiar
 
     //BLOQUEAR MOVIMIENTO: la carrera termino (fase de resultado)
-    fase = 'resultado'
-    pasoIzquierdo=0
-    pasoDerecho=0
-    pasoIzquierdo2=0
-    pasoDerecho2=0
+    fase = 'resultado';
+    pasoIzquierdo = 0;
+    pasoDerecho = 0;
+    pasoIzquierdo2 = 0;
+    pasoDerecho2 = 0;
 
     //EL BOTON DE PAUSA NO APLICA FUERA DE LA CARRERA
-    botonPausa.hidden = true
-    
+    botonPausa.hidden = true;
+
     //DURACION DE LA CARRERA -> record de mejor tiempo (ganes o pierdas)
     if (inicioCarrera > 0) {
-        guardarTiempo(performance.now() - inicioCarrera)
-        inicioCarrera = 0
+        guardarTiempo(performance.now() - inicioCarrera);
+        inicioCarrera = 0;
     }
-    
+
     //RESULTADO (gana quien llego mas lejos de la meta en el frame final)
-    const llegadaJugador = posicionJugador - META
-    const llegadaRival1 = posicionRival1 - META     //carril 1: bot en 1P, Jugador 2 en 2P
-    const llegadaRival2 = posicionRival2 - META     //carril 3: siempre el bot
+    const llegadaJugador = posicionJugador - META;
+    const llegadaRival1 = posicionRival1 - META; //carril 1: bot en 1P, Jugador 2 en 2P
+    const llegadaRival2 = posicionRival2 - META; //carril 3: siempre el bot
 
     //gana solo si esta estrictamente primero (los empates no ganan)
-    const ganoJ1 = llegadaJugador>llegadaRival1&&llegadaJugador>llegadaRival2
-    const ganoJ2 = llegadaRival1>llegadaJugador&&llegadaRival1>llegadaRival2
-    const ganoBot = llegadaRival2>llegadaJugador&&llegadaRival2>llegadaRival1
+    const ganoJ1 = llegadaJugador > llegadaRival1 && llegadaJugador > llegadaRival2;
+    const ganoJ2 = llegadaRival1 > llegadaJugador && llegadaRival1 > llegadaRival2;
+    const ganoBot = llegadaRival2 > llegadaJugador && llegadaRival2 > llegadaRival1;
 
     if (ganoJ1) {
         spanMensaje.textContent = modo2Jugadores
             ? 'Ganaste Jugador 1!! Pasas al siguiente nivel'
-            : 'Ganaste!! Pasas al siguiente nivel'
+            : 'Ganaste!! Pasas al siguiente nivel';
         botonSiguiente.textContent = 'Siguiente';
-        fanfarria()
+        fanfarria();
 
         //PASA AL SIGUIENTE NIVEL
-        nivel++
+        nivel++;
     } else if (modo2Jugadores && ganoJ2) {
         //GANA UN HUMANO -> tambien sube de nivel
-        spanMensaje.textContent = 'Gano Jugador 2!! Pasas al siguiente nivel'
+        spanMensaje.textContent = 'Gano Jugador 2!! Pasas al siguiente nivel';
         botonSiguiente.textContent = 'Siguiente';
-        fanfarria()
-        nivel++
+        fanfarria();
+        nivel++;
     } else if (modo2Jugadores && !ganoBot && !ganoJ1 && !ganoJ2) {
         //empate entre corredores: se repite el nivel (nadie llego claramente primero)
-        spanMensaje.textContent = 'Empate!! Repiten el nivel'
+        spanMensaje.textContent = 'Empate!! Repiten el nivel';
         botonSiguiente.textContent = 'Repetir';
     } else {
         spanMensaje.textContent = modo2Jugadores
             ? 'Gano la máquina.. Quieres intentarlo de nuevo ?'
-            : 'Perdiste.. Quieres intentarlo de nuevo ?'
+            : 'Perdiste.. Quieres intentarlo de nuevo ?';
         botonSiguiente.textContent = 'Repetir';
-        sonarDerrota()
+        sonarDerrota();
     }
 
     //RESET POSICIONES
-    posicionJugador = unidad*0.8
-    posicionRival1 =unidad*1.2
-    posicionRival2 = unidad*0.3
+    posicionJugador = unidad * 0.8;
+    posicionRival1 = unidad * 1.2;
+    posicionRival2 = unidad * 0.3;
 
     botonSiguiente.style.display = 'flex';
     botonIzquierda.style.display = 'none';
     botonDerecha.style.display = 'none';
 }
-

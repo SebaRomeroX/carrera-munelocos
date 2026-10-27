@@ -173,7 +173,7 @@ P3 — DX / MANTENIMIENTO
 [x] 28. Agregar package.json + scripts  (HECHO 2026-10-27)
        npm run dev (live-server o vite), npm run lint, npm run format.
 
-[ ] 29. ESLint + Prettier
+[x] 29. ESLint + Prettier  (HECHO 2026-10-27)
        Config con reglas que detecten justo los problemas actuales
        (no-undef habría atrapado los globals implícitos del item 3).
 
