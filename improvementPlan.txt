@@ -158,7 +158,7 @@ P2 — FEATURES QUE SUBEN EL VALOR
        Ya existe bg-blue.avif sin usar. -> 2-3 fondos que rotan por nivel
        con distintas velocidades/apariencia de calle.
 
-[ ] 26. Modo multijugador local (2 jugadores en un teclado)
+[x] 26. Modo multijugador local (2 jugadores en un teclado)  (HECHO 2026-10-27)
        Jugador 1: A/D, Jugador 2: ◀/▶. Reutiliza toda la lógica
        existente; solo cambia quién controla a cada muñeco.
 

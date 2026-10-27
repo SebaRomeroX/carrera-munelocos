@@ -98,6 +98,27 @@ button:hover{
 }
 
 
+/* -- NUMERO DE JUGADORES -- */
+.modos{
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center;
+
+    padding: 1em 0;
+    gap: 1.5em;
+}
+
+/* OJO: sin esto, display:flex de .modos gana al [hidden] de la UA */
+.modos[hidden]{
+    display: none;
+}
+
+.btn-modo{
+    min-width: 9em;
+    font-size: 1.1em;
+}
+
+
 /* -- ICONOS -- */
 .iconos{
     display: flex;

@@ -3,6 +3,7 @@
 
 //ELEMENTOS     
 const seccionIconos= document.getElementById('iconos');
+const seccionModos = document.getElementById('modos');
 const mensajeNivel = document.getElementById('mensajeNivel');
 const botonIzquierda = document.getElementById('botonIzquierda');
 const botonDerecha = document.getElementById('botonDerecha');
@@ -32,6 +33,7 @@ botonSiguiente.addEventListener('click', () => {
 function cargarElementos() {
     
     // DISPLAY ELEMENTOS
+    seccionModos.style.display='none';
     seccionIconos.style.display='none';
     canvas.style.display='none';
     mensajeNivel.style.display='none';
@@ -270,6 +272,8 @@ function reiniciarEstadoCarrera() {
     posicionRival2 = unidad * 0.3;
     pasoIzquierdo = 0;
     pasoDerecho = 0;
+    pasoIzquierdo2 = 0;
+    pasoDerecho2 = 0;
     pasoRival1 = 0;
     pasoRival2 = 0;
     acumRival1 = 0;
@@ -305,11 +309,17 @@ function reiniciarPartida() {
     reiniciarEstadoCarrera();
     nivel = 1;
 
+    //SELECCION A CERO: radios libres y sin eleccion pendiente del J2
+    esperandoEleccionP2 = false;
+    eleccionP1 = 0;
+    radiosPersonajes.forEach(r => { r.disabled = false; });
+
     //UI: esconder la carrera y volver a la intro
     canvas.style.display = 'none';
     botonIzquierda.style.display = 'none';
     botonDerecha.style.display = 'none';
     mensajeNivel.style.display = 'none';
+    seccionModos.style.display = 'none';
     seccionIconos.style.display = 'none';
     botonSiguiente.style.display = 'flex';
     botonPausa.hidden = true;
@@ -336,6 +346,22 @@ btnReiniciarPartida.addEventListener('click', reiniciarPartida);
 
 
 
+/**   -------------------------------------  MODO DE JUEGO (1P / 2P)  ---------------------  */
+
+//MODO DE LA PARTIDA: false = 1 jugador (default), true = 2 jugadores en un teclado
+let modo2Jugadores = false;
+
+function elegirModo(jugadores) {
+    modo2Jugadores = jugadores === 2;
+    seccionModos.style.display = 'none';
+    mostrarMensajeIntro();   //siguiente mensaje: eleccion de muñeco
+}
+
+document.getElementById('btn1Jugador').addEventListener('click', () => elegirModo(1));
+document.getElementById('btn2Jugadores').addEventListener('click', () => elegirModo(2));
+
+
+
      /** ---------------------------------------------------------   MENSAJES INTRO        */
 
 // CONTADOR MENSAJES
@@ -356,19 +382,28 @@ function mostrarMensajeIntro() {
         botonSiguiente.textContent = 'Siguiente';
     }
     if (contadorMensajes==2) {
-        mensaje='Primero elige a tu personaje';
+        //ELEGIR MODO ANTES QUE EL MUÑECO: 1 o 2 jugadores
+        mensaje='¿Cuántos juegan esta partida?';
+        seccionModos.style.display = 'flex';
+        botonSiguiente.style.display = 'none';
+        fase = 'modo';
+    } 
+    if (contadorMensajes==3) {
+        mensaje = modo2Jugadores ? 'Jugador 1: elige tu muñeco' : 'Primero elige a tu personaje';
         seccionIconos.style.display ='flex';
         botonSiguiente.style.display = 'none';
     } 
-    if (contadorMensajes==3) {
-        mensaje='Cuando la carrera comienze, oprime los botones IZQUIERDA y DERECHA alternadamente para correr';
+    if (contadorMensajes==4) {
+        mensaje = modo2Jugadores
+            ? 'Jugador 1: usa A y D  |  Jugador 2: usa las flechas IZQUIERDA y DERECHA, alternando para correr'
+            : 'Cuando la carrera comienze, oprime los botones IZQUIERDA y DERECHA alternadamente para correr';
         botonSiguiente.style.display = 'flex';
     } 
-    if (contadorMensajes==4) {
+    if (contadorMensajes==5) {
         mensaje='El primero en llegar al final de la calle gana';
         botonSiguiente.textContent = 'Siguiente';
     } 
-    if (contadorMensajes==5) {
+    if (contadorMensajes==6) {
         mensaje='Estas listo ?';
 
         //MANDA INICIO DE CARRERA
@@ -400,6 +435,9 @@ let inputRosa  = document.getElementById('radioRosa');
 
 // EVENTO 'change' (delegation): se dispara apenas se elige un personaje
 seccionIconos.addEventListener('change', revisarEleccion);
+
+//ORDEN DE LOS RADIOS = ORDEN DE ELECCION (1..5)
+const radiosPersonajes = [inputRojo, inputAzul, inputVerde, inputRosa, inputAmarillo];
 
 
 //IMAGENES
@@ -437,27 +475,53 @@ function revisarEleccion() {
 }
 
 
+//LECTURA DE LA ELECCION ACTUAL
+function eleccionActual() {
+    if (inputRojo.checked) return 1;
+    if (inputAzul.checked) return 2;
+    if (inputVerde.checked) return 3;
+    if (inputRosa.checked) return 4;
+    if (inputAmarillo.checked) return 5;
+    return 0;
+}
+
+//ESTADO DE LA SELECCION EN MODO 2 JUGADORES
+let eleccionP1 = 0;
+let esperandoEleccionP2 = false;
+
 //DETERMINAR PERSONAJE SEGUN ELECCION
 function determinarPersonaje() {
     seccionIconos.style.display = 'none';
 
-    let eleccion;
+    const eleccion = eleccionActual();
 
-    if (inputRojo.checked) {
-        eleccion=1;
-    }if (inputAzul.checked) {
-        eleccion=2;
-    }if (inputVerde.checked) {
-        eleccion=3;
-    }if (inputRosa.checked) {
-        eleccion=4;
-    }if (inputAmarillo.checked) {
-        eleccion=5;
+    //2 JUGADORES - PRIMERA PASADA: guarda al J1, bloquea su muñeco y pide el del J2
+    if (modo2Jugadores && !esperandoEleccionP2) {
+        eleccionP1 = eleccion;
+        esperandoEleccionP2 = true;
+        radiosPersonajes[eleccionP1 - 1].disabled = true;   //el J2 no puede repetir muñeco
+
+        spanMensaje.textContent = 'Jugador 2: elige tu muñeco';
+        seccionIconos.style.display = 'flex';
+        return;   //la eleccion del J2 vuelve a disparar 'change' -> 'Confirmar'
     }
 
-    determinarImagenMuñeco(eleccion);
-    armarMuñecoJugador();
-    elegirRival1(eleccion);
+    if (esperandoEleccionP2) {
+        //SEGUNDA PASADA: J1 en el carril 2, J2 en el carril 1 y bot en el carril 3
+        esperandoEleccionP2 = false;
+        radiosPersonajes[eleccionP1 - 1].disabled = false;
+
+        determinarImagenMuñeco(eleccionP1);
+        armarMuñecoJugador();
+        determinarImagenMuñeco(eleccion);
+        armarMuñecoRival1();                       //carril 1: en 2P lo controla el Jugador 2
+        elegirRival2(eleccionP1, eleccion);        //bot distinto de los dos muñecos
+    } else {
+        determinarImagenMuñeco(eleccion);
+        armarMuñecoJugador();
+        elegirRival1(eleccion);
+    }
+
     mostrarMensajeIntro();
 }
 
@@ -605,6 +669,9 @@ let posicionRival1 =unidad*1.2
 let posicionRival2 = unidad*0.3
 let pasoIzquierdo=0
 let pasoDerecho=0
+//pasos del JUGADOR 2 (carril 1): misma regla de alternancia que el J1
+let pasoIzquierdo2=0
+let pasoDerecho2=0
 let pasoRival1=0
 let pasoRival2=0
 
@@ -829,18 +896,21 @@ function bucleAnimacion(tiempoAhora, cadena) {
     ultimoTiempo = tiempoAhora
 
     //rivales: acumulan tiempo y dan un paso cada msRivalN (misma cadencia de siempre)
-    //rival 1: cambiar de modo si vencio
-    restoRival1 -= dt
-    if (restoRival1 <= 0) {
-        const modo1 = elegirModoRival()
-        escalaRival1 = modo1.escala
-        restoRival1 = modo1.dur + restoRival1      //conserva el exceso
-    }
-    acumRival1 += dt
-    const pasoMs1 = Math.max(INTERVALO_MIN, msRival1 * escalaRival1)
-    while (acumRival1 >= pasoMs1) {
-        moverRival1()
-        acumRival1 -= pasoMs1
+    //carril 1: es el bot en 1 jugador; en 2 jugadores lo mueve el Jugador 2 (WASD/flechas)
+    if (!modo2Jugadores) {
+        //rival 1: cambiar de modo si vencio
+        restoRival1 -= dt
+        if (restoRival1 <= 0) {
+            const modo1 = elegirModoRival()
+            escalaRival1 = modo1.escala
+            restoRival1 = modo1.dur + restoRival1      //conserva el exceso
+        }
+        acumRival1 += dt
+        const pasoMs1 = Math.max(INTERVALO_MIN, msRival1 * escalaRival1)
+        while (acumRival1 >= pasoMs1) {
+            moverRival1()
+            acumRival1 -= pasoMs1
+        }
     }
 
     //rival 2: cambiar de modo si vencio
@@ -892,6 +962,22 @@ function correr(tecla) {
         return;
     }
 
+    //MODO 2 JUGADORES: J1 con A/D, J2 con las flechas
+    if (modo2Jugadores) {
+        const k = typeof tecla.key === 'string' ? tecla.key.toLowerCase() : '';
+        if (k === 'a') {
+            darPasoIzquierdo()
+        } else if (k === 'd') {
+            darPasoDerecho()
+        } else if (tecla.key === 'ArrowLeft') {
+            darPasoIzquierdo2()
+        } else if (tecla.key === 'ArrowRight') {
+            darPasoDerecho2()
+        }
+        return;
+    }
+
+    //MODO 1 JUGADOR: las flechas mueven al jugador (como siempre)
     if (tecla.key === 'ArrowLeft') {
         darPasoIzquierdo()
     } else if (tecla.key === 'ArrowRight') {
@@ -913,6 +999,25 @@ function darPasoDerecho() {
         posicionJugador+=unidad*0.05
         pasoDerecho=1
         pasoIzquierdo=0
+        sonarPaso(false)
+    }
+}
+
+//PASOS DEL JUGADOR 2: avanza el carril 1 (la variable "rival1" en 1 jugador)
+function darPasoIzquierdo2() {
+    if (pasoIzquierdo2==0) {
+        posicionRival1+=unidad*0.05
+        pasoIzquierdo2=1
+        pasoDerecho2=0
+        sonarPaso(true)
+    }
+}
+
+function darPasoDerecho2() {
+    if (pasoDerecho2==0) {
+        posicionRival1+=unidad*0.05
+        pasoDerecho2=1
+        pasoIzquierdo2=0
         sonarPaso(false)
     }
 }
@@ -940,6 +1045,8 @@ function victoria() {
     fase = 'resultado'
     pasoIzquierdo=0
     pasoDerecho=0
+    pasoIzquierdo2=0
+    pasoDerecho2=0
 
     //EL BOTON DE PAUSA NO APLICA FUERA DE LA CARRERA
     botonPausa.hidden = true
@@ -952,18 +1059,37 @@ function victoria() {
     
     //RESULTADO (gana quien llego mas lejos de la meta en el frame final)
     const llegadaJugador = posicionJugador - META
-    const llegadaRival1 = posicionRival1 - META
-    const llegadaRival2 = posicionRival2 - META
+    const llegadaRival1 = posicionRival1 - META     //carril 1: bot en 1P, Jugador 2 en 2P
+    const llegadaRival2 = posicionRival2 - META     //carril 3: siempre el bot
 
-    if (llegadaJugador>llegadaRival1&&llegadaJugador>llegadaRival2) {
-        spanMensaje.textContent = 'Ganaste!! Pasas al siguiente nivel'
-         botonSiguiente.textContent = 'Siguiente';
+    //gana solo si esta estrictamente primero (los empates no ganan)
+    const ganoJ1 = llegadaJugador>llegadaRival1&&llegadaJugador>llegadaRival2
+    const ganoJ2 = llegadaRival1>llegadaJugador&&llegadaRival1>llegadaRival2
+    const ganoBot = llegadaRival2>llegadaJugador&&llegadaRival2>llegadaRival1
+
+    if (ganoJ1) {
+        spanMensaje.textContent = modo2Jugadores
+            ? 'Ganaste Jugador 1!! Pasas al siguiente nivel'
+            : 'Ganaste!! Pasas al siguiente nivel'
+        botonSiguiente.textContent = 'Siguiente';
         fanfarria()
 
         //PASA AL SIGUIENTE NIVEL
         nivel++
-    }if (llegadaRival1>=llegadaJugador||llegadaRival2>=llegadaJugador) {
-        spanMensaje.textContent = 'Perdiste.. Quieres intentarlo de nuevo ?'
+    } else if (modo2Jugadores && ganoJ2) {
+        //GANA UN HUMANO -> tambien sube de nivel
+        spanMensaje.textContent = 'Gano Jugador 2!! Pasas al siguiente nivel'
+        botonSiguiente.textContent = 'Siguiente';
+        fanfarria()
+        nivel++
+    } else if (modo2Jugadores && !ganoBot && !ganoJ1 && !ganoJ2) {
+        //empate entre corredores: se repite el nivel (nadie llego claramente primero)
+        spanMensaje.textContent = 'Empate!! Repiten el nivel'
+        botonSiguiente.textContent = 'Repetir';
+    } else {
+        spanMensaje.textContent = modo2Jugadores
+            ? 'Gano la máquina.. Quieres intentarlo de nuevo ?'
+            : 'Perdiste.. Quieres intentarlo de nuevo ?'
         botonSiguiente.textContent = 'Repetir';
         sonarDerrota()
     }
