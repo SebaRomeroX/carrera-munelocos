@@ -177,7 +177,7 @@ P3 — DX / MANTENIMIENTO
        Config con reglas que detecten justo los problemas actuales
        (no-undef habría atrapado los globals implícitos del item 3).
 
-[ ] 30. .editorconfig + mejorar .gitignore
+[x] 30. .editorconfig + mejorar .gitignore  (HECHO 2026-10-27)
        .gitignore solo contiene "Roadmap.txt".
        -> Agregar node_modules/, .DS_Store, *.log, dist/.
 
