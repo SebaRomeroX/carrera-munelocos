@@ -170,7 +170,7 @@ P2 — FEATURES QUE SUBEN EL VALOR
 P3 — DX / MANTENIMIENTO
 ====================================================================
 
-[ ] 28. Agregar package.json + scripts
+[x] 28. Agregar package.json + scripts  (HECHO 2026-10-27)
        npm run dev (live-server o vite), npm run lint, npm run format.
 
 [ ] 29. ESLint + Prettier
