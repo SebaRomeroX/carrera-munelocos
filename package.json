@@ -2,6 +2,7 @@
     "name": "carrera-munelocos",
     "version": "1.0.0",
     "private": true,
+    "type": "module",
     "description": "Juego de carrera con muñecos graciosos (HTML + CSS + canvas en JavaScript sin frameworks)",
     "scripts": {
         "dev": "vite",

@@ -2,41 +2,40 @@
  * NUCLEO PURO DEL JUEGO
  *
  * Logica sin DOM ni canvas: velocidades, ganador, eleccion de rivales y rachas de los bots.
- * Se consume desde carrera.js como `globalThis.Nucleo` (puente temporal: en el item 33
- * este archivo se convierte en ES module y se importa con `import`).
+ * ES module sin dependencias: lo importan game.js y state.js.
  */
 
 /* -- TUNING DE DIFICULTAD (ms de intervalo por rival; menor = mas rapido) -- */
 
 //techo de velocidad: nunca mas rapido que esto (el nivel siempre es ganable)
-const INTERVALO_MIN = 55;
+export const INTERVALO_MIN = 55;
 
 //ms por paso en nivel 1
-const BASE_RIVAL1 = 125;
-const BASE_RIVAL2 = 150;
+export const BASE_RIVAL1 = 125;
+export const BASE_RIVAL2 = 150;
 
 //ms mas rapido por nivel (rival2 es un poco mas agresivo)
-const DELTA_RIVAL1 = 1.2;
-const DELTA_RIVAL2 = 2.5;
+export const DELTA_RIVAL1 = 1.2;
+export const DELTA_RIVAL2 = 2.5;
 
 //fraccion de la unidad de la calle que avanza un corredor por paso
-const PASO = 0.05;
+export const PASO = 0.05;
 
 /* -- FISICA DE LOS CORREDORES -- */
 
 //MOVER UN CORREDOR: un paso de la fraccion PASO de la unidad
-function moverCorredor(posicion, unidad) {
+export function moverCorredor(posicion, unidad) {
     return posicion + unidad * PASO;
 }
 
 //VELOCIDAD DE UN BOT EN UN NIVEL DADO (nunca baja de INTERVALO_MIN)
-function calcularVelocidadBot(nivel, base, delta, jitter = 0) {
+export function calcularVelocidadBot(nivel, base, delta, jitter = 0) {
     return Math.max(INTERVALO_MIN, base - (nivel - 1) * delta + jitter);
 }
 
 //GANADOR: gana quien esta estrictamente primero; cualquier empate -> 'empate'
 //la meta es la misma para los tres: comparar posiciones alcanza
-function determinarGanador(posicionJugador, posicionRival1, posicionRival2) {
+export function determinarGanador(posicionJugador, posicionRival1, posicionRival2) {
     if (posicionJugador > posicionRival1 && posicionJugador > posicionRival2) {
         return 'jugador';
     }
@@ -52,12 +51,12 @@ function determinarGanador(posicionJugador, posicionRival1, posicionRival2) {
 /* -- SORTEO DE MUÑECOS -- */
 
 //ALEATORIO ENTERO ENTRE [min, max] (rand inyectable para tests)
-function aleatorio(min, max, rand = Math.random) {
+export function aleatorio(min, max, rand = Math.random) {
     return Math.floor(rand() * (max - min + 1) + min);
 }
 
 //FISHER-YATES: copia del arreglo en orden aleatorio
-function mezclar(colores, rand = Math.random) {
+export function mezclar(colores, rand = Math.random) {
     const resultado = colores.slice();
     for (let i = resultado.length - 1; i > 0; i--) {
         const j = Math.floor(rand() * (i + 1));
@@ -70,20 +69,20 @@ function mezclar(colores, rand = Math.random) {
 const TODOS_LOS_COLORES = [1, 2, 3, 4, 5];
 
 //RIVALES DEL MODO 1 JUGADOR: 3 muñecos distintos (shuffle, sin recursion aleatoria)
-function elegirColoresRivales(jugador, rand = Math.random) {
+export function elegirColoresRivales(jugador, rand = Math.random) {
     const libres = mezclar(TODOS_LOS_COLORES, rand).filter((c) => c !== jugador);
     return { rival1: libres[0], rival2: libres[1] };
 }
 
 //BOT DEL MODO 2 JUGADORES: un muñeco distinto de los humanos ya tomados
-function elegirBot(tomados, rand = Math.random) {
+export function elegirBot(tomados, rand = Math.random) {
     return mezclar(TODOS_LOS_COLORES, rand).find((c) => !tomados.includes(c));
 }
 
 /* -- RACHAS DE LOS BOTS -- */
 
 //sprint / pausa / normal, conservando la velocidad media
-function elegirModoRival(rand = Math.random) {
+export function elegirModoRival(rand = Math.random) {
     const r = rand();
     if (r < 0.15) {
         return { escala: 0.7, dur: aleatorio(400, 900, rand) }; //SPRINT
@@ -93,22 +92,3 @@ function elegirModoRival(rand = Math.random) {
     }
     return { escala: 1.0, dur: aleatorio(700, 1500, rand) }; //NORMAL
 }
-
-/* -- PUENTE PARA EL SCRIPT CLASICO DE index.html (se elimina en el item 33) -- */
-
-globalThis.Nucleo = {
-    INTERVALO_MIN,
-    BASE_RIVAL1,
-    BASE_RIVAL2,
-    DELTA_RIVAL1,
-    DELTA_RIVAL2,
-    PASO,
-    moverCorredor,
-    calcularVelocidadBot,
-    determinarGanador,
-    aleatorio,
-    mezclar,
-    elegirColoresRivales,
-    elegirBot,
-    elegirModoRival,
-};

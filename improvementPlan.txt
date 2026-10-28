@@ -193,7 +193,7 @@ P3 — DX / MANTENIMIENTO
        - elegirRival* siempre devuelve 3 colores distintos
          (hoy es recursión aleatoria sin límite → reemplazar por shuffle)
 
-[ ] 33. Refactor de carrera.js (500 líneas -> módulos)
+[x] 33. Refactor de carrera.js (500 líneas -> módulos)  (HECHO 2026-10-28)
        -> src/state.js (máquina de estados)
           src/assets.js (preloader)
           src/render.js (canvas + rAF)

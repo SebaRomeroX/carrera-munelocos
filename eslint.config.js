@@ -1,11 +1,9 @@
-'use strict';
+import js from '@eslint/js';
+import globals from 'globals';
 
-const js = require('@eslint/js');
-const globals = require('globals');
-
-// Config plana (flat config): reglas que atrapan los problemas historicos
+// Config plana (flat config) en ESM: reglas que atrapan los problemas historicos
 // del proyecto (p. ej. no-undef habria detectado los globals implicitos del item 3).
-module.exports = [
+export default [
     {
         ignores: ['node_modules/', 'dist/'],
     },
@@ -16,12 +14,10 @@ module.exports = [
         files: ['**/*.js'],
         languageOptions: {
             ecmaVersion: 2022,
-            // carrera.js es un script clasico, no un modulo
-            sourceType: 'script',
+            // el juego son ES modules nativos bajo src/ (item 33)
+            sourceType: 'module',
             globals: {
                 ...globals.browser,
-                // provisto por nucleo.js (script cargado antes que carrera.js en index.html)
-                Nucleo: 'readonly',
             },
         },
         rules: {
@@ -34,18 +30,10 @@ module.exports = [
     {
         files: ['eslint.config.js'],
         languageOptions: {
-            sourceType: 'commonjs',
+            sourceType: 'module',
             globals: {
                 ...globals.node,
             },
-        },
-    },
-
-    // los tests usan import/export de vitest
-    {
-        files: ['tests/**/*.js'],
-        languageOptions: {
-            sourceType: 'module',
         },
     },
 ];

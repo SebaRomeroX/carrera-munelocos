@@ -43,9 +43,12 @@
 
 ### 🚀 Cómo Ejecutar Localmente
 
-No necesitas servidores ni dependencias  
 **Clona el repositorio:** git clone https://github.com/SebaRomeroX/carrera-munelocos  
-Y ejecuta el archivo index.html en tu navegador
+Entra a la carpeta: cd carrera-munelocos  
+Instala las dependencias: npm install  
+Y arranca el servidor de desarrollo: npm run dev (abre la URL que muestra en tu navegador)
+
+> El juego usa módulos ES nativos, así que no funciona abriendo index.html con doble clic (file://); necesitas un servidor como el de `npm run dev`
 
 ### 📈 Evolución del Proyecto
 

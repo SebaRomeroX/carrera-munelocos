@@ -1,8 +1,6 @@
 // Tests del nucleo puro (sin DOM): fisica, ganador, sorteo de muñecos y rachas de los bots
 import { describe, it, expect } from 'vitest';
-import '../nucleo.js';
-
-const N = globalThis.Nucleo;
+import * as N from '../src/nucleo.js';
 
 // PRNG con semilla para asserts deterministas
 function mulberry32(semilla) {
