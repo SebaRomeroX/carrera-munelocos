@@ -20,6 +20,8 @@ module.exports = [
             sourceType: 'script',
             globals: {
                 ...globals.browser,
+                // provisto por nucleo.js (script cargado antes que carrera.js en index.html)
+                Nucleo: 'readonly',
             },
         },
         rules: {
@@ -36,6 +38,14 @@ module.exports = [
             globals: {
                 ...globals.node,
             },
+        },
+    },
+
+    // los tests usan import/export de vitest
+    {
+        files: ['tests/**/*.js'],
+        languageOptions: {
+            sourceType: 'module',
         },
     },
 ];

@@ -515,11 +515,21 @@ function determinarPersonaje() {
         armarMuñecoJugador();
         determinarImagenMuñeco(eleccion);
         armarMuñecoRival1(); //carril 1: en 2P lo controla el Jugador 2
-        elegirRival2(eleccionP1, eleccion); //bot distinto de los dos muñecos
+
+        //bot distinto de los dos muñecos humanos (nucleo puro, con shuffle)
+        const bot = Nucleo.elegirBot([eleccionP1, eleccion]);
+        determinarImagenMuñeco(bot);
+        armarMuñecoRival2();
     } else {
         determinarImagenMuñeco(eleccion);
         armarMuñecoJugador();
-        elegirRival1(eleccion);
+
+        //3 muñecos distintos: jugador + 2 rivales (nucleo puro, con shuffle)
+        const { rival1, rival2 } = Nucleo.elegirColoresRivales(eleccion);
+        determinarImagenMuñeco(rival1);
+        armarMuñecoRival1();
+        determinarImagenMuñeco(rival2);
+        armarMuñecoRival2();
     }
 
     mostrarMensajeIntro();
@@ -564,24 +574,7 @@ function armarMuñecoJugador() {
     imagenJugadorDerecha = imagenDerecha;
 }
 
-//ALEATORIO
-function aleatorio(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-//-------------------------- RIVAL 1
-
-// ELEGIR DISTINTO A JUGADOR
-function elegirRival1(jugador) {
-    let rival1 = aleatorio(1, 5);
-    if (rival1 != jugador) {
-        determinarImagenMuñeco(rival1);
-        armarMuñecoRival1();
-        elegirRival2(jugador, rival1);
-    } else {
-        elegirRival1(jugador);
-    }
-}
+//-------------------------- RIVALES
 
 let imagenRival1Izquierda;
 let imagenRival1Derecha;
@@ -590,19 +583,6 @@ let imagenRival1Derecha;
 function armarMuñecoRival1() {
     imagenRival1Izquierda = imagenIzquierda;
     imagenRival1Derecha = imagenDerecha;
-}
-
-//----------------------------------- RIVAL 2
-
-// ELEGIR DISTINTO A JUGADOR Y RIVAL
-function elegirRival2(jugador, rival1) {
-    let rival2 = aleatorio(1, 5);
-    if (rival2 != jugador && rival2 != rival1) {
-        determinarImagenMuñeco(rival2);
-        armarMuñecoRival2();
-    } else {
-        elegirRival2(jugador, rival1);
-    }
 }
 
 let imagenRival2Izquierda;
@@ -739,18 +719,6 @@ let escalaRival2 = 1;
 let restoRival1 = 0;
 let restoRival2 = 0;
 
-//RACHAS DE LOS BOTS: sprint / pausa / normal, conservando la velocidad media
-function elegirModoRival() {
-    const r = Math.random();
-    if (r < 0.15) {
-        return { escala: 0.7, dur: aleatorio(400, 900) }; //SPRINT
-    }
-    if (r < 0.3) {
-        return { escala: 3.0, dur: aleatorio(250, 550) }; //PAUSA (duda)
-    }
-    return { escala: 1.0, dur: aleatorio(700, 1500) }; //NORMAL
-}
-
 //INICIAR CUENTA
 function cuentaRegresiva() {
     //ESPERAR A QUE LAS IMAGENES SEAN VISIBLES ANTES DE EMPEZAR
@@ -813,12 +781,7 @@ function contar() {
     spanNivel.textContent = `Nivel ${nivel}`;
 }
 
-//TUNING DE DIFICULTAD (ms de intervalo por rival; menor = mas rapido)
-const INTERVALO_MIN = 55; //techo de velocidad: nunca mas rapido que esto
-const BASE_RIVAL1 = 125; //ms en nivel 1
-const BASE_RIVAL2 = 150; //ms en nivel 1
-const DELTA_RIVAL1 = 1.2; //ms mas rapido por nivel
-const DELTA_RIVAL2 = 2.5; //ms mas rapido por nivel (un poco mas agresivo)
+//TUNING DE DIFICULTAD: las constantes y los calculos viven en nucleo.js (Nucleo.*)
 
 function iniciarCarrera() {
     //CRONOMETRO DE LA CARRERA ACTUAL + RECORD DE NIVEL ALCANZADO (gane o pierda)
@@ -826,11 +789,11 @@ function iniciarCarrera() {
     guardarNivelAlcanzado(nivel);
 
     //pequena variacion por carrera para que no se sienta identico
-    const jitter = aleatorio(-4, 4);
+    const jitter = Nucleo.aleatorio(-4, 4);
 
-    //velocidad acotada: nunca baja de INTERVALO_MIN (el nivel siempre es ganable)
-    msRival1 = Math.max(INTERVALO_MIN, BASE_RIVAL1 - (nivel - 1) * DELTA_RIVAL1 + jitter);
-    msRival2 = Math.max(INTERVALO_MIN, BASE_RIVAL2 - (nivel - 1) * DELTA_RIVAL2 + jitter);
+    //velocidad acotada por el nucleo: nunca baja de INTERVALO_MIN (el nivel siempre es ganable)
+    msRival1 = Nucleo.calcularVelocidadBot(nivel, Nucleo.BASE_RIVAL1, Nucleo.DELTA_RIVAL1, jitter);
+    msRival2 = Nucleo.calcularVelocidadBot(nivel, Nucleo.BASE_RIVAL2, Nucleo.DELTA_RIVAL2, jitter);
 
     //reiniciar acumuladores del loop
     acumRival1 = 0;
@@ -877,12 +840,12 @@ function bucleAnimacion(tiempoAhora, cadena) {
         //rival 1: cambiar de modo si vencio
         restoRival1 -= dt;
         if (restoRival1 <= 0) {
-            const modo1 = elegirModoRival();
+            const modo1 = Nucleo.elegirModoRival();
             escalaRival1 = modo1.escala;
             restoRival1 = modo1.dur + restoRival1; //conserva el exceso
         }
         acumRival1 += dt;
-        const pasoMs1 = Math.max(INTERVALO_MIN, msRival1 * escalaRival1);
+        const pasoMs1 = Math.max(Nucleo.INTERVALO_MIN, msRival1 * escalaRival1);
         while (acumRival1 >= pasoMs1) {
             moverRival1();
             acumRival1 -= pasoMs1;
@@ -892,12 +855,12 @@ function bucleAnimacion(tiempoAhora, cadena) {
     //rival 2: cambiar de modo si vencio
     restoRival2 -= dt;
     if (restoRival2 <= 0) {
-        const modo2 = elegirModoRival();
+        const modo2 = Nucleo.elegirModoRival();
         escalaRival2 = modo2.escala;
         restoRival2 = modo2.dur + restoRival2; //conserva el exceso
     }
     acumRival2 += dt;
-    const pasoMs2 = Math.max(INTERVALO_MIN, msRival2 * escalaRival2);
+    const pasoMs2 = Math.max(Nucleo.INTERVALO_MIN, msRival2 * escalaRival2);
     while (acumRival2 >= pasoMs2) {
         moverRival2();
         acumRival2 -= pasoMs2;
@@ -960,7 +923,7 @@ function correr(tecla) {
 
 function darPasoIzquierdo() {
     if (pasoIzquierdo == 0) {
-        posicionJugador += unidad * 0.05;
+        posicionJugador = Nucleo.moverCorredor(posicionJugador, unidad);
         pasoIzquierdo = 1;
         pasoDerecho = 0;
         sonarPaso(true);
@@ -969,7 +932,7 @@ function darPasoIzquierdo() {
 
 function darPasoDerecho() {
     if (pasoDerecho == 0) {
-        posicionJugador += unidad * 0.05;
+        posicionJugador = Nucleo.moverCorredor(posicionJugador, unidad);
         pasoDerecho = 1;
         pasoIzquierdo = 0;
         sonarPaso(false);
@@ -979,7 +942,7 @@ function darPasoDerecho() {
 //PASOS DEL JUGADOR 2: avanza el carril 1 (la variable "rival1" en 1 jugador)
 function darPasoIzquierdo2() {
     if (pasoIzquierdo2 == 0) {
-        posicionRival1 += unidad * 0.05;
+        posicionRival1 = Nucleo.moverCorredor(posicionRival1, unidad);
         pasoIzquierdo2 = 1;
         pasoDerecho2 = 0;
         sonarPaso(true);
@@ -988,7 +951,7 @@ function darPasoIzquierdo2() {
 
 function darPasoDerecho2() {
     if (pasoDerecho2 == 0) {
-        posicionRival1 += unidad * 0.05;
+        posicionRival1 = Nucleo.moverCorredor(posicionRival1, unidad);
         pasoDerecho2 = 1;
         pasoIzquierdo2 = 0;
         sonarPaso(false);
@@ -997,12 +960,12 @@ function darPasoDerecho2() {
 
 //MOVIMIENTO RIVALES
 function moverRival1() {
-    posicionRival1 += unidad * 0.05;
+    posicionRival1 = Nucleo.moverCorredor(posicionRival1, unidad);
     pasoRival1++;
 }
 
 function moverRival2() {
-    posicionRival2 += unidad * 0.05;
+    posicionRival2 = Nucleo.moverCorredor(posicionRival2, unidad);
     pasoRival2++;
 }
 
@@ -1027,17 +990,11 @@ function victoria() {
         inicioCarrera = 0;
     }
 
-    //RESULTADO (gana quien llego mas lejos de la meta en el frame final)
-    const llegadaJugador = posicionJugador - META;
-    const llegadaRival1 = posicionRival1 - META; //carril 1: bot en 1P, Jugador 2 en 2P
-    const llegadaRival2 = posicionRival2 - META; //carril 3: siempre el bot
+    //RESULTADO (nucleo puro: gana quien esta estrictamente primero; los empates no ganan)
+    //carril 1: bot en 1P y Jugador 2 en 2P; carril 3: siempre el bot
+    const ganador = Nucleo.determinarGanador(posicionJugador, posicionRival1, posicionRival2);
 
-    //gana solo si esta estrictamente primero (los empates no ganan)
-    const ganoJ1 = llegadaJugador > llegadaRival1 && llegadaJugador > llegadaRival2;
-    const ganoJ2 = llegadaRival1 > llegadaJugador && llegadaRival1 > llegadaRival2;
-    const ganoBot = llegadaRival2 > llegadaJugador && llegadaRival2 > llegadaRival1;
-
-    if (ganoJ1) {
+    if (ganador === 'jugador') {
         spanMensaje.textContent = modo2Jugadores
             ? 'Ganaste Jugador 1!! Pasas al siguiente nivel'
             : 'Ganaste!! Pasas al siguiente nivel';
@@ -1046,13 +1003,13 @@ function victoria() {
 
         //PASA AL SIGUIENTE NIVEL
         nivel++;
-    } else if (modo2Jugadores && ganoJ2) {
+    } else if (ganador === 'rival1' && modo2Jugadores) {
         //GANA UN HUMANO -> tambien sube de nivel
         spanMensaje.textContent = 'Gano Jugador 2!! Pasas al siguiente nivel';
         botonSiguiente.textContent = 'Siguiente';
         fanfarria();
         nivel++;
-    } else if (modo2Jugadores && !ganoBot && !ganoJ1 && !ganoJ2) {
+    } else if (ganador === 'empate' && modo2Jugadores) {
         //empate entre corredores: se repite el nivel (nadie llego claramente primero)
         spanMensaje.textContent = 'Empate!! Repiten el nivel';
         botonSiguiente.textContent = 'Repetir';

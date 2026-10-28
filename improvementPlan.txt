@@ -185,7 +185,7 @@ P3 — DX / MANTENIMIENTO
        Lint en cada push + link check del README.
        Opcional: Lighthouse CI con presupuesto de performance.
 
-[ ] 32. Tests del núcleo del juego
+[x] 32. Tests del núcleo del juego  (HECHO 2026-10-28)
        Extraer la lógica pura (moverCorredor, determinarGanador,
        calcularVelocidadBot) a un módulo sin DOM y testear con Vitest:
        - la meta es la misma para los tres
