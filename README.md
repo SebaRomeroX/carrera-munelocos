@@ -10,7 +10,7 @@
 1. **Elige tu personaje** entre 5 opciones diferentes
 2. **Presiona alternadamente** las teclas ← y → (botones en móvil)
 3. **¡Corre más rápido que los bots!** Gana para avanzar al siguiente nivel
-4. **Los bots aceleran** con cada nivel. ¿hasta dónde llegarás?
+4. **Los bots aceleran** con cada nivel. ¿Hasta dónde llegarás?
 
 ### 🖼️ Vista Previa
 
@@ -45,11 +45,11 @@
 
 No necesitas servidores ni dependencias  
 **Clona el repositorio:** git clone https://github.com/SebaRomeroX/carrera-munelocos  
-Y ejecuta el el archivo index.html en tu navegador
+Y ejecuta el archivo index.html en tu navegador
 
 ### 📈 Evolución del Proyecto
 
-Este juego fue un proyecto de experimentación donde aplique lo que habia aprendido sobre Desarrollo Web
+Este juego fue un proyecto de experimentación donde apliqué lo que había aprendido sobre Desarrollo Web
 
 - **Refactorización gradual** mejor organización y legibilidad
 - **Mejoras de UI/UX** estilos y controles móviles
@@ -58,8 +58,8 @@ Este juego fue un proyecto de experimentación donde aplique lo que habia aprend
 ### 💡 Lo Que Aprendí / Reflexión
 
 "Este proyecto fue un juego dentro de otro juego.
-Me diverti experimentando y probando lo que iba haciendo,
-puse en practica lo aprendido pero aprendi muchisimo mas mientras lo desarrollaba "
+Me divertí experimentando y probando lo que iba haciendo,
+puse en práctica lo aprendido pero aprendí muchísimo más mientras lo desarrollaba "
 
 - La simplicidad en la mecánica puede crear diversión pura
 - Refactorizar es parte natural del crecimiento como dev
@@ -71,7 +71,7 @@ puse en practica lo aprendido pero aprendi muchisimo mas mientras lo desarrollab
 - Implementaría **spritesheets** en lugar de imágenes separadas
 - Añadiría sistema de **puntuación** y leaderboards
 - Mejoraría la IA de los bots con **comportamientos más variados**
-- Agregaria un modo **multijugador** local
+- Agregaría un modo **multijugador** local
 - Efectos de **sonido y música**
 - Diferentes **escenarios**
 

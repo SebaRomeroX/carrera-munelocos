@@ -201,7 +201,7 @@ P3 — DX / MANTENIMIENTO
           src/game.js (física, bots, niveles)
           Alternativa sin bundler: ES modules nativos + import en index.html.
 
-[ ] 34. Typos en textos visibles y README
+[x] 34. Typos en textos visibles y README  (HECHO 2026-10-28)
        "comienze" -> "comience"
        "Estas listo ?" -> "¿Estás listo?"
        "Perdiste.." -> "Perdiste..."

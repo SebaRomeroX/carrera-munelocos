@@ -106,7 +106,7 @@ function sonarPaso(izquierda) {
     tono({ frecuencia: izquierda ? 880 : 988, duracion: 0.05, tipo: 'square', volumen: 0.25 });
 }
 
-//CUENTA REGRESIVA: beeps 3-2-1 (Do5) y tono mas agudo y largo en "YA !!!" (Do6)
+//CUENTA REGRESIVA: beeps 3-2-1 (Do5) y tono mas agudo y largo en "¡YA!" (Do6)
 function sonarCuenta(indice) {
     if (indice <= 2) {
         tono({ frecuencia: 523, duracion: 0.12, tipo: 'square', volumen: 0.7 });
@@ -404,7 +404,7 @@ function mostrarMensajeIntro() {
     if (contadorMensajes == 4) {
         mensaje = modo2Jugadores
             ? 'Jugador 1: usa A y D  |  Jugador 2: usa las flechas IZQUIERDA y DERECHA, alternando para correr'
-            : 'Cuando la carrera comienze, oprime los botones IZQUIERDA y DERECHA alternadamente para correr';
+            : 'Cuando la carrera comience, oprime los botones IZQUIERDA y DERECHA alternadamente para correr';
         botonSiguiente.style.display = 'flex';
     }
     if (contadorMensajes == 5) {
@@ -412,7 +412,7 @@ function mostrarMensajeIntro() {
         botonSiguiente.textContent = 'Siguiente';
     }
     if (contadorMensajes == 6) {
-        mensaje = 'Estas listo ?';
+        mensaje = '¿Estás listo?';
 
         //MANDA INICIO DE CARRERA
         botonSiguiente.textContent = 'Comenzar';
@@ -764,7 +764,7 @@ function contar() {
         sonarCuenta(2);
     }
     if (indice == 3) {
-        spanMensaje.textContent = '3...2...1...YA !!!';
+        spanMensaje.textContent = '3...2...1...¡YA!';
         sonarCuenta(3);
         clearInterval(cuenta);
         iniciarCarrera();
@@ -996,8 +996,8 @@ function victoria() {
 
     if (ganador === 'jugador') {
         spanMensaje.textContent = modo2Jugadores
-            ? 'Ganaste Jugador 1!! Pasas al siguiente nivel'
-            : 'Ganaste!! Pasas al siguiente nivel';
+            ? '¡Ganaste Jugador 1! Pasas al siguiente nivel'
+            : '¡Ganaste! Pasas al siguiente nivel';
         botonSiguiente.textContent = 'Siguiente';
         fanfarria();
 
@@ -1005,18 +1005,18 @@ function victoria() {
         nivel++;
     } else if (ganador === 'rival1' && modo2Jugadores) {
         //GANA UN HUMANO -> tambien sube de nivel
-        spanMensaje.textContent = 'Gano Jugador 2!! Pasas al siguiente nivel';
+        spanMensaje.textContent = '¡Ganó Jugador 2! Pasas al siguiente nivel';
         botonSiguiente.textContent = 'Siguiente';
         fanfarria();
         nivel++;
     } else if (ganador === 'empate' && modo2Jugadores) {
         //empate entre corredores: se repite el nivel (nadie llego claramente primero)
-        spanMensaje.textContent = 'Empate!! Repiten el nivel';
+        spanMensaje.textContent = '¡Empate! Repiten el nivel';
         botonSiguiente.textContent = 'Repetir';
     } else {
         spanMensaje.textContent = modo2Jugadores
-            ? 'Gano la máquina.. Quieres intentarlo de nuevo ?'
-            : 'Perdiste.. Quieres intentarlo de nuevo ?';
+            ? 'Ganó la máquina... ¿Quieres intentarlo de nuevo?'
+            : 'Perdiste... ¿Quieres intentarlo de nuevo?';
         botonSiguiente.textContent = 'Repetir';
         sonarDerrota();
     }
