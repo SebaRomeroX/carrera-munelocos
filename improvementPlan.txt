@@ -1,6 +1,19 @@
 # PLAN DE MEJORAS — La Carrera de los MuñeLocos
-# Grade actual: 5/10   →   Objetivo: 8.5/10
+# Grade inicial: 5/10   →   Objetivo: 8.5/10   →   Grade actual: 8.5/10 (2026-10-28)
 # Orden sugerido: P0 (bugs) → P1 (calidad) → P2 (features) → P3 (DX)
+#
+# ============ ESTADO AL CERRAR LA ITERACIÓN (2026-10-28) ============
+# 30 items HECHOS + 1 omitido (#23, sin interés) + 4 PENDIENTES = 35.
+# Los pendientes #25, #27, #31 y #35 quedan APARCADOS a la espera de
+# diseño y decisiones del usuario (no son bugs: son contenido/polish/
+# distribución). Reanudar cuando el usuario defina:
+#   #25 -> qué escenarios, cuántos y reglas de rotación/velocidad
+#   #27 -> look de la línea de meta y estilo del sonido de llegada
+#   #31 -> qué workflows de CI y si incluir Lighthouse CI
+#   #35 -> textos/imagen OG, URL canónica y diseño de favicon
+# SINCRONIZACIÓN: completada 2026-10-28 (este archivo del repo es la
+# copia maestra; el espejo en ~/.opencode/plan está al día).
+#====================================================================
 
 ====================================================================
 P0 — BUGS Y CORRECCIONES DE JUEGO (lo más urgente)
@@ -154,7 +167,7 @@ P2 — FEATURES QUE SUBEN EL VALOR
        Tecla Escape o botón para reiniciar la partida completa
        (reset de nivel, dificultad y posiciones).
 
-[ ] 25. Diferentes escenarios
+[ ] 25. Diferentes escenarios  (PENDIENTE - futura iteración, a la espera de diseño/decisiones del usuario)
        Ya existe bg-blue.avif sin usar. -> 2-3 fondos que rotan por nivel
        con distintas velocidades/apariencia de calle.
 
@@ -162,7 +175,7 @@ P2 — FEATURES QUE SUBEN EL VALOR
        Jugador 1: A/D, Jugador 2: ◀/▶. Reutiliza toda la lógica
        existente; solo cambia quién controla a cada muñeco.
 
-[ ] 27. Meta y sonido de llegada
+[ ] 27. Meta y sonido de llegada  (PENDIENTE - futura iteración, a la espera de diseño/decisiones del usuario)
        Dibujar una línea de meta real en el canvas (ahora no se ve),
        más un efecto de "cruzando la línea".
 
@@ -181,7 +194,7 @@ P3 — DX / MANTENIMIENTO
        .gitignore solo contiene "Roadmap.txt".
        -> Agregar node_modules/, .DS_Store, *.log, dist/.
 
-[ ] 31. CI con GitHub Actions
+[ ] 31. CI con GitHub Actions  (PENDIENTE - futura iteración, a la espera de diseño/decisiones del usuario)
        Lint en cada push + link check del README.
        Opcional: Lighthouse CI con presupuesto de performance.
 
@@ -208,17 +221,28 @@ P3 — DX / MANTENIMIENTO
        README: "diverti" -> "divertí", "aprendi" -> "aprendí",
        "habia" -> "había", "ejecuta el el archivo" -> "ejecuta el archivo"
 
-[ ] 35. SEO básico para compartir en redes
+[ ] 35. SEO básico para compartir en redes  (PENDIENTE - futura iteración, a la espera de diseño/decisiones del usuario)
        -> Open Graph tags (og:title, og:description, og:image con
           imagenes/carrera.jpg), canonical URL, y favicon PNG->ICO.
 
 ====================================================================
-MÉTRICA DE ÉXITO
+MÉTRICA DE ÉXITO  (estado al cerrar la iteración 2026-10-28)
 ====================================================================
-- W3C validator: 0 errores
-- ESLint: 0 problemas, 0 variables implícitas
-- Todos los corredores usan la misma línea de meta
-- Nivel 20 todavía superable por un humano
-- Lighthouse >= 90 en Performance y Accessibility
-- Repo < 2 MiB, imágenes < 500 KB en total
-- Nunca se puede mover el muñeco fuera de la fase 'carrera'
+- W3C validator: 0 errores                          [HECHO] item 1
+- ESLint: 0 problemas, 0 variables implícitas       [HECHO] items 3, 29, 33
+- Todos los corredores usan la misma línea de meta  [HECHO] item 2 (constante META)
+- Nivel 20 todavía superable por un humano          [HECHO] item 6 (INTERVALO_MIN, suites lo verifican)
+- Lighthouse >= 90 en Performance y Accessibility   [SIN MEDIR] requiere CI (#31); base: rAF, assets
+  WebP, a11y y reduced-motion ya implementados
+- Repo < 2 MiB, imágenes < 500 KB en total          [PARCIAL] worktree ~928 KB de imágenes
+  (el pack de git sigue en 6.28 MiB por historial preservado; sin rewrite por decisión)
+- Nunca se puede mover el muñeco fuera de 'carrera' [HECHO] item 10 (máquina de estados)
+
+====================================================================
+CIERRE DE ITERACIÓN
+====================================================================
+- Grade inicial 5/10 -> Grade final 8.5/10 (objetivo cumplido).
+- 32 commits locales en la sesión, ninguno pushado.
+- Pendientes aparados: #25, #27, #31, #35 (a la espera de diseño y
+  decisiones del usuario). Ninguno es bug: son contenido/polish/distribución.
+- Espejo del plan (~/.opencode/plan) sincronizado con este maestro.
